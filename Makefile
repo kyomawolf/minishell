@@ -4,11 +4,8 @@ NAME = minishell
 LIB = -Llib -lft
 FLAGS = -Wall -Werror -Wextra
 INC = -Iinclude
-SRC = 	pushswap.c sim.c sort.c utils.c utils_2.c utils_3.c input.c alg_one_1.c alg_one_2.c alg_two.c alg_hard.c \
-		alg_two_helper.c reverse_five.c alg_five.c check.c chunks.c
-INST = ./instructionset/instructionset.c
-BONUS_SRC = ./tester/main.c ./tester/helper.c ./tester/check.c ./tester/helper_p2.c ./tester/input.c \
-            ./tester/sorted.c ./tester/tester_instructions.c ./tester/fetch.c
+SRC = 	
+BONUS_SRC = 
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
 $(NAME) : $(OBJ)
@@ -25,12 +22,7 @@ debug : fclean lib/libft.a $(OBJ) $(SET)
 
 re : fclean all
 
-bonus : tester
-
-
-tester : libs
-	@gcc $(FLAGS) $(BONUS_SRC) $(INC) $(LIB) -o c_tester
-	@echo "compiled!"
+bonus :
 
 libs :
 	@make -silent -C lib/libft
@@ -39,7 +31,7 @@ libs :
 	@echo "libraries ready!"
 
 test : libs
-	@gcc $(SRC) $(INST) $(INC) $(LIB)
+	@gcc $(SRC) $(INC) $(LIB)
 	@echo "compiled!"
 
 clean :
@@ -48,9 +40,8 @@ clean :
 
 fclean :
 	make fclean -silent -C lib/libft/
-	rm -f *.out *.o *.~ push_swap
-	rm -f ./lib/*.a ./include/lbft.h
-	rm -f ./instructionset/*.out ./instructionset/*.o ./instructionset/*.~
+	rm -f *.out *.o *.~ $(NAME) ./parser/*.o
+	rm -f ./lib/*.a ./include/libft.h
 
 help :
 	@echo "rules:	all [default]"
