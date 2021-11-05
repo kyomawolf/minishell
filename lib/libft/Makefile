@@ -6,7 +6,7 @@
 #    By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/19 15:11:15 by jkasper           #+#    #+#              #
-#    Updated: 2021/11/05 15:32:00 by jkasper          ###   ########.fr        #
+#    Updated: 2021/11/05 15:36:33 by jkasper          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,6 @@ BONUS = ft_lstnew.c ft_lstadd_front.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
 OBJ_BON = $(patsubst %.c, %.o, $(BONUS))
-
 
 FLAGS = -Wall -Werror -Wextra
 

@@ -2,7 +2,7 @@
 NAME = minishell
 
 LIB = -Llib -lft
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -lreadline
 INC = -Iinclude
 SRC = 	
 BONUS_SRC = 

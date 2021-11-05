@@ -1,0 +1,25 @@
+
+main_struct
+{
+	input
+	binary_tree
+	(history?)
+	
+}
+
+main
+{
+	init_main_struct
+	init_env_variables(and other)
+	
+	loop
+	{
+		readline
+		add_history
+
+		inputparser
+		instruction_execution
+	}
+
+	memory_handling
+}
