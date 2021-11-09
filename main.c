@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/09 13:20:20 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/09 13:21:08 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ t_data	*init_main(void)
 	ret->currdir = getcwd(NULL, 0);
 	ret->allcom = malloc(sizeof(struct s_command *));
 	ret->input = NULL;
+	ret->promp = "minishell % ";
 	//get_prompt(ret);
 	return (ret);
 }
