@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/09 19:43:52 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/09 19:46:39 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,21 @@ void	attributes(void)
 	}
 }
 
+void	attributes_clear(void)
+{
+	struct termios	loc;
+
+	signal(SIGINT, main_interrupt);
+	signal(SIGQUIT, main_interrupt);
+	signal(6, main_interrupt);
+	tcgetattr(1, &loc);
+	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
+	{
+		loc.c_lflag += ECHOCTL;
+		tcsetattr(1, TCSANOW, &loc);
+	}
+}
+
 //		->other file
 void	main_readline(t_data *data)
 {
@@ -86,10 +101,11 @@ void	main_readline(t_data *data)
 
 void	main_loop(t_data *data)
 {
-	attributes();
 	while (1)
 	{
+		attributes();
 		main_readline(data);
+		attributes_clear();
 		if (data->input == NULL)
 			continue ;
 		if (!ft_strncmp(data->input, "exit\0", 5))
