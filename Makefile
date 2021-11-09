@@ -1,14 +1,18 @@
 
 NAME = minishell
 
-LIB = -Llib -lft
-FLAGS = -Wall -Werror -Wextra -lreadline
+LIB = -Llib -lft -lreadline
+FLAGS = -Wall -Werror -Wextra
+
 INC = -Iinclude
-SRC = 	
+SRC = main.c 
+
+#./parser/par_main.c ./parser/par_utils1.c
+
 BONUS_SRC = 
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
-$(NAME) : $(OBJ)
+$(NAME) : $(OBJ) lib/libft.a
 	@gcc $(FLAGS) -O3 $(INC) $^ $(LIB) -o $@
 	@echo "compiled!"
 
@@ -24,7 +28,7 @@ re : fclean all
 
 bonus :
 
-libs :
+lib/libft.a :
 	@make -silent -C lib/libft
 	@cp -f lib/libft/libft.a lib
 	@cp -f lib/libft/libft.h include
