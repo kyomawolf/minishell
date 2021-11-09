@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/09 13:49:08 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/09 19:21:10 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@ struct s_simple_com
 	int		number_arguments;
 	char	**arguments;
 	int		exit_status;
+};
+
+struct s_groups
+{
+	int	begin_com;
+	int	end_com;
+	int	group_id;
 };
 
 struct s_command

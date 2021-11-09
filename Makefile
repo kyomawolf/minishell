@@ -1,10 +1,10 @@
 
 NAME = minishell
 
-LIB = -Llib -lft -lreadline
+LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
 FLAGS = -Wall -Werror -Wextra
 
-INC = -Iinclude
+INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
 SRC = main.c 
 
 #./parser/par_main.c ./parser/par_utils1.c
