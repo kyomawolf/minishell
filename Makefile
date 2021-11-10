@@ -5,7 +5,7 @@ LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
 FLAGS = -Wall -Werror -Wextra
 
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
-SRC = main.c 
+SRC = main.c input.c
 
 #./parser/par_main.c ./parser/par_utils1.c
 

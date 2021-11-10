@@ -6,18 +6,13 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/09 19:46:39 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/10 15:38:13 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <signal.h>
 #include <unistd.h>
-#include <termios.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <fcntl.h>
 
 #include "minis.h"
 #include "libft.h"
@@ -48,64 +43,13 @@ void	get_prompt(t_data *data)
 	free(temp);
 }
 
-void	main_interrupt(int sig)
-{
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_replace_line("", 0);
-	}
-	rl_on_new_line();
-	rl_redisplay();
-}
-
-//tcsetattr for disabling signal printing
-//		->other file
-void	attributes(void)
-{
-	struct termios	loc;
-
-	signal(SIGINT, main_interrupt);
-	signal(SIGQUIT, main_interrupt);
-	signal(6, main_interrupt);
-	tcgetattr(1, &loc);
-	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
-	{
-		loc.c_lflag -= ECHOCTL;
-		tcsetattr(1, TCSANOW, &loc);
-	}
-}
-
-void	attributes_clear(void)
-{
-	struct termios	loc;
-
-	signal(SIGINT, main_interrupt);
-	signal(SIGQUIT, main_interrupt);
-	signal(6, main_interrupt);
-	tcgetattr(1, &loc);
-	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
-	{
-		loc.c_lflag += ECHOCTL;
-		tcsetattr(1, TCSANOW, &loc);
-	}
-}
-
-//		->other file
-void	main_readline(t_data *data)
-{
-	data->input = readline(data->prompt);
-	attributes();
-	add_history(data->input);
-}
-
 void	main_loop(t_data *data)
 {
 	while (1)
 	{
-		attributes();
-		main_readline(data);
-		attributes_clear();
+		input_attributes_add();
+		input_readline(data);
+		input_attributes_clear();
 		if (data->input == NULL)
 			continue ;
 		if (!ft_strncmp(data->input, "exit\0", 5))
