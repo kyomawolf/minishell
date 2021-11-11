@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   par_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:19:49 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/08 17:16:54 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/09 13:25:01 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ struct s_simple_com	**utils_realloc_simple_com_list(struct s_simple_com ***old,
 	}
 	free_simple_com_list(old, old_num);
 	if (new[i] == NULL && i != old_num)
-		return (free_simple_com_list(&new, i););
+		return (free_simple_com_list(&new, i));
 	return (new);
 }
