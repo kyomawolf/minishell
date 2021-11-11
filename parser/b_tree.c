@@ -1,38 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   b_tree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/11 15:52:38 by jkasper          ###   ########.fr       */
+/*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
+/*   Updated: 2021/11/11 17:05:59 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 #include "minis.h"
+#include "parser.h"
 #include "struct.h"
 
-struct s_simple_com	**free_simple_com_list(struct s_simple_com ***tofree, int l)
-{
-	int	i;
-	int	ii;
 
-	i = 0;
-	while (i < l && (*tofree)[i] != NULL)
-	{
-		ii = 0;
-		while (ii < (*tofree)[i]->number_arguments)
-		{
-			free((*tofree)[i]->arguments[ii]);
-			ii++;
-		}
-		free((*tofree)[i]->arguments);
-		free((*tofree)[i]);
-		i++;
-	}
-	free(*tofree);
-	*tofree = NULL;
-	return (*tofree);
+
+t_bin	*b_tree_init(t_data *data, int c_pos)
+{
+	t_bin	*root;
+	int		node_count;
+	t_bin	**all_children;
+
+	node_count = ft_count_commands(data->input, c_pos, delimiter);
+	root = ft_calloc(1, sizeof(t_bin));
+	all_children = ft_calloc(node_count, sizeof(t_bin));
+	
+}
+
+//recursive
+t_bin	*b_tree_add_children(void)
+{
+	
 }

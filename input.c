@@ -6,11 +6,12 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/10 15:37:58 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/11 15:52:43 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
+#include "struct.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>

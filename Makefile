@@ -7,7 +7,7 @@ FLAGS = -Wall -Werror -Wextra
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
 SRC = main.c input.c
 
-#./parser/par_main.c ./parser/par_utils1.c
+#./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 
 BONUS_SRC = 
 OBJ = $(patsubst %.c,%.o,$(SRC))

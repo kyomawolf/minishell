@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   par_utils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:19:49 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/09 13:25:01 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/11 17:05:33 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,3 +53,4 @@ struct s_simple_com	**utils_realloc_simple_com_list(struct s_simple_com ***old,
 		return (free_simple_com_list(&new, i));
 	return (new);
 }
+

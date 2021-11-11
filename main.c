@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/10 15:38:13 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/11 15:52:36 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 #include "minis.h"
 #include "libft.h"
+#include "struct.h"
 
 void	get_prompt(t_data *data)
 {
@@ -63,26 +64,12 @@ void	main_loop(t_data *data)
 	}
 }
 
-t_data	*init_main(void)
-{
-	t_data	*ret;
-
-	ret = malloc(sizeof(t_data));
-	ret->currdir = NULL;
-	ret->currdir = getcwd(NULL, 0);
-	ret->allcom = malloc(sizeof(struct s_command *));
-	ret->input = NULL;
-	//ret->promp = "minishell % ";
-	get_prompt(ret);
-	return (ret);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
 
 	data = NULL;
-	data = init_main();
+	data = new_t_data();
 	(void) envp;
 	(void) argc;
 	(void) argv;
