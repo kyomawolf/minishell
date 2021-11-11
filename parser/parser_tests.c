@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   parser_tests.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 13:09:28 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/11/11 16:04:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/11 16:41:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,12 +164,15 @@ int	ft_skip_quotes(char *input, int *i)
 {
 	char	quote;
 
-	quote = input[(*i)];
-	(*i)++;
-	while (input[(*i)] != quote && input[(*i)] != '\0')
+	if ((input[(*i)] == '\'' || input[(*i)] == '"'))
+	{
+		quote = input[(*i)];
 		(*i)++;
-	if (input[(*i)] == '\0')
-		return (1);
+		while (input[(*i)] != quote && input[(*i)] != '\0')
+			(*i)++;
+		if (input[(*i)] == '\0')
+			return (1);
+	}
 	return (0);
 }
 
@@ -204,6 +207,8 @@ int	ft_count_hierarchy(char *input)
 	return (c_open_par);
 }
 
+
+//unfinished
 int	ft_count_commands(char *input)
 {
 	int	c_cmds;
@@ -214,6 +219,8 @@ int	ft_count_commands(char *input)
 	i = 0;
 	while (input[i] != '\0')
 	{
+		if (ft_skip_quotes(input, &i))
+			return (-1);
 		if (!ft_strchr("&|", input[i]))
 			c_operator = 0;
 		if (input[i] == '&' && input[i + 1] == '&')
