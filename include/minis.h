@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/11 15:51:35 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/12 13:30:12 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,6 @@ void				input_readline(t_data *data);
 void				input_attributes_clear(void);
 void				input_attributes_add(void);
 t_data				*new_t_data(void);
+//built in functions
+// TODO: cd, echo, env, exit, export, pwd, unset
 #endif

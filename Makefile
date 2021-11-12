@@ -1,6 +1,5 @@
 
 NAME = minishell
-
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
 FLAGS = -Wall -Werror -Wextra
 
@@ -14,6 +13,7 @@ OBJ = $(patsubst %.c,%.o,$(SRC))
 
 $(NAME) : $(OBJ) lib/libft.a
 	@gcc $(FLAGS) -O3 $(INC) $^ $(LIB) -o $@
+
 	@echo "compiled!"
 
 all : lib/libft.a $(NAME)
