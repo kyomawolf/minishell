@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 17:21:48 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/15 18:14:50 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/15 21:22:35 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,61 @@ int	export_fill_array(char ***envp, char **new_envp, char *new, int amount)
 	return (0);
 }
 
-export_check_input(char *str)
+int	export_set_value(char **envp, int i, char *str)
 {
-	
+	char	*temp;
+
+	temp = envp[i];
+	envp[i] = ft_strdup(str);
+	if (envp[i] == NULL)
+	{
+		envp[i] = temp;
+		return (0);
+	}
+	else
+	{
+		free(temp);
+	}
+	return (1);
 }
 
+int	export_check_input(char *str, char **envp)
+{
+	int		i;
+	char	*name;
+	int		name_len;
+	char	*point;
+
+	i = 0;
+	while (str[i] != NULL && str[i] != '=')
+		name[i] = str[i++];
+	name_len = i;
+	if (str[name_len] == '\0')
+		return (0);
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		point = ft_strnstr(envp[i], name, ft_strlen(envp[i]));
+		if (point != NULL)
+		{
+			if (point + name_len == '=')
+				break ;
+		}
+		i++;
+	}
+	if (envp[i] != NULL && !export_set_val(envp, i, str))
+		return (0);
+	return (1);
+}
+
+//WARNING NEW HAS TO BE FREED OUT OF EXPORT
 int	export_main(char ***envp, char *new)
 {
 	int		amount;
 	int		i;
 	char	**new_envp;
 
-	if (!export_check_input(new))
+	if (!export_check_input(new, *envp))
 		return (-1);
 	amount = chararr_len(*envp);
 	new_envp = ft_calloc(amount + 2, sizeof(char *));

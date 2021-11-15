@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:19:49 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/11 17:05:33 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/15 16:37:02 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,3 @@ struct s_simple_com	**utils_realloc_simple_com_list(struct s_simple_com ***old,
 		return (free_simple_com_list(&new, i));
 	return (new);
 }
-
