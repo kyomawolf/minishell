@@ -6,13 +6,21 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/12 18:41:57 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/15 15:10:01 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 
 # define STRUCTS_H
+
+enum e_op
+{
+	NONE;
+	PIPE;
+	AND;
+	OR;
+};
 
 typedef struct s_simple_com
 {
@@ -55,6 +63,7 @@ typedef struct s_bin
 	struct s_bin	*parent;
 	struct s_bin	**child;
 	t_simple_com	*command;
+	enum cp			control_op;
 	int				child_amount;
 }	t_bin;
 
