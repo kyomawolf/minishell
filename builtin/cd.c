@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new.c                                              :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/10 15:42:10 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/16 17:11:37 by jkasper          ###   ########.fr       */
+/*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
+/*   Updated: 2021/11/16 15:49:28 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "minishell.h"
 #include <unistd.h>
-#include "minis.h"
-#include "libft.h"
-#include "struct.h"
+#include <stdlib.h>
 
-t_data	*new_t_data(void)
+int	cd_main(char **input, t_data *data)
 {
-	t_data	*ret;
+	int		i;
+	char	*path;
 
-	ret = malloc(sizeof(t_data));
-	ret->currdir = NULL;
-	ret->currdir = getcwd(NULL, 0);
-	ret->allcom = ft_calloc(1, sizeof(struct s_command));
-	ret->input = NULL;
-	get_prompt(ret);
-	return (ret);
+	if (chdir(input[1]) == -1)
+	{
+		ft_putstring_fd("No such file or directory: ");
+		ft_putstring_fd(input[1]);
+		write(1, "\n", 1);
+		return (-1);
+	}
+	data->currdir = getcwd(NULL, 0);
+	get_prompt(data);
+	return (0);
 }

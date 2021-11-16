@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/15 15:10:01 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/16 17:08:34 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@
 
 enum e_op
 {
-	NONE;
-	PIPE;
-	AND;
-	OR;
+	NONE,
+	PIPE,
+	AND,
+	OR
 };
 
 typedef struct s_simple_com
@@ -63,7 +63,7 @@ typedef struct s_bin
 	struct s_bin	*parent;
 	struct s_bin	**child;
 	t_simple_com	*command;
-	enum cp			control_op;
+	enum e_op		control_op;
 	int				child_amount;
 }	t_bin;
 

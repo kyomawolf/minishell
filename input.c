@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/11 15:52:43 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/16 17:32:50 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <signal.h>
 #include <termios.h>
 #include <fcntl.h>
+#include <stdlib.h>
 
 void	input_interrupt(int sig)
 {
@@ -25,6 +26,11 @@ void	input_interrupt(int sig)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
+	}
+	if (sig == 6)
+	{
+		//call exit function
+		exit(1);
 	}
 	rl_on_new_line();
 	rl_redisplay();
@@ -36,9 +42,9 @@ void	input_attributes_add(void)
 {
 	struct termios	loc;
 
-	signal(SIGINT, main_interrupt);
-	signal(SIGQUIT, main_interrupt);
-	signal(6, main_interrupt);
+	signal(SIGINT, input_interrupt);
+	signal(SIGQUIT, input_interrupt);
+	signal(6, input_interrupt);
 	tcgetattr(1, &loc);
 	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
 	{
