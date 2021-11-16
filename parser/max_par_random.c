@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 13:09:28 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/11/11 16:41:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/11 18:28:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ int	ft_skip_quotes(char *input, int *i)
 			(*i)++;
 		if (input[(*i)] == '\0')
 			return (1);
+		(*i)++;
 	}
 	return (0);
 }
@@ -189,11 +190,8 @@ int	ft_count_hierarchy(char *input)
 	i = 0;
 	while (input[i] != '\0')
 	{
-		if ((input[i] == '\'' || input[i] == '"'))
-		{
-			if (ft_skip_quotes(input, &i))
-				return (-1);
-		}
+		if (ft_skip_quotes(input, &i))
+			return (-1);
 		if (input[i] == '(')
 			c_open_par++;
 		else if (input[i] == ')')
@@ -207,35 +205,83 @@ int	ft_count_hierarchy(char *input)
 	return (c_open_par);
 }
 
+char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+{
+	size_t	i;
+	size_t	j;
+	char	*needle_start;
+
+	i = 0;
+	if (!needle[i])
+		return ((char *) haystack);
+	while (i < len && haystack[i])
+	{
+		j = 0;
+		needle_start = &((char *)haystack)[i];
+		while (i + j < len && haystack[i + j] && needle[j]
+			&& haystack[i + j] == needle[j])
+			j++;
+		if (!needle[j])
+			return (needle_start);
+		i++;
+	}
+	return (NULL);
+}
+
+
 
 //unfinished
 int	ft_count_commands(char *input)
 {
-	int	c_cmds;
-	int	i;
-	int	c_operator;
+	int	len;
+	int	counter;
+	char	*str;
 
-	c_cmds = 0;
+	counter = 0;
+	str = input;
+	while (1)
+	{
+		len = ft_strlen(str);
+		if (len == 0)
+			break ;
+		str = ft_strnstr(str, "&&", len);
+		if (str == NULL)
+			break ;
+		str = str + 2;
+		if (*str == '&')
+		{
+			counter = -1;
+			break ;
+		}
+		counter++;
+	}
+	printf("%d\n", counter);
+	return (0);
+
+	/* int	i;
+	int	n_oper;
+
+	n_oper = 0;
 	i = 0;
 	while (input[i] != '\0')
 	{
 		if (ft_skip_quotes(input, &i))
 			return (-1);
-		if (!ft_strchr("&|", input[i]))
-			c_operator = 0;
-		if (input[i] == '&' && input[i + 1] == '&')
+
+		if (input[i] == '&')
 		{
-			c_operator++;
-			c_cmds++;
+			if (input[i + 1] != '&')
+				return (-1);
+			i++;
+			n_oper++;
 		}
-		else if (input[i] == '|' && input[i + 1] == '|')
+		else if (input[i] == '|')
 		{
-			c_operator++;
-			c_cmds++;
+			n_oper++;
 		}
 		i++;
 	}
-	return (0);
+	return (0); */
 }
 
 int	ft_parser(char * input)
@@ -243,7 +289,8 @@ int	ft_parser(char * input)
 	//int	n_token;
 	//int	i;
 
-	printf("Hierarchy %d\n", ft_count_hierarchy(input));
+	ft_count_commands(input);
+	//printf("Hierarchy %d\n", ft_count_hierarchy(input));
 	//i = 0;
 	/* n_token = ft_count_token(input, &i);
 	if (n_token == -1)
