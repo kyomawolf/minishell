@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 17:21:48 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/15 21:22:35 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/16 20:48:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "minis.h"
+#include "libft.h"
+#include <stdlib.h>
 
 int	chararr_len(char **arr)
 {
