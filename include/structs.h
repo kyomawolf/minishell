@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/16 17:08:34 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/17 17:14:07 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,21 @@
 
 # define STRUCTS_H
 
-enum e_op
+typedef enum e_op
 {
-	NONE,
-	PIPE,
 	AND,
-	OR
-};
+	OR,
+	PIPE,
+	OPAR,
+	CPAR,
+	HERE_DOC,
+	IRD,
+	ORD_APP,
+	ORD_TRC,
+	QUOTE,
+	DQUOTE,
+	WORD
+}	t_e_op;
 
 typedef struct s_simple_com
 {
@@ -56,6 +64,7 @@ typedef struct s_data
 	char				*input;
 	char				*prompt;
 	char				*currdir;
+	char				**envp;
 }	t_data;
 
 typedef struct s_bin
@@ -66,5 +75,19 @@ typedef struct s_bin
 	enum e_op		control_op;
 	int				child_amount;
 }	t_bin;
+
+typedef struct s_token
+{
+	char	*string;
+	int		type;
+	int		layer;
+}	t_token;
+
+typedef struct s_node
+{
+	void	*next;
+	void	*prev;
+	void	*content;
+}	t_node;
 
 #endif /*STRUCTS_H*/
