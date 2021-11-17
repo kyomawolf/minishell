@@ -30,7 +30,8 @@ int	ft_isalnum(int c);
 
 struct s_token
 {
-	char *	string;
+	char	*string;
+	char	**cmd_arr;
 	int		type;
 	int		layer;
 };
@@ -308,7 +309,7 @@ int	main(int argc, char **argv, char **envp)
 		ft_s_node_print_content(head);
 		//ft_s_node_expand_variables(head);
 		//expand variables and wildcards
-
+		//split words
 		ft_s_node_free(head);
 		//system("leaks test");
 		return (0);
