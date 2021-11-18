@@ -86,6 +86,9 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
+// check if token->string is valid on a later step?
+// what if quotes appear not at the beginning of the token->string?
+
 int	ft_s_token_get_type(void *content)
 {
 	char	*token;
@@ -252,6 +255,71 @@ char	*ft_get_next_token(char *input, int *i)
 	return (bytes);
 }
 
+int	ft_quotes_count(char *input)
+{
+	int		i;
+	int		counter;
+
+	counter = 0;
+	i = 0;
+	while (input[i] != '\0')
+	{
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			ft_skip_quotes(input, &i);
+			if (input[i] == '\0')
+				return (-1);
+			counter = counter + 2;
+
+		}
+		i++;
+	}
+	return (counter);
+}
+
+char	*memcpy_skip_quotes(char *dst, char *src)
+{
+	int		i;
+	int		j;
+	char	quote;
+
+	if (!dst && !src)
+		return (NULL);
+	i = 0;
+	j = 0;
+	quote = -1;
+	while (src[i] != '\0')
+	{
+		if ((src[i] == '\'' || src[i] == '"') && quote == -1)
+		{
+			quote = src[i++];
+			continue ;
+		}
+		else if (src[i] == quote)
+		{
+			quote = -1;
+			i++;
+			continue ;
+		}
+		dst[j++] = src[i++];
+	}
+	dst[j] = '\0';
+	return (dst);
+}
+
+void	ft_unquote_token(struct s_token *token)
+{
+	char	*new_string;
+	int		len;
+
+	len = ft_strlen(token->string);
+	len = len - ft_quotes_count(token->string);
+	new_string = (char *)malloc(sizeof(char) * len + 1);
+	memcpy_skip_quotes(new_string, token->string);
+	free (token->string);
+	token->string = new_string;
+}
+
 struct s_node	*lexer(char *input)
 {
 	int		i;
@@ -276,12 +344,14 @@ void	ft_s_node_print_content(struct s_node *head)
 {
 	while (head != NULL)
 	{
+		//if (((struct s_token *)head->content)->type == QUOTE || ((struct s_token *)head->content)->type == DQUOTE)
+			ft_unquote_token((struct s_token *)head->content); // type assignment has to be fixed: detection of quotes is wrong!
 		printf("[%d] %s\n", ((struct s_token *)head->content)->type, ((struct s_token *)head->content)->string);
 		head = head->next;
 	}
 }
 
-void	ft_s_node_expand_variables(struct s_node * head)
+/* void	ft_s_node_expand_variables(struct s_node * head)
 {
 	while (head != NULL)
 	{
@@ -297,7 +367,7 @@ void	ft_s_node_expand_variables(struct s_node * head)
 		}
 		head = head->next;
 	}
-}
+} */
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -308,7 +378,8 @@ int	main(int argc, char **argv, char **envp)
 		head = lexer(argv[1]);
 		ft_s_node_print_content(head);
 		//ft_s_node_expand_variables(head);
-		//expand variables and wildcards
+		//ft_unquote_token(head->content); in while loop
+		//expand variables then wildcards //information if variable was singlequoted?
 		//split words
 		ft_s_node_free(head);
 		//system("leaks test");
