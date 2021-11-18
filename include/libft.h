@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/17 15:09:50 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/15 17:00:24 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/18 12:49:47 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,5 @@ int		ft_putnbbase(long long number, char *base, int len);
 long	ft_numlen(long nb, int base);
 void	*ft_realloc(void *old, size_t newsize, size_t size, int i);
 int		ft_isallnum(char *str);
+int		ft_char_arr_len(char **arr);
 #endif
