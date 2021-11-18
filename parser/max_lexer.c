@@ -26,7 +26,10 @@
 #define DQUOTE 10
 #define WORD 11
 
+char	**ft_split_on_set_obey_quoting(char *s, char* set);
 int	ft_isalnum(int c);
+
+// STRUCTS
 
 struct s_token
 {
@@ -42,6 +45,16 @@ struct s_node
 	void	*prev;
 	void	*content;
 };
+
+// LIBFT FUNCTIONS
+
+int	ft_isalpha(int c)
+{
+	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+		return (1);
+	else
+		return (0);
+}
 
 size_t	ft_strlen(const char *str)
 {
@@ -85,6 +98,53 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	}
 	return (dst);
 }
+
+void	*ft_calloc(int nitems, int size)
+{
+	char	*ptr;
+	int		size_in_bytes;
+	int		i;
+
+	size_in_bytes = nitems * size;
+	ptr = (char *) malloc(size_in_bytes);
+	if (ptr == NULL)
+		return (NULL);
+	i = 0;
+	while (i < (size_in_bytes))
+	{
+		ptr[i] = 0;
+		i++;
+	}
+	return ((void *)ptr);
+}
+
+char	*ft_substr(char *s, unsigned int start, int len)
+{
+	char	*substr;
+	int	i;
+
+	substr = (char *) malloc(len + 1);
+	if (substr == NULL || s == NULL)
+		return (NULL);
+	if (start >= ft_strlen(s))
+	{
+		substr[0] = 0;
+		return (substr);
+	}
+	i = 0;
+	while (i < len && s[start])
+	{
+		substr[i] = s[start];
+		i++;
+		start++;
+	}
+	substr[i] = '\0';
+	return (substr);
+}
+
+//
+// LEXER FUNCTIONS
+//
 
 // check if token->string is valid on a later step?
 // what if quotes appear not at the beginning of the token->string?
@@ -131,11 +191,16 @@ int	ft_s_token_get_type(void *content)
 void	*ft_s_token_create(void *content)
 {
 	struct s_token	*token;
+	char			**cmd_arr;
 
 	token = (struct s_token *)malloc(sizeof(struct s_token));
 	if (token == NULL)
 		return (NULL);
 	token->string = content;
+	cmd_arr = ft_split_on_set_obey_quoting(token->string, " \t\n");
+	if (cmd_arr == NULL)
+		return (NULL);
+	token->cmd_arr = cmd_arr;
 	token->type = ft_s_token_get_type(content);
 	token->layer = 0;
 	return (token);
@@ -180,12 +245,22 @@ void	ft_s_node_add_back(struct s_node **head, struct s_node *node)
 
 void	ft_s_node_free(struct s_node *head)
 {
+	int				i;
 	struct s_node	*temp;
 
 	while (head != NULL)
 	{
+		i = 0;
+		while (((struct s_token *)head->content)->cmd_arr[i] != NULL)
+		{
+			free (((struct s_token *)head->content)->cmd_arr[i]);
+			((struct s_token *)head->content)->cmd_arr[i] = NULL;
+			i++;
+		}
+		free (((struct s_token *)head->content)->cmd_arr);
+		((struct s_token *)head->content)->cmd_arr = NULL;
 		free(((struct s_token *)head->content)->string);
-		head->content = NULL;
+		((struct s_token *)head->content)->string = NULL;
 		temp = head;
 		head = head->next;
 		free(temp);
@@ -206,6 +281,8 @@ void	ft_skip_quotes(char *input, int *pos)
 	quote = input[(*pos)++];
 	while (input[*pos] != quote && input[*pos] != '\0')
 		(*pos)++;
+	if (input[*pos] == '\0')
+		exit(EXIT_FAILURE); // FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE ERROR HANDLING ERROR HANDLING ERROR HANDLING
 }
 
 int	ft_token_get_length(char *input)
@@ -267,10 +344,7 @@ int	ft_quotes_count(char *input)
 		if (input[i] == '\'' || input[i] == '"')
 		{
 			ft_skip_quotes(input, &i);
-			if (input[i] == '\0')
-				return (-1);
 			counter = counter + 2;
-
 		}
 		i++;
 	}
@@ -307,18 +381,225 @@ char	*memcpy_skip_quotes(char *dst, char *src)
 	return (dst);
 }
 
-void	ft_unquote_token(struct s_token *token)
+char	*ft_unquote_string(char *str)
 {
 	char	*new_string;
 	int		len;
 
-	len = ft_strlen(token->string);
-	len = len - ft_quotes_count(token->string);
+	len = ft_strlen(str);
+	len = len - ft_quotes_count(str);
 	new_string = (char *)malloc(sizeof(char) * len + 1);
-	memcpy_skip_quotes(new_string, token->string);
-	free (token->string);
-	token->string = new_string;
+	memcpy_skip_quotes(new_string, str);
+	free (str);
+	return (new_string);
 }
+
+static int	ft_get_num_str(char *s, char *set)
+{
+	int		found;
+	int		num_str;
+	int		i;
+
+	found = 0;
+	num_str = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\'' || s[i] == '"')
+			ft_skip_quotes(s, &i);
+		if (ft_strchr(set, s[i]))
+			found = 0;
+		else if (found == 0)
+		{
+			num_str++;
+			found = 1;
+		}
+		i++;
+	}
+	return (num_str);
+}
+
+static char	*ft_get_substr(char *s, char* set, int *pos)
+{
+	int		i;
+	char	*substr;
+
+	while (ft_strchr(set, s[*pos]))
+		(*pos)++;
+	i = *pos;
+	while (!ft_strchr(set, s[i]) && s[i] != '\0')
+	{
+		if (s[i] == '\'' || s[i] == '"')
+			ft_skip_quotes(s, &i);
+		i++;
+	}
+	substr = ft_substr(s, *pos, i - *pos);
+	if (substr == NULL)
+		return (NULL);
+	*pos = i + 1;
+	return (substr);
+}
+
+char	**ft_split_on_set_obey_quoting(char *s, char* set)
+{
+	int		num_str;
+	char	**ret;
+	int		i;
+	char	*substr;
+	int		pos;
+
+	if (s == NULL)
+		return (NULL);
+	num_str = ft_get_num_str(s, set);
+	ret = ft_calloc(sizeof(char *), num_str + 1);
+	if (ret == NULL)
+		return (NULL);
+	i = 0;
+	pos = 0;
+	while (i < num_str)
+	{
+		substr = ft_get_substr(s, set, &pos);
+		if (substr == NULL)
+			return (NULL);
+		ret[i] = substr;
+		i++;
+	}
+	ret[num_str] = NULL;
+	return (ret);
+}
+
+/////////////////////////////       added
+
+//space after var_name and '=' sign is not allowed
+//not assigned variable gives empty line or new prompt
+//no spaces in var_name
+//var_name has to start with alpha or '_'
+//no special character in var_name
+
+// must handle $?
+
+char	*ft_var_name_is_valid(char *str, int i)
+{
+	int		i_start;
+	char	*var_name;
+
+	i_start = i;
+	//check if var_name is ?
+	if (str[i] == '?')
+	{
+		var_name = malloc(2);
+		var_name[0] = '?';
+		var_name[1] = '\0';
+		return (var_name);
+	}
+	//check first char of var_name: must be alpha or _
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (NULL);
+	while (str[i] != '\0' && str[i] != '"' && str[i] != '\'' && str[i] != '$' && str[i] != ' ')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (NULL);
+		i++;
+	}
+	var_name = ft_substr(str, i_start, i - i_start);
+	return (var_name);
+}
+
+void	ft_check_variables_expansion(char *str, int i)
+{
+	char	quote;
+	char	*var;
+
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'')
+			ft_skip_quotes(str, &i);
+		else if (str[i] == '$')
+		{
+			var = ft_var_name_is_valid(str, i + 1);
+			if (var == NULL)
+			{
+				printf("invalid var_name\n");
+				exit(EXIT_FAILURE); // free and error handling
+			}
+			printf("var_name: :%s:\n", var);
+			free(var);
+			var = NULL;
+		}
+		else if (str[i] == '"')
+		{
+			quote = str[i++];
+			while (str[i] != quote) // && str[i] != '\0'
+			{
+				if (str[i] == '$' && quote == '"')
+				{
+					var = ft_var_name_is_valid(str, i + 1);
+					if (var == NULL)
+					{
+						printf("invalid var_name\n");
+						exit(EXIT_FAILURE); // free and error handling
+					}
+					printf("var_name: :%s:\n", var);
+					free(var);
+					var = NULL;
+					// search for variable in env
+					//	expand variable & split content if necessary & add tokens
+				}
+				i++;
+			}
+		}
+		i++;
+	}
+}
+
+/* {
+			quote = str[i++];
+			while (str[i] != quote) // && str[i] != '\0'
+			{
+				if (str[i] == '$' && quote == '"')
+				{
+					var = ft_var_name_is_valid(str, i + 1);
+					if (var == NULL)
+					{
+						printf("invalid var_name\n");
+						exit(EXIT_FAILURE); // free and error handling
+					}
+					printf("var_name: :%s:\n", var);
+					free(var);
+					var = NULL;
+					// search for variable in env
+					//	expand variable & split content if necessary & add tokens
+				}
+				i++;
+			}
+} */
+
+void	ft_s_node_expand_variables(struct s_node *head)
+{
+	int		i;
+
+	while (head != NULL)
+	{
+		i = 0;
+		while (((struct s_token *)head->content)->cmd_arr[i] != NULL)
+		{
+			if (((struct s_token *)head->content)->type == WORD || ((struct s_token *)head->content)->type == DQUOTE)
+			{
+				printf("%s\n", ((struct s_token *)head->content)->cmd_arr[i]);
+				if (ft_strchr(((struct s_token *)head->content)->cmd_arr[i], '$'))
+				{
+					ft_check_variables_expansion(((struct s_token *)head->content)->cmd_arr[i], 0);
+					// search for variable in env
+					//	expand variable & add tokens
+				}
+			}
+			i++;
+		}
+		head = head->next;
+	}
+}
+
+/////////////////////////////fin added
 
 struct s_node	*lexer(char *input)
 {
@@ -342,43 +623,39 @@ struct s_node	*lexer(char *input)
 
 void	ft_s_node_print_content(struct s_node *head)
 {
+	char	*str;
+	int		i;
+
 	while (head != NULL)
 	{
+
 		//if (((struct s_token *)head->content)->type == QUOTE || ((struct s_token *)head->content)->type == DQUOTE)
-			ft_unquote_token((struct s_token *)head->content); // type assignment has to be fixed: detection of quotes is wrong!
-		printf("[%d] %s\n", ((struct s_token *)head->content)->type, ((struct s_token *)head->content)->string);
+		//str = ft_unquote_string(((struct s_token *)head->content)->string); // type assignment has to be fixed: detection of quotes is wrong!
+		//((struct s_token *)head->content)->string = str;
+		i = 0;
+		while (((struct s_token *)head->content)->cmd_arr[i] != NULL)
+		{
+			printf("Original :%s:\n", ((struct s_token *)head->content)->cmd_arr[i]);
+			str = ft_unquote_string(((struct s_token *)head->content)->cmd_arr[i]);
+			((struct s_token *)head->content)->cmd_arr[i] = str;
+			printf("Unquoted :%s:\n", ((struct s_token *)head->content)->cmd_arr[i]);
+			i++;
+		}
+		//printf("[%d] :%s:\n", ((struct s_token *)head->content)->type, ((struct s_token *)head->content)->string);
 		head = head->next;
 	}
 }
 
-/* void	ft_s_node_expand_variables(struct s_node * head)
-{
-	while (head != NULL)
-	{
-		if (((struct s_token *)head->content)->type == WORD || ((struct s_token *)head->content)->type == DQUOTE)
-		{
-			if (ft_strchr(((struct s_token *)head->content)->string, '$'))
-			{
-				// search for variable in env
-				//	expand variable & add tokens
-
-
-			}
-		}
-		head = head->next;
-	}
-} */
-
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv)//, char **envp)
 {
 	struct s_node	*head;
 
 	if (argc == 2)
 	{
 		head = lexer(argv[1]);
-		ft_s_node_print_content(head);
-		//ft_s_node_expand_variables(head);
-		//ft_unquote_token(head->content); in while loop
+		ft_s_node_expand_variables(head);
+		//ft_s_node_print_content(head);
+		//ft_unquote_string(head->content); in while loop
 		//expand variables then wildcards //information if variable was singlequoted?
 		//split words
 		ft_s_node_free(head);
