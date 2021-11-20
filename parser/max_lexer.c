@@ -26,6 +26,8 @@
 #define DQUOTE 10
 #define WORD 11
 
+#define BUFFER_SIZE 50
+
 char	**ft_split_on_set_obey_quoting(char *s, char* set);
 int	ft_isalnum(int c);
 
@@ -478,6 +480,172 @@ char	**ft_split_on_set_obey_quoting(char *s, char* set)
 
 // must handle $?
 
+struct s_word
+{
+	char			*chars;
+	ssize_t			write_head;
+	unsigned int	alloc;
+};
+
+int	ft_s_word_init(struct s_word *word)
+{
+	word->write_head = 0;
+	word->alloc = BUFFER_SIZE;
+	word->chars = malloc(sizeof(char) * word->alloc);
+	if (word->chars == NULL)
+		return (1);
+	return (0);
+}
+
+void	ft_memcpy(char *dst, const char *src, unsigned int n)
+{
+	while (n > 0)
+	{
+		dst[n - 1] = src[n - 1];
+		n--;
+	}
+}
+
+int	ft_s_word_append_char(struct s_word *word, char c)
+{
+	unsigned int	new_alloc;
+	char			*new_chars;
+
+	if (word->write_head >= word->alloc)
+	{
+		new_alloc = word->write_head + word->alloc;
+		new_chars = malloc(sizeof(char) * new_alloc);
+		if (new_chars == NULL)
+			return (1);
+		ft_memcpy(new_chars, word->chars, word->write_head);
+		free (word->chars);
+		word->chars = new_chars;
+		word->alloc = new_alloc;
+	}
+	word->chars[word->write_head] = c;
+	word->write_head++;
+	return (0);
+}
+
+char	*ft_s_word_get_str(struct s_word *word)
+{
+	char	*str;
+
+	if (word->write_head <= 0)
+	{
+		free(word->chars);
+		return (NULL);
+	}
+	str = malloc(sizeof(char) * word->write_head + 1);
+	if (str == NULL)
+	{
+		free(word->chars);
+		return (NULL);
+	}
+	ft_memcpy(str, word->chars, word->write_head);
+	str[word->write_head] = '\0';
+	free (word->chars);
+	return (str);
+}
+
+
+
+char	**get_next_word(char *input)
+{
+	int				i;
+	struct s_word	word;
+	char			c;
+	char			status;
+	char			*var_name;
+	char			*var_value;
+	int				j;
+	struct s_node	*words;
+	struct s_node	*head;
+	char			*str;
+
+	ft_s_node_create()
+	ft_s_word_init(&word);
+	status = -1;
+	i = 0;
+	while (input[i] != '\0')
+	{
+		//set status
+		if (status == -1 && (input[i] == '"' || input[i] == '\''))
+		{
+			status = input[i];
+			i++;
+			continue ;
+		}
+		//unset status
+		else if (input[i] == status)
+		{
+			status = -1;
+			i++;
+			continue ;
+		}
+		//append char as literal (includes single quoted $)
+		else if ((status == '\'' && input[i] != status) || (input[i] != '$'))
+		{
+			if (ft_s_word_append_char(&word, input[i]))
+			{
+				free(word.chars);
+				return (NULL);
+			}
+		}
+		// found variable in dquoted or unquoted state
+		else if (input[i] == '$')
+		{
+			var_name = ft_var_name_is_valid(input, i + 1);
+			if (var_name == NULL)
+				return (NULL); // error management
+			var_value = getenv(var_name);
+			if (var_value == NULL)
+				return (NULL); // error management
+			//dquoted $ -> var_value == one word
+			if (status == '"')
+			{
+				j = 0;
+				while (var_value[j] != '\0')
+				{
+					if (ft_s_word_append_char(&word, var_value[j]))
+					{
+						free(word.chars);
+						return (NULL);
+					}
+					j++;
+				}
+			}
+			//unquoted $ -> var_value may contain several words
+			//unfinished
+			/* else if (status == -1)
+			{
+				j = 0;
+				while (var_value[j] != '\0')
+				{
+					if (var_value[j] == ' ')
+					{
+						while (var_value[j] == ' ')
+							j++;
+						str = ft_s_word_get_str(&word);
+						words = ft_s_node_create(str);
+						ft_s_node_add_back(&head, words);
+						ft_s_word_init(&word);
+						continue ;
+					}
+					else if (ft_s_word_append_char(&word, var_value[j]))
+					{
+						free(word.chars);
+						return (NULL);
+					}
+					j++;
+				}
+			} */
+		}
+		i++;
+	}
+}
+
+
 char	*ft_var_name_is_valid(char *str, int i)
 {
 	int		i_start;
@@ -507,8 +675,9 @@ char	*ft_var_name_is_valid(char *str, int i)
 
 void	ft_check_variables_expansion(char *str, int i)
 {
-	char	quote;
-	char	*var;
+	//char	quote;
+	char	*var_name;
+	char	*var_value;
 
 	while (str[i] != '\0')
 	{
@@ -516,38 +685,42 @@ void	ft_check_variables_expansion(char *str, int i)
 			ft_skip_quotes(str, &i);
 		else if (str[i] == '$')
 		{
-			var = ft_var_name_is_valid(str, i + 1);
-			if (var == NULL)
+			var_name = ft_var_name_is_valid(str, i + 1);
+			if (var_name == NULL)
 			{
 				printf("invalid var_name\n");
 				exit(EXIT_FAILURE); // free and error handling
 			}
-			printf("var_name: :%s:\n", var);
-			free(var);
-			var = NULL;
+			printf("var_name: :%s:\n", var_name);
+			var_value = getenv(var_name);
+			printf("var_value: :%s:\n", var_value);
+			free(var_name);
+			var_name = NULL;
 		}
-		else if (str[i] == '"')
+		/* else if (str[i] == '"')
 		{
 			quote = str[i++];
 			while (str[i] != quote) // && str[i] != '\0'
 			{
 				if (str[i] == '$' && quote == '"')
 				{
-					var = ft_var_name_is_valid(str, i + 1);
-					if (var == NULL)
+					var_name = ft_var_name_is_valid(str, i + 1);
+					if (var_name == NULL)
 					{
 						printf("invalid var_name\n");
 						exit(EXIT_FAILURE); // free and error handling
 					}
-					printf("var_name: :%s:\n", var);
-					free(var);
-					var = NULL;
+					printf("var_name: :%s:\n", var_name);
+					var_value = getenv(var_name);
+					printf("var_value: :%s:\n", var_value);
+					free(var_name);
+					var_name = NULL;
 					// search for variable in env
 					//	expand variable & split content if necessary & add tokens
 				}
 				i++;
 			}
-		}
+		} */
 		i++;
 	}
 }
