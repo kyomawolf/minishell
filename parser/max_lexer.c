@@ -26,9 +26,8 @@
 #define DQUOTE 10
 #define WORD 11
 
-#define BUFFER_SIZE 50
+#define BUFFER_SIZE 1
 
-char	**ft_split_on_set_obey_quoting(char *s, char* set);
 int	ft_isalnum(int c);
 char	*ft_var_name_is_valid(char *str, int i);
 
@@ -38,7 +37,7 @@ struct s_token
 {
 	char	*string;
 	struct s_node	*args;
-	//char	**cmd_arr;
+	char	**cmd_arr;
 	int		type;
 	int		layer;
 };
@@ -48,6 +47,13 @@ struct s_node
 	void	*next;
 	void	*prev;
 	void	*content;
+};
+
+struct s_word
+{
+	char			*chars;
+	size_t			write_head;
+	unsigned int	alloc;
 };
 
 // LIBFT FUNCTIONS
@@ -182,11 +188,11 @@ int	ft_s_token_get_type(void *content)
 			type = ORD_APP;
 		else if (token[0] == '>' && token[1] == '\0')
 			type = ORD_TRC;
-		else if (token[0] == '\'')
+		else if (token[0] == '\'') // what if quotes appear on a later char?
 			type = QUOTE;
-		else if (token[0] == '"')
+		else if (token[0] == '"') // what if quotes appear on a later char?
 			type = DQUOTE;
-		else if (ft_isalnum(token[0]) || token[0] == '_')
+		else if (ft_isalnum(token[0]) || token[0] == '_') // what if quotes appear on a later char?
 			type = WORD;
 	}
 	return (type);
@@ -195,17 +201,13 @@ int	ft_s_token_get_type(void *content)
 void	*ft_s_token_create(void *content)
 {
 	struct s_token	*token;
-	//char			**cmd_arr;
 
 	token = (struct s_token *)malloc(sizeof(struct s_token));
 	if (token == NULL)
 		return (NULL);
 	token->string = content;
 	token->args = NULL;
-	//cmd_arr = ft_split_on_set_obey_quoting(token->string, " \t\n");
-	//if (cmd_arr == NULL)
-	//	return (NULL);
-	//token->cmd_arr = cmd_arr;
+	token->cmd_arr = NULL;
 	token->type = ft_s_token_get_type(content);
 	token->layer = 0;
 	return (token);
@@ -257,14 +259,6 @@ void	ft_s_node_free(struct s_node *head)
 	while (head != NULL)
 	{
 		i = 0;
-		/* while (((struct s_token *)head->content)->cmd_arr[i] != NULL)
-		{
-			free (((struct s_token *)head->content)->cmd_arr[i]);
-			((struct s_token *)head->content)->cmd_arr[i] = NULL;
-			i++;
-		}
-		free (((struct s_token *)head->content)->cmd_arr);
-		((struct s_token *)head->content)->cmd_arr = NULL; */
 		free(((struct s_token *)head->content)->string);
 		((struct s_token *)head->content)->string = NULL;
 		while (((struct s_token *)head->content)->args != NULL)
@@ -281,6 +275,12 @@ void	ft_s_node_free(struct s_node *head)
 		free(temp);
 		temp = NULL;
 	}
+}
+
+void	ft_skip_set(char *input, int *pos, char *set)
+{
+	while (ft_strchr(set, input[*pos]) && input[*pos] != '\0')
+		(*pos)++;
 }
 
 void	ft_skip_whitespace(char *input, int *pos)
@@ -347,7 +347,309 @@ char	*ft_get_next_token(char *input, int *i)
 	return (bytes);
 }
 
-int	ft_quotes_count(char *input)
+/*
+** cmd_string_handling
+*/
+
+//space after var_name and '=' sign is not allowed
+//not assigned variable gives empty line or new prompt
+//no spaces in var_name
+//var_name has to start with alpha or '_'
+//no special character in var_name
+
+// must handle $?
+
+int	ft_s_word_init(struct s_word *word)
+{
+	word->write_head = 0;
+	word->alloc = BUFFER_SIZE;
+	word->chars = malloc(sizeof(char) * word->alloc);
+	if (word->chars == NULL)
+		return (1);
+	return (0);
+}
+
+int	ft_s_word_append_char(struct s_word *word, char c)
+{
+	unsigned int	new_alloc;
+	char			*new_chars;
+
+	if (word->write_head >= word->alloc)
+	{
+		new_alloc = word->write_head + word->alloc;
+		new_chars = malloc(sizeof(char) * new_alloc);
+		if (new_chars == NULL)
+			return (1);
+		ft_memcpy(new_chars, word->chars, word->write_head);
+		free (word->chars);
+		word->chars = new_chars;
+		word->alloc = new_alloc;
+	}
+	word->chars[word->write_head] = c;
+	word->write_head++;
+	return (0);
+}
+
+char	*ft_s_word_get_str(struct s_word *word)
+{
+	char	*str;
+
+	if (word->write_head <= 0)
+	{
+		free(word->chars);
+		return (NULL);
+	}
+	str = malloc(sizeof(char) * word->write_head + 1);
+	if (str == NULL)
+	{
+		free(word->chars);
+		return (NULL);
+	}
+	ft_memcpy(str, word->chars, word->write_head);
+	str[word->write_head] = '\0';
+	free (word->chars);
+	return (str);
+}
+
+int	ft_cmdstring_helper_add_word(struct s_token *token, struct s_word *word)
+{
+	int		ret;
+	char	*str;
+	struct s_node	*node;
+
+	ret = 0;
+	str = ft_s_word_get_str(word);
+	if (str == NULL)
+		ret = -1;
+	node = ft_s_node_create(str);
+	if (node == NULL)
+	{
+		free (str);
+		ret = -1;
+	}
+	ft_s_node_add_back(&(token->args), node);
+	return (ret);
+}
+
+char	*ft_var_name_is_valid(char *str, int i)
+{
+	int		i_start;
+	char	*var_name;
+
+	i_start = i;
+	//check if var_name is ?
+	if (str[i] == '?')
+	{
+		var_name = malloc(2);
+		var_name[0] = '?';
+		var_name[1] = '\0';
+		return (var_name);
+	}
+	//check first char of var_name: must be alpha or _
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (NULL);
+	while (str[i] != '\0' && str[i] != '"' && str[i] != '\'' && str[i] != '$' && str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (NULL);
+		i++;
+	}
+	var_name = ft_substr(str, i_start, i - i_start);
+	return (var_name);
+}
+
+int	ft_handle_variable(struct s_token *token, struct s_word *word, char status, int *i)
+{
+	char	*var_name;
+	char	*var_value;
+	int		j;
+
+	var_name = ft_var_name_is_valid(token->string, *i + 1);
+	if (var_name == NULL)
+		return (-1);
+	var_value = getenv(var_name);
+	if (var_value == NULL)
+		return (-1);
+	*i += ft_strlen(var_name);
+	//dquoted $ -> var_value == one word
+	if (status == '"')
+	{
+		j = 0;
+		while (var_value[j] != '\0')
+		{
+			if (var_value[j] == '*')
+			{
+				ft_skip_set(var_value, &j, "*");
+				ft_s_word_append_char(word, '"');
+				ft_s_word_append_char(word, '*');
+				ft_s_word_append_char(word, '"');
+				continue ;
+			}
+			else if (ft_s_word_append_char(word, var_value[j]))
+				return (-1);
+			j++;
+		}
+	}
+	//unquoted $ -> var_value may contain several words
+	else if (status == -1)
+	{
+		j = 0;
+		while (var_value[j] != '\0')
+		{
+			if (var_value[j] == ' ' || var_value[j] == '\t' || var_value[j] == '\n')
+			{
+				while (var_value[j] == ' ' || var_value[j] == '\t' || var_value[j] == '\n')
+					j++;
+				if (ft_cmdstring_helper_add_word(token, word) == -1)
+					return (-1);
+				ft_s_word_init(word);
+				continue ;
+			}
+			else if (ft_s_word_append_char(word, var_value[j]))
+				return (-1);
+			j++;
+		}
+	}
+	else
+		return (-1);
+	return (0);
+}
+
+int	ft_handle_cmdstring(struct s_token *token)
+{
+	int				i;
+	char			status;
+	struct s_word	word;
+
+	status = -1;
+	ft_s_word_init(&word);
+	i = 0;
+	while (token->string[i] != '\0')
+	{
+		//add word to list
+		if ((token->string[i] == ' ' || token->string[i] == '\t' || token->string[i] == '\n') && status !=  '\'' && status != '"')
+		{
+			if (ft_cmdstring_helper_add_word(token, &word) == -1)
+				return (-1);
+			ft_s_word_init(&word);
+			ft_skip_whitespace(token->string, &i);
+			continue ;
+		}
+		//set status
+		else if (status == -1 && (token->string[i] == '"' || token->string[i] == '\''))
+		{
+			status = token->string[i];
+			i++;
+			continue ;
+		}
+		//unset status
+		else if (token->string[i] == status)
+		{
+			status = -1;
+			i++;
+			continue ;
+		}
+		//append char as literal (includes single quoted $)
+		else if (status == '\'' || token->string[i] != '$')
+		{
+			if (token->string[i] == '*' && (status == '\'' || status == '"'))
+			{
+				ft_skip_set(token->string, &i, "*");
+				ft_s_word_append_char(&word, '"');
+				ft_s_word_append_char(&word, '*');
+				ft_s_word_append_char(&word, '"');
+				continue ;
+			}
+			else if (ft_s_word_append_char(&word, token->string[i]))
+			{
+				free(word.chars);
+				return (-1);
+			}
+		}
+		// found variable in dquoted or unquoted state
+		else if (token->string[i] == '$')
+		{
+			if (ft_handle_variable(token, &word, status, &i) == -1)
+			{
+				free(word.chars);
+				return (-1);
+			}
+		}
+		i++;
+	}
+	if (ft_cmdstring_helper_add_word(token, &word) == -1)
+		return (-1);
+	return (1);
+}
+
+void	ft_handle_nodes(struct s_node *head)
+{
+	while (head != NULL)
+	{
+		if (((struct s_token *)head->content)->type == WORD || ((struct s_token *)head->content)->type == DQUOTE || ((struct s_token *)head->content)->type == QUOTE)
+			ft_handle_cmdstring((struct s_token *)head->content);
+		while (((struct s_token *)head->content)->args != NULL)
+		{
+			printf("%s\n", ((struct s_token *)head->content)->args->content);
+			((struct s_token *)head->content)->args = ((struct s_token *)head->content)->args->next;
+		}
+		head = head->next;
+	}
+}
+
+// lexer: breaks input string from readline into cmd_strings, filenames, control operator or redirection operators
+struct s_node	*lexer(char *input)
+{
+	int		i;
+	char	*bytes;
+	struct s_node	*node;
+	struct s_node	*head;
+	struct s_token	*token;
+
+	head = NULL;
+	i = 0;
+	while (input[i] != '\0')
+	{
+		bytes = ft_get_next_token(input, &i);
+		token = ft_s_token_create(bytes);
+		node = ft_s_node_create(token);
+		ft_s_node_add_back(&head, node);
+	}
+	return (head);
+}
+
+void	ft_s_node_print_content(struct s_node *head)
+{
+	while (head != NULL)
+	{
+		printf("[%d] :%s:\n", ((struct s_token *)head->content)->type, ((struct s_token *)head->content)->string);
+		head = head->next;
+	}
+}
+
+int	main(int argc, char **argv)//, char **envp)
+{
+	struct s_node	*head;
+
+	if (argc == 2)
+	{
+		head = lexer(argv[1]);
+		ft_handle_nodes(head);
+		ft_s_node_print_content(head);
+		//expand wildcards
+		//create cmd_arr (char **)
+		ft_s_node_free(head);
+		//system("leaks test");
+		return (0);
+	}
+	return (1);
+}
+
+//
+// unused utils
+//
+
+/* int	ft_quotes_count(char *input)
 {
 	int		i;
 	int		counter;
@@ -481,320 +783,4 @@ char	**ft_split_on_set_obey_quoting(char *s, char* set)
 	}
 	ret[num_str] = NULL;
 	return (ret);
-}
-
-/////////////////////////////       added
-
-//space after var_name and '=' sign is not allowed
-//not assigned variable gives empty line or new prompt
-//no spaces in var_name
-//var_name has to start with alpha or '_'
-//no special character in var_name
-
-// must handle $?
-
-struct s_word
-{
-	char			*chars;
-	size_t			write_head;
-	unsigned int	alloc;
-};
-
-int	ft_s_word_init(struct s_word *word)
-{
-	word->write_head = 0;
-	word->alloc = BUFFER_SIZE;
-	word->chars = malloc(sizeof(char) * word->alloc);
-	if (word->chars == NULL)
-		return (1);
-	return (0);
-}
-
-void	ft_memcpy2(char *dst, const char *src, unsigned int n)
-{
-	while (n > 0)
-	{
-		dst[n - 1] = src[n - 1];
-		n--;
-	}
-}
-
-int	ft_s_word_append_char(struct s_word *word, char c)
-{
-	unsigned int	new_alloc;
-	char			*new_chars;
-
-	if (word->write_head >= word->alloc)
-	{
-		new_alloc = word->write_head + word->alloc;
-		new_chars = malloc(sizeof(char) * new_alloc);
-		if (new_chars == NULL)
-			return (1);
-		ft_memcpy(new_chars, word->chars, word->write_head);
-		free (word->chars);
-		word->chars = new_chars;
-		word->alloc = new_alloc;
-	}
-	word->chars[word->write_head] = c;
-	word->write_head++;
-	return (0);
-}
-
-char	*ft_s_word_get_str(struct s_word *word)
-{
-	char	*str;
-
-	if (word->write_head <= 0)
-	{
-		free(word->chars);
-		return (NULL);
-	}
-	str = malloc(sizeof(char) * word->write_head + 1);
-	if (str == NULL)
-	{
-		free(word->chars);
-		return (NULL);
-	}
-	ft_memcpy2(str, word->chars, word->write_head);
-	str[word->write_head] = '\0';
-	free (word->chars);
-	return (str);
-}
-
-int	ft_cmdstring_helper_add_word(struct s_token *token, struct s_word *word)
-{
-	int		ret;
-	char	*str;
-	struct s_node	*node;
-
-	ret = 0;
-	str = ft_s_word_get_str(word);
-	if (str == NULL)
-		ret = -1;
-	node = ft_s_node_create(str);
-	if (node == NULL)
-	{
-		free (str);
-		ret = -1;
-	}
-	ft_s_node_add_back(&(token->args), node);
-	//free ((word)->chars);
-	return (ret);
-}
-
-int	ft_handle_variable(struct s_token *token, struct s_word *word, char status, int *i)
-{
-	char	*var_name;
-	char	*var_value;
-	int		j;
-
-	var_name = ft_var_name_is_valid(token->string, *i + 1);
-	if (var_name == NULL)
-		return (-1);
-	var_value = getenv(var_name);
-	if (var_value == NULL)
-		return (-1);
-	*i += ft_strlen(var_name);
-	//dquoted $ -> var_value == one word
-	if (status == '"')
-	{
-		j = 0;
-		while (var_value[j] != '\0')
-		{
-			if (ft_s_word_append_char(word, var_value[j]))
-				return (-1);
-			j++;
-		}
-	}
-	//unquoted $ -> var_value may contain several words
-	else if (status == -1)
-	{
-		j = 0;
-		while (var_value[j] != '\0')
-		{
-			if (var_value[j] == ' ')
-			{
-				while (var_value[j] == ' ')
-					j++;
-				if (ft_cmdstring_helper_add_word(token, word) == -1)
-					return (-1);
-				ft_s_word_init(word);
-				continue ;
-			}
-			else if (ft_s_word_append_char(word, var_value[j]))
-				return (-1);
-			j++;
-		}
-	}
-	else
-		return (-1);
-	return (0);
-}
-
-int	ft_handle_cmdstring(struct s_token *token)
-{
-	int				i;
-	char			status;
-	struct s_word	word;
-
-	status = -1;
-	ft_s_word_init(&word);
-	i = 0;
-	while (token->string[i] != '\0')
-	{
-		//add word to list
-		if ((token->string[i] == ' ' || token->string[i] == '\t' || token->string[i] == '\n') && status !=  '\'' && status != '"')
-		{
-			if (ft_cmdstring_helper_add_word(token, &word) == -1)
-				return (-1);
-			ft_s_word_init(&word);
-			ft_skip_whitespace(token->string, &i);
-			continue ;
-		}
-		//set status
-		else if (status == -1 && (token->string[i] == '"' || token->string[i] == '\''))
-		{
-			status = token->string[i];
-			i++;
-			continue ;
-		}
-		//unset status
-		else if (token->string[i] == status)
-		{
-			status = -1;
-			i++;
-			continue ;
-		}
-		//append char as literal (includes single quoted $)
-		else if ((status == '\'') || (token->string[i] != '$'))
-		{
-			if (ft_s_word_append_char(&word, token->string[i]))
-			{
-				free(word.chars);
-				return (-1);
-			}
-		}
-		// found variable in dquoted or unquoted state
-		else if (token->string[i] == '$')
-		{
-			if (ft_handle_variable(token, &word, status, &i) == -1)
-			{
-				free(word.chars);
-				return (-1);
-			}
-		}
-		i++;
-	}
-	if (ft_cmdstring_helper_add_word(token, &word) == -1)
-		return (-1);
-	return (1);
-}
-
-void	ft_handle_nodes(struct s_node *head)
-{
-	while (head != NULL)
-	{
-		if (((struct s_token *)head->content)->type == WORD || ((struct s_token *)head->content)->type == DQUOTE || ((struct s_token *)head->content)->type == QUOTE)
-			ft_handle_cmdstring((struct s_token *)head->content);
-		while (((struct s_token *)head->content)->args != NULL)
-		{
-			printf("%s\n", ((struct s_token *)head->content)->args->content);
-			((struct s_token *)head->content)->args = ((struct s_token *)head->content)->args->next;
-		}
-		head = head->next;
-	}
-}
-
-char	*ft_var_name_is_valid(char *str, int i)
-{
-	int		i_start;
-	char	*var_name;
-
-	i_start = i;
-	//check if var_name is ?
-	if (str[i] == '?')
-	{
-		var_name = malloc(2);
-		var_name[0] = '?';
-		var_name[1] = '\0';
-		return (var_name);
-	}
-	//check first char of var_name: must be alpha or _
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (NULL);
-	while (str[i] != '\0' && str[i] != '"' && str[i] != '\'' && str[i] != '$' && str[i] != ' ')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (NULL);
-		i++;
-	}
-	var_name = ft_substr(str, i_start, i - i_start);
-	return (var_name);
-}
-
-/////////////////////////////fin added
-
-struct s_node	*lexer(char *input)
-{
-	int		i;
-	char	*bytes;
-	struct s_node	*node;
-	struct s_node	*head;
-	struct s_token	*token;
-
-	head = NULL;
-	i = 0;
-	while (input[i] != '\0')
-	{
-		bytes = ft_get_next_token(input, &i);
-		token = ft_s_token_create(bytes);
-		node = ft_s_node_create(token);
-		ft_s_node_add_back(&head, node);
-	}
-	return (head);
-}
-
-void	ft_s_node_print_content(struct s_node *head)
-{
-	//char	*str;
-	//int		i;
-
-	while (head != NULL)
-	{
-
-		//if (((struct s_token *)head->content)->type == QUOTE || ((struct s_token *)head->content)->type == DQUOTE)
-		//str = ft_unquote_string(((struct s_token *)head->content)->string); // type assignment has to be fixed: detection of quotes is wrong!
-		//((struct s_token *)head->content)->string = str;
-		/* i = 0;
-		while (((struct s_token *)head->content)->cmd_arr[i] != NULL)
-		{
-			printf("Original :%s:\n", ((struct s_token *)head->content)->cmd_arr[i]);
-			str = ft_unquote_string(((struct s_token *)head->content)->cmd_arr[i]);
-			((struct s_token *)head->content)->cmd_arr[i] = str;
-			printf("Unquoted :%s:\n", ((struct s_token *)head->content)->cmd_arr[i]);
-			i++;
-		} */
-		printf("[%d] :%s:\n", ((struct s_token *)head->content)->type, ((struct s_token *)head->content)->string);
-		head = head->next;
-	}
-}
-
-int	main(int argc, char **argv)//, char **envp)
-{
-	struct s_node	*head;
-
-	if (argc == 2)
-	{
-		head = lexer(argv[1]);
-		ft_handle_nodes(head);
-		//ft_s_node_expand_variables(head);
-		//ft_s_node_print_content(head);
-		//ft_unquote_string(head->content); in while loop
-		//expand variables then wildcards //information if variable was singlequoted?
-		//split words
-		ft_s_node_free(head);
-		//system("leaks test");
-		return (0);
-	}
-	return (1);
-}
+} */
