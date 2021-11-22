@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/17 15:02:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/22 00:47:18 by jkasper          ###   ########.fr       */
+/*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
+/*   Updated: 2021/11/22 18:11:25 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <stdio.h>
 #include <stdlib.h>
-char	*ft_strdup(const char *s1)
-{
-	char	*s2;
-	size_t	len;
+#include "structs.h"
+#include "minis.h"
+#include "parser.h"
 
-	len = ft_strlen(s1);
-	s2 = malloc(len + 1 * sizeof(char));
-	if (s2 == NULL)
-		return (NULL);
-	ft_memcpy(s2, s1, (len + 1));
-	return (s2);
+t_bin	*add_com(t_token *tok);
+int		par_check_com(t_node *node);
+int		count_children(t_node *node);
+
+
+t_bin	*builder_main(t_node *head)
+{
+	t_bin	*tree;
+
+	tree = b_tree_init(head, 0);
+	free_t_node_list(head);
+	return (tree);
 }
