@@ -12,6 +12,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "../include/structs.h"
+#include "../include/libft.h"
 
 #define AND 0
 #define OR	1
@@ -27,130 +29,6 @@
 #define WORD 11
 
 #define BUFFER_SIZE 1
-
-int	ft_isalnum(int c);
-char	*ft_var_name_is_valid(char *str, int i);
-
-// STRUCTS
-
-struct s_token
-{
-	char	*string;
-	struct s_node	*args;
-	char	**cmd_arr;
-	int		type;
-	int		layer;
-};
-
-struct s_node
-{
-	void	*next;
-	void	*prev;
-	void	*content;
-};
-
-struct s_word
-{
-	char			*chars;
-	size_t			write_head;
-	unsigned int	alloc;
-};
-
-// LIBFT FUNCTIONS
-
-int	ft_isalpha(int c)
-{
-	if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
-		return (1);
-	else
-		return (0);
-}
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
-
-char	*ft_strchr(const char *str, int c)
-{
-	size_t	i;
-	size_t	len;
-
-	i = 0;
-	len = ft_strlen(str);
-	while (i <= len)
-	{
-		if (str[i] == (unsigned char) c)
-			return ((char *)&str[i]);
-		i++;
-	}
-	return (NULL);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	size_t	i;
-
-	if (!dst && !src)
-		return (NULL);
-	i = 0;
-	while (i < n)
-	{
-		((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
-		i++;
-	}
-	return (dst);
-}
-
-void	*ft_calloc(int nitems, int size)
-{
-	char	*ptr;
-	int		size_in_bytes;
-	int		i;
-
-	size_in_bytes = nitems * size;
-	ptr = (char *) malloc(size_in_bytes);
-	if (ptr == NULL)
-		return (NULL);
-	i = 0;
-	while (i < (size_in_bytes))
-	{
-		ptr[i] = 0;
-		i++;
-	}
-	return ((void *)ptr);
-}
-
-char	*ft_substr(char *s, unsigned int start, int len)
-{
-	char	*substr;
-	int	i;
-
-	substr = (char *) malloc(len + 1);
-	if (substr == NULL || s == NULL)
-		return (NULL);
-	if (start >= ft_strlen(s))
-	{
-		substr[0] = 0;
-		return (substr);
-	}
-	i = 0;
-	while (i < len && s[start])
-	{
-		substr[i] = s[start];
-		i++;
-		start++;
-	}
-	substr[i] = '\0';
-	return (substr);
-}
 
 //
 // LEXER FUNCTIONS
@@ -200,9 +78,9 @@ int	ft_s_token_get_type(void *content)
 
 void	*ft_s_token_create(void *content)
 {
-	struct s_token	*token;
+	t_token	*token;
 
-	token = (struct s_token *)malloc(sizeof(struct s_token));
+	token = (t_token *)malloc(sizeof(t_token));
 	if (token == NULL)
 		return (NULL);
 	token->string = content;
@@ -215,9 +93,9 @@ void	*ft_s_token_create(void *content)
 
 void	*ft_s_node_create(void *content)
 {
-	struct s_node	*node;
+	t_node	*node;
 
-	node = (struct s_node *)malloc(sizeof(struct s_node));
+	node = (t_node *)malloc(sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->next = NULL;
@@ -228,17 +106,14 @@ void	*ft_s_node_create(void *content)
 
 void	*ft_s_node_get_last(void *head)
 {
-	struct s_node	*current;
-
-	current = head;
-	while (current->next != NULL)
-		current = current->next;
-	return (current);
+	while (((t_node *)head)->next != NULL)
+		head = ((t_node *)head)->next;
+	return (head);
 }
 
-void	ft_s_node_add_back(struct s_node **head, struct s_node *node)
+void	ft_s_node_add_back(t_node **head, t_node *node)
 {
-	struct s_node	*current;
+	t_node	*current;
 
 	if (*head == NULL)
 		*head = node;
@@ -250,23 +125,23 @@ void	ft_s_node_add_back(struct s_node **head, struct s_node *node)
 	}
 }
 
-void	ft_s_node_free(struct s_node *head)
+void	ft_s_node_free(t_node *head)
 {
 	int				i;
-	struct s_node	*temp;
-	struct s_node	*temp_args;
+	t_node	*temp;
+	t_node	*temp_args;
 
 	while (head != NULL)
 	{
 		i = 0;
-		free(((struct s_token *)head->content)->string);
-		((struct s_token *)head->content)->string = NULL;
-		while (((struct s_token *)head->content)->args != NULL)
+		free(((t_token *)head->content)->string);
+		((t_token *)head->content)->string = NULL;
+		while (((t_token *)head->content)->args != NULL)
 		{
-			free(((struct s_token *)head->content)->args->content);
-			((struct s_token *)head->content)->args->content = NULL;
-			temp_args = ((struct s_token *)head->content)->args;
-			((struct s_token *)head->content)->args = ((struct s_token *)head->content)->args->next;
+			free(((t_token *)head->content)->args->content);
+			((t_token *)head->content)->args->content = NULL;
+			temp_args = ((t_token *)head->content)->args;
+			((t_token *)head->content)->args = ((t_token *)head->content)->args->next;
 			free(temp_args);
 			temp_args = NULL;
 		}
@@ -276,7 +151,7 @@ void	ft_s_node_free(struct s_node *head)
 		temp = NULL;
 	}
 }
-
+// skips set of characters specified in char *set
 void	ft_skip_set(char *input, int *pos, char *set)
 {
 	while (ft_strchr(set, input[*pos]) && input[*pos] != '\0')
@@ -299,7 +174,7 @@ void	ft_skip_quotes(char *input, int *pos)
 	if (input[*pos] == '\0')
 		exit(EXIT_FAILURE); // FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE ERROR HANDLING ERROR HANDLING ERROR HANDLING
 }
-
+// counts the length of the token. For allocation reasons.
 int	ft_token_get_length(char *input)
 {
 	int		i;
@@ -331,6 +206,7 @@ int	ft_token_get_length(char *input)
 	return (i);
 }
 
+// interates through input string and returns the next token string (divides input string in cmdstrings and operators)
 char	*ft_get_next_token(char *input, int *i)
 {
 	int	len;
@@ -359,7 +235,8 @@ char	*ft_get_next_token(char *input, int *i)
 
 // must handle $?
 
-int	ft_s_word_init(struct s_word *word)
+// initializes struct s_word word
+int	ft_s_word_init(t_word *word)
 {
 	word->write_head = 0;
 	word->alloc = BUFFER_SIZE;
@@ -369,7 +246,8 @@ int	ft_s_word_init(struct s_word *word)
 	return (0);
 }
 
-int	ft_s_word_append_char(struct s_word *word, char c)
+//appends character to struct s_word chars buffer
+int	ft_t_word_append_char(t_word *word, char c)
 {
 	unsigned int	new_alloc;
 	char			*new_chars;
@@ -390,7 +268,8 @@ int	ft_s_word_append_char(struct s_word *word, char c)
 	return (0);
 }
 
-char	*ft_s_word_get_str(struct s_word *word)
+//creates a copy of the terminated word, frees struct s_word word->chars buffer
+char	*ft_s_word_get_str(t_word *word)
 {
 	char	*str;
 
@@ -411,7 +290,8 @@ char	*ft_s_word_get_str(struct s_word *word)
 	return (str);
 }
 
-int	ft_cmdstring_helper_add_word(struct s_token *token, struct s_word *word)
+//creates copy of terminated word, saves it in a new node and adds node to list
+int	ft_t_token_add_word_helper(t_token *token, t_word *word)
 {
 	int		ret;
 	char	*str;
@@ -430,7 +310,7 @@ int	ft_cmdstring_helper_add_word(struct s_token *token, struct s_word *word)
 	ft_s_node_add_back(&(token->args), node);
 	return (ret);
 }
-
+// checks if var_name is valid. Returns var_name.
 char	*ft_var_name_is_valid(char *str, int i)
 {
 	int		i_start;
@@ -458,7 +338,8 @@ char	*ft_var_name_is_valid(char *str, int i)
 	return (var_name);
 }
 
-int	ft_handle_variable(struct s_token *token, struct s_word *word, char status, int *i)
+//is called if variable is found: checks for valid var_name, gets var_value, checks for wildcard character and appends chars to word and terminates word if necessary
+int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
 {
 	char	*var_name;
 	char	*var_value;
@@ -480,12 +361,12 @@ int	ft_handle_variable(struct s_token *token, struct s_word *word, char status, 
 			if (var_value[j] == '*')
 			{
 				ft_skip_set(var_value, &j, "*");
-				ft_s_word_append_char(word, '"');
-				ft_s_word_append_char(word, '*');
-				ft_s_word_append_char(word, '"');
+				ft_t_word_append_char(word, '"');
+				ft_t_word_append_char(word, '*');
+				ft_t_word_append_char(word, '"');
 				continue ;
 			}
-			else if (ft_s_word_append_char(word, var_value[j]))
+			else if (ft_t_word_append_char(word, var_value[j]))
 				return (-1);
 			j++;
 		}
@@ -500,12 +381,12 @@ int	ft_handle_variable(struct s_token *token, struct s_word *word, char status, 
 			{
 				while (var_value[j] == ' ' || var_value[j] == '\t' || var_value[j] == '\n')
 					j++;
-				if (ft_cmdstring_helper_add_word(token, word) == -1)
+				if (ft_t_token_add_word_helper(token, word) == -1)
 					return (-1);
 				ft_s_word_init(word);
 				continue ;
 			}
-			else if (ft_s_word_append_char(word, var_value[j]))
+			else if (ft_t_word_append_char(word, var_value[j]))
 				return (-1);
 			j++;
 		}
@@ -515,11 +396,187 @@ int	ft_handle_variable(struct s_token *token, struct s_word *word, char status, 
 	return (0);
 }
 
-int	ft_handle_cmdstring(struct s_token *token)
+int	ft_t_token_add_word(t_token *token, char status, t_word *word, int *i)
+{
+	if ((token->string[*i] == ' ' || token->string[*i] == '\t' ||
+		token->string[*i] == '\n') && status !=  '\'' && status != '"')
+	{
+		if (ft_t_token_add_word_helper(token, word) == -1)
+			return (-1);
+		ft_s_word_init(word);
+		ft_skip_whitespace(token->string, i);
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_cmdstring_change_status(t_token *token, char *status, int *i)
+{
+	int	ret;
+
+	ret = 0;
+	if (*status == -1 && (token->string[*i] == '"' ||
+		token->string[*i] == '\''))
+	{
+		*status = token->string[*i];
+		(*i)++;
+		ret = 1;
+	}
+	else if (token->string[*i] == *status)
+	{
+		*status = -1;
+		(*i)++;
+		ret = 1;
+	}
+	return (ret);
+}
+
+int	ft_t_word_append_wildcard(t_token *token, char status, int *i, t_word *word)
+{
+	if (token->string[*i] == '*' && (status == '\'' || status == '"'))
+	{
+		ft_skip_set(token->string, i, "*");
+		if (ft_t_word_append_char(word, '"') == -1)
+			return (-1);
+		if (ft_t_word_append_char(word, '*') == -1)
+			return (-1);
+		if (ft_t_word_append_char(word, '"') == -1)
+			return (-1);
+		return (1);
+	}
+	return (0);
+}
+
+int	ft_cmdstring_append_char(t_token *token, char status, int *i, t_word *word)
+{
+	if (status == '\'' || token->string[*i] != '$')
+	{
+		if (ft_t_word_append_wildcard(token , status, i, word))
+			return (1);
+		else if (ft_t_word_append_char(word, token->string[*i]))
+		{
+			free(word->chars);
+			return (-1);
+		}
+	}
+	else if (token->string[*i] == '$')
+	{
+		if (ft_t_word_handle_variable(token, word, status, i) == -1)
+		{
+			free(word->chars);
+			return (-1);
+		}
+	}
+	return (0);
+}
+
+//breaks down cmdstrings and filenames into single words, unquotes, expands variables and wildcards
+int	ft_handle_cmdstring(t_token *token)
 {
 	int				i;
 	char			status;
-	struct s_word	word;
+	t_word			word;
+	int				ret;
+
+	status = -1;
+	ft_s_word_init(&word);
+	i = 0;
+	while (token->string[i] != '\0')
+	{
+		if (ft_t_token_add_word(token, status, &word, &i))
+			continue ; // error not handled
+		else if (ft_cmdstring_change_status(token, &status, &i))
+			continue ; // error not handled
+		ret = ft_cmdstring_append_char(token, status, &i, &word);
+		if (ret == 1)
+			continue ; // error not handled
+		else if (ret == -1)
+			return (ret);
+		i++;
+	}
+	if (ft_t_token_add_word_helper(token, &word) == -1)
+		return (-1);
+	return (1);
+}
+
+// breaks down cmd_strings and filenames into single words
+void	ft_handle_nodes(t_node *head)
+{
+	t_token	*token;
+
+	token = (t_token *)head->content;
+	while (head != NULL)
+	{
+		if (token->type == WORD || token->type == DQUOTE ||
+			token->type == QUOTE)
+			ft_handle_cmdstring(token);
+		while (token->args != NULL)
+		{
+			printf(":%s:\n", token->args->content);
+			token->args = token->args->next;
+		}
+		head = head->next;
+	}
+}
+
+// lexer: breaks input string from readline into cmd_strings, filenames, control operator or redirection operators
+t_node	*lexer(char *input)
+{
+	int		i;
+	char	*bytes;
+	t_node	*node;
+	t_node	*head;
+	t_token	*token;
+
+	head = NULL;
+	i = 0;
+	while (input[i] != '\0')
+	{
+		bytes = ft_get_next_token(input, &i);
+		token = ft_s_token_create(bytes);
+		node = ft_s_node_create(token);
+		ft_s_node_add_back(&head, node);
+	}
+	return (head);
+}
+
+void	ft_s_node_print_content(t_node *head)
+{
+	t_token	*token;
+
+	token = (t_token *)head->content;
+	while (head != NULL)
+	{
+		printf("[%d] :%s:\n", token->type, token->string);
+		head = head->next;
+	}
+}
+
+int	main(int argc, char **argv)//, char **envp)
+{
+	t_node	*head;
+
+	if (argc == 2)
+	{
+		head = lexer(argv[1]);
+		ft_handle_nodes(head);
+		ft_s_node_print_content(head);
+		//create cmd_arr (char **)
+		ft_s_node_free(head);
+		//system("leaks test");
+		return (0);
+	}
+	return (1);
+}
+
+/*
+//breaks down cmdstrings and filenames into single words, unquotes, expands variables and wildcards
+int	ft_handle_cmdstring(t_token *token)
+{
+	int				i;
+	char			status;
+	t_word			word;
+	int				ret;
 
 	status = -1;
 	ft_s_word_init(&word);
@@ -529,7 +586,7 @@ int	ft_handle_cmdstring(struct s_token *token)
 		//add word to list
 		if ((token->string[i] == ' ' || token->string[i] == '\t' || token->string[i] == '\n') && status !=  '\'' && status != '"')
 		{
-			if (ft_cmdstring_helper_add_word(token, &word) == -1)
+			if (ft_t_token_add_word_helper(token, &word) == -1)
 				return (-1);
 			ft_s_word_init(&word);
 			ft_skip_whitespace(token->string, &i);
@@ -555,12 +612,12 @@ int	ft_handle_cmdstring(struct s_token *token)
 			if (token->string[i] == '*' && (status == '\'' || status == '"'))
 			{
 				ft_skip_set(token->string, &i, "*");
-				ft_s_word_append_char(&word, '"');
-				ft_s_word_append_char(&word, '*');
-				ft_s_word_append_char(&word, '"');
+				ft_t_word_append_char(&word, '"');
+				ft_t_word_append_char(&word, '*');
+				ft_t_word_append_char(&word, '"');
 				continue ;
 			}
-			else if (ft_s_word_append_char(&word, token->string[i]))
+			else if (ft_t_word_append_char(&word, token->string[i]))
 			{
 				free(word.chars);
 				return (-1);
@@ -569,7 +626,7 @@ int	ft_handle_cmdstring(struct s_token *token)
 		// found variable in dquoted or unquoted state
 		else if (token->string[i] == '$')
 		{
-			if (ft_handle_variable(token, &word, status, &i) == -1)
+			if (ft_t_word_handle_variable(token, &word, status, &i) == -1)
 			{
 				free(word.chars);
 				return (-1);
@@ -577,73 +634,11 @@ int	ft_handle_cmdstring(struct s_token *token)
 		}
 		i++;
 	}
-	if (ft_cmdstring_helper_add_word(token, &word) == -1)
+	if (ft_t_token_add_word_helper(token, &word) == -1)
 		return (-1);
 	return (1);
 }
-
-void	ft_handle_nodes(struct s_node *head)
-{
-	while (head != NULL)
-	{
-		if (((struct s_token *)head->content)->type == WORD || ((struct s_token *)head->content)->type == DQUOTE || ((struct s_token *)head->content)->type == QUOTE)
-			ft_handle_cmdstring((struct s_token *)head->content);
-		while (((struct s_token *)head->content)->args != NULL)
-		{
-			printf("%s\n", ((struct s_token *)head->content)->args->content);
-			((struct s_token *)head->content)->args = ((struct s_token *)head->content)->args->next;
-		}
-		head = head->next;
-	}
-}
-
-// lexer: breaks input string from readline into cmd_strings, filenames, control operator or redirection operators
-struct s_node	*lexer(char *input)
-{
-	int		i;
-	char	*bytes;
-	struct s_node	*node;
-	struct s_node	*head;
-	struct s_token	*token;
-
-	head = NULL;
-	i = 0;
-	while (input[i] != '\0')
-	{
-		bytes = ft_get_next_token(input, &i);
-		token = ft_s_token_create(bytes);
-		node = ft_s_node_create(token);
-		ft_s_node_add_back(&head, node);
-	}
-	return (head);
-}
-
-void	ft_s_node_print_content(struct s_node *head)
-{
-	while (head != NULL)
-	{
-		printf("[%d] :%s:\n", ((struct s_token *)head->content)->type, ((struct s_token *)head->content)->string);
-		head = head->next;
-	}
-}
-
-int	main(int argc, char **argv)//, char **envp)
-{
-	struct s_node	*head;
-
-	if (argc == 2)
-	{
-		head = lexer(argv[1]);
-		ft_handle_nodes(head);
-		ft_s_node_print_content(head);
-		//expand wildcards
-		//create cmd_arr (char **)
-		ft_s_node_free(head);
-		//system("leaks test");
-		return (0);
-	}
-	return (1);
-}
+ */
 
 //
 // unused utils
