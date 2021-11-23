@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/22 17:52:51 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/24 00:03:47 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,40 +194,33 @@ char	**wild_open_dir(void)
 	return (ret);
 }
 
-char	*wild_combine(char **sel_dir)
+t_node	*wild_combine(char **sel_dir)
 {
+	t_node	*ret;
+	t_node	*curr;
 	int		i;
-	int		ii;
-	int		len;
-	char	*ret;
 
-	i = 0;
-	len = 1;
+	curr = ft_calloc(1, sizeof(t_node));
+	(t_token *)(curr->content) = (t_token *) ft_calloc(1, sizeof(t_token));
+	(t_token *)(curr->content)->string = sel_dir[0];
+	(t_token *)(curr->content)->type = WORD;
+	ret = curr;
+	i = 1;
 	while (sel_dir[i] != NULL)
 	{
-		len += ft_strlen(sel_dir[i++]);
-		len++;
-	}
-	i = 0;
-	ret = ft_calloc(len + 1, 1);
-	len = 0;
-	while (sel_dir[i] != NULL)
-	{
-		ii = 0;
-		while (sel_dir[i][ii] != '\0')
-		{
-			ret[len] = sel_dir[i][ii++];
-			len++;
-		}
-		free(sel_dir[i]);
-		ret[len++] = ' ';
+		curr->next = ft_calloc(1, sizeof(t_node));
+		curr->next->prev = curr;
+		curr = curr->next;
+		(t_token *)(curr->content) = (t_token *) ft_calloc(1, sizeof(t_token));
+		(t_token *)(curr->content)->string = sel_dir[0];
+		(t_token *)(curr->content)->type = WORD;
 		i++;
 	}
-	free(sel_dir);
+	free_char_array(&sel_dir);
 	return (ret);
 }
 
-char	*wild_main(char *string)
+t_node	*wild_main(char *string)
 {
 	char	**times;
 	char	**all_dir;
