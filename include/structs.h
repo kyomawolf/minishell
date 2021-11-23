@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/23 22:45:16 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/23 22:57:20 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,17 @@ typedef enum e_op
 	WORD
 }	t_e_op;
 
+typedef struct s_io
+{
+	int		i_mode;
+	char	**input;
+	int		o_mode;
+	char	**output;
+}	t_io;
+
 typedef struct s_simple_com
 {
 	int		command;
-	int		io;
 	int		number_arguments;
 	char	**arguments;
 	int		exit_status;
@@ -73,6 +80,7 @@ typedef struct s_bin
 	struct s_bin	*parent;
 	struct s_bin	**child;
 	t_simple_com	*command;
+	t_io			*command_io;
 	enum e_op		control_op;
 	int				child_amount;
 }	t_bin;
