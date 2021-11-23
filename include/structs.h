@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/23 19:42:35 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/23 22:45:16 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef enum e_op
 typedef struct s_simple_com
 {
 	int		command;
+	int		io;
 	int		number_arguments;
 	char	**arguments;
 	int		exit_status;
