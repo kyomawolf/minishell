@@ -2,6 +2,7 @@
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
 FLAGS = -Wall -Werror -Wextra
+SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
 SRC = main.c input.c new.c

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/22 18:11:10 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/23 20:41:53 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ t_bin	*b_tree_init(t_node *node, int depth)
 	root->child = ft_calloc(root->child_amount + 1, sizeof(t_bin *));
 	while (1)
 	{
-		det_com = par_check_com(node); //check for new word/op
-		if (det_com == -1)
-			break ;
 		if (b_tree_add_child(node, root))
 			break ;
 	}
@@ -48,9 +45,9 @@ t_bin	*b_tree_add_child(t_node *node, t_bin *root)
 	while (i < root->child_pos)
 	{
 		ret = 0;
-		root->child[i] = add_com(node->content);//determines stage and fills comms
+		root->child[i] = add_com(&node, root);//determines stage and fills comms
 		if (root->child[i] == NULL)
-			root->child[i] = b_tree_init(node, , root->depth + 1);
+			root->child[i] = b_tree_init(node, root->depth + 1);
 		i++;
 	}
 	return (ret);
