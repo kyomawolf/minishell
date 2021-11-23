@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/23 16:13:25 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/23 19:42:35 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,20 @@ typedef struct s_bin
 	int				child_amount;
 }	t_bin;
 
+typedef struct s_word
+{
+	char			*chars;
+	size_t			write_head;
+	unsigned int	alloc;
+}	t_word;
+
 typedef struct s_token
 {
-	char	*string;
-	int		type;
-	int		layer;
+	char			*string;
+	struct s_node	*args;
+	char			**cmd_arr;
+	int				type;
+	int				layer;
 }	t_token;
 
 typedef struct s_node
