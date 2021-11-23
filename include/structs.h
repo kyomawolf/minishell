@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/23 13:47:34 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/23 19:42:35 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_op
 	OPAR,
 	CPAR,
 	HERE_DOC,
-	IRD,		//Input ReDirect
+	IRD,		//Input ReDirect no sw
 	ORD_APP,	//APP append
 	ORD_TRC,	//truncate
 	QUOTE,
