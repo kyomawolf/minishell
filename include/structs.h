@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/22 17:44:24 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/23 16:13:25 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ typedef enum e_op
 	OPAR,
 	CPAR,
 	HERE_DOC,
-	IRD,		//Input ReDirect
+	IRD,		//Input ReDirect no sw
 	ORD_APP,	//APP append
 	ORD_TRC,	//truncate
 	QUOTE,
