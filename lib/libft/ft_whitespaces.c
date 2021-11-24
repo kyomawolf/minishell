@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_whitespaces.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/03 15:06:24 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/03 15:06:46 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/23 20:01:34 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_whitespaces(char c)
 {
-	if (c >= 7 && c <= 20)
+	if ((c >= '\t' && c <= '\r') || c == ' ')
 		return (1);
 	return (0);
 }
