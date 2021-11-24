@@ -66,7 +66,7 @@ int	ft_s_token_get_type(void *content)
 			type = ORD_APP;
 		else if (token[0] == '>' && token[1] == '\0')
 			type = ORD_TRC;
-		else if (token[0] == '\'') // what if quotes appear on a later char?
+		else if (ft_strchr(token, '\'')) // what if quotes appear on a later char?
 			type = QUOTE;
 		else if (token[0] == '"') // what if quotes appear on a later char?
 			type = DQUOTE;
@@ -127,24 +127,27 @@ void	ft_s_node_add_back(t_node **head, t_node *node)
 
 void	ft_s_node_free(t_node *head)
 {
-	int				i;
+	t_token	*token;
 	t_node	*temp;
 	t_node	*temp_args;
 
 	while (head != NULL)
 	{
-		i = 0;
-		free(((t_token *)head->content)->string);
-		((t_token *)head->content)->string = NULL;
-		while (((t_token *)head->content)->args != NULL)
+		token = (t_token *)head->content;
+		free(token->string);
+		token->string = NULL;
+		while (token->args != NULL)
 		{
-			free(((t_token *)head->content)->args->content);
-			((t_token *)head->content)->args->content = NULL;
-			temp_args = ((t_token *)head->content)->args;
-			((t_token *)head->content)->args = ((t_token *)head->content)->args->next;
+			printf("token args content %p\n", token->args->content);
+			free(token->args->content);
+			token->args->content = NULL;
+			temp_args = token->args;
+			token->args = token->args->next;
+			printf("temp args %p\n", temp_args);
 			free(temp_args);
 			temp_args = NULL;
 		}
+		free(token);
 		temp = head;
 		head = head->next;
 		free(temp);
@@ -174,24 +177,29 @@ void	ft_skip_quotes(char *input, int *pos)
 	if (input[*pos] == '\0')
 		exit(EXIT_FAILURE); // FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE ERROR HANDLING ERROR HANDLING ERROR HANDLING
 }
+
+void	ft_operator_length(char *input, int *i)
+{
+	char	operator;
+
+	operator = input[*i];
+	if (operator == '(' || operator == ')')
+		(*i)++;
+	else
+	{
+		while (input[*i] == operator)
+			(*i)++;
+	}
+}
+
 // counts the length of the token. For allocation reasons.
 int	ft_token_get_length(char *input)
 {
 	int		i;
-	char	operator;
 
 	i = 0;
 	if (ft_strchr("|&()<>", input[i]))
-	{
-		operator = input[i];
-		if (operator == '(' || operator == ')')
-			i++;
-		else
-		{
-			while (input[i] == operator)
-				i++;
-		}
-	}
+		ft_operator_length(input, &i);
 	else
 	{
 		while (!ft_strchr("|&()<>", input[i]) && input[i] != '\0')
@@ -206,7 +214,8 @@ int	ft_token_get_length(char *input)
 	return (i);
 }
 
-// interates through input string and returns the next token string (divides input string in cmdstrings and operators)
+// interates through input string and returns the next token string
+// (divides input string in cmdstrings and operators)
 char	*ft_get_next_token(char *input, int *i)
 {
 	int	len;
@@ -241,6 +250,7 @@ int	ft_s_word_init(t_word *word)
 	word->write_head = 0;
 	word->alloc = BUFFER_SIZE;
 	word->chars = malloc(sizeof(char) * word->alloc);
+	printf("%p\n", word->chars);
 	if (word->chars == NULL)
 		return (1);
 	return (0);
@@ -260,6 +270,7 @@ int	ft_t_word_append_char(t_word *word, char c)
 			return (1);
 		ft_memcpy(new_chars, word->chars, word->write_head);
 		free (word->chars);
+		word->chars = NULL;
 		word->chars = new_chars;
 		word->alloc = new_alloc;
 	}
@@ -299,12 +310,15 @@ int	ft_t_token_add_word_helper(t_token *token, t_word *word)
 
 	ret = 0;
 	str = ft_s_word_get_str(word);
+	printf("[%d] %p\n",__LINE__, str);
 	if (str == NULL)
 		ret = -1;
 	node = ft_s_node_create(str);
+	printf("[%d] %p\n",__LINE__, node);
 	if (node == NULL)
 	{
 		free (str);
+		str = NULL;
 		ret = -1;
 	}
 	ft_s_node_add_back(&(token->args), node);
@@ -317,7 +331,6 @@ char	*ft_var_name_is_valid(char *str, int i)
 	char	*var_name;
 
 	i_start = i;
-	//check if var_name is ?
 	if (str[i] == '?')
 	{
 		var_name = malloc(2);
@@ -325,10 +338,10 @@ char	*ft_var_name_is_valid(char *str, int i)
 		var_name[1] = '\0';
 		return (var_name);
 	}
-	//check first char of var_name: must be alpha or _
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (NULL);
-	while (str[i] != '\0' && str[i] != '"' && str[i] != '\'' && str[i] != '$' && str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '"' && str[i] != '\'' && str[i] != '$' &&
+		str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (NULL);
@@ -338,21 +351,11 @@ char	*ft_var_name_is_valid(char *str, int i)
 	return (var_name);
 }
 
-//is called if variable is found: checks for valid var_name, gets var_value, checks for wildcard character and appends chars to word and terminates word if necessary
-int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
+//dquoted $ -> var_value == one word
+int ft_t_word_variable_dquoted(char *var_value, char status, t_word *word)
 {
-	char	*var_name;
-	char	*var_value;
-	int		j;
+	int	j;
 
-	var_name = ft_var_name_is_valid(token->string, *i + 1);
-	if (var_name == NULL)
-		return (-1);
-	var_value = getenv(var_name);
-	if (var_value == NULL)
-		return (-1);
-	*i += ft_strlen(var_name);
-	//dquoted $ -> var_value == one word
 	if (status == '"')
 	{
 		j = 0;
@@ -371,16 +374,23 @@ int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
 			j++;
 		}
 	}
-	//unquoted $ -> var_value may contain several words
-	else if (status == -1)
+	return (0);
+}
+
+//unquoted $ -> var_value may contain several words
+int	ft_t_word_variable_unquoted(t_token *token, char *var_value, char status,
+		t_word *word)
+{
+	int	j;
+
+	if (status == -1)
 	{
 		j = 0;
 		while (var_value[j] != '\0')
 		{
-			if (var_value[j] == ' ' || var_value[j] == '\t' || var_value[j] == '\n')
+			if (ft_whitespaces(var_value[j]))
 			{
-				while (var_value[j] == ' ' || var_value[j] == '\t' || var_value[j] == '\n')
-					j++;
+				ft_skip_whitespace(var_value, &j);
 				if (ft_t_token_add_word_helper(token, word) == -1)
 					return (-1);
 				ft_s_word_init(word);
@@ -391,7 +401,31 @@ int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
 			j++;
 		}
 	}
-	else
+	return (0);
+}
+
+// is called if variable is found: checks for
+// valid var_name, gets var_value, checks for wildcard character
+// and appends chars to word and terminates word if necessary
+int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
+{
+	char	*var_name;
+	char	*var_value;
+
+	var_name = ft_var_name_is_valid(token->string, *i + 1);
+	if (var_name == NULL)
+		return (-1);
+	var_value = getenv(var_name);
+	if (var_value == NULL)
+	{
+		free(var_name);
+		return (-1);
+	}
+	*i += ft_strlen(var_name);
+	free(var_name);
+	if (ft_t_word_variable_dquoted(var_value, status, word) == -1)
+		return (-1);
+	if (ft_t_word_variable_unquoted(token, var_value, status, word) == -1)
 		return (-1);
 	return (0);
 }
@@ -409,7 +443,7 @@ int	ft_t_token_add_word(t_token *token, char status, t_word *word, int *i)
 	}
 	return (0);
 }
-
+//changes status of quotation
 int	ft_cmdstring_change_status(t_token *token, char *status, int *i)
 {
 	int	ret;
@@ -447,6 +481,7 @@ int	ft_t_word_append_wildcard(t_token *token, char status, int *i, t_word *word)
 	return (0);
 }
 
+// manages wildcard, char and variable appendtion
 int	ft_cmdstring_append_char(t_token *token, char status, int *i, t_word *word)
 {
 	if (status == '\'' || token->string[*i] != '$')
@@ -470,7 +505,8 @@ int	ft_cmdstring_append_char(t_token *token, char status, int *i, t_word *word)
 	return (0);
 }
 
-//breaks down cmdstrings and filenames into single words, unquotes, expands variables and wildcards
+// breaks down cmdstrings and filenames into:
+// single words, unquotes, expands variables and wildcards
 int	ft_handle_cmdstring(t_token *token)
 {
 	int				i;
@@ -499,27 +535,33 @@ int	ft_handle_cmdstring(t_token *token)
 	return (1);
 }
 
-// breaks down cmd_strings and filenames into single words
+// checks nodes->token for type and calls function to split string
+// (cmd plus flags and arguments OR filenames) into words and puts them in a
+// argument list
+// prints content of argument list
 void	ft_handle_nodes(t_node *head)
 {
 	t_token	*token;
+	t_node	*node;
 
-	token = (t_token *)head->content;
 	while (head != NULL)
 	{
+		token = (t_token *)head->content;
+		node = token->args;
 		if (token->type == WORD || token->type == DQUOTE ||
 			token->type == QUOTE)
 			ft_handle_cmdstring(token);
-		while (token->args != NULL)
+		while (node != NULL)
 		{
-			printf(":%s:\n", token->args->content);
-			token->args = token->args->next;
+			printf(":%s:\n", node->content);
+			node = node->next;
 		}
 		head = head->next;
 	}
 }
 
-// lexer: breaks input string from readline into cmd_strings, filenames, control operator or redirection operators
+// lexer: breaks input string from readline into:
+// cmd_strings, filenames, control operator or redirection operators
 t_node	*lexer(char *input)
 {
 	int		i;
@@ -533,8 +575,14 @@ t_node	*lexer(char *input)
 	while (input[i] != '\0')
 	{
 		bytes = ft_get_next_token(input, &i);
+		if (bytes == NULL)
+			return (NULL);
 		token = ft_s_token_create(bytes);
+		if (token == NULL)
+			return (NULL);
 		node = ft_s_node_create(token);
+		if (node == NULL)
+			return (NULL);
 		ft_s_node_add_back(&head, node);
 	}
 	return (head);
@@ -544,15 +592,15 @@ void	ft_s_node_print_content(t_node *head)
 {
 	t_token	*token;
 
-	token = (t_token *)head->content;
 	while (head != NULL)
 	{
+		token = (t_token *)head->content;
 		printf("[%d] :%s:\n", token->type, token->string);
 		head = head->next;
 	}
 }
 
-int	main(int argc, char **argv)//, char **envp)
+int	main(int argc, char **argv)
 {
 	t_node	*head;
 
@@ -563,7 +611,7 @@ int	main(int argc, char **argv)//, char **envp)
 		ft_s_node_print_content(head);
 		//create cmd_arr (char **)
 		ft_s_node_free(head);
-		//system("leaks test");
+		system("leaks lexer");
 		return (0);
 	}
 	return (1);
