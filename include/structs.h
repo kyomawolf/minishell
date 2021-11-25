@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/23 22:57:20 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/11/25 20:21:34 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ typedef struct s_word
 	char			*chars;
 	size_t			write_head;
 	unsigned int	alloc;
+	char			type;
+	char			status;
 }	t_word;
 
 typedef struct s_token
@@ -98,7 +100,6 @@ typedef struct s_token
 	struct s_node	*args;
 	char			**cmd_arr;
 	int				type;
-	int				layer;
 }	t_token;
 
 typedef struct s_node

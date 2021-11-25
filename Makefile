@@ -9,7 +9,7 @@ SRC = main.c input.c new.c
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 
-BONUS_SRC = 
+BONUS_SRC =
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
 $(NAME) : $(OBJ) lib/libft.a
@@ -23,7 +23,7 @@ debug : fclean lib/libft.a $(OBJ) $(SET)
 	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
 %.o: %.c
-	@gcc $(FLAGS) $(INC) -O3 -c $< -o $@ 
+	@gcc $(FLAGS) $(INC) -O3 -c $< -o $@
 
 re : fclean all
 

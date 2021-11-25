@@ -27,56 +27,9 @@
 #define QUOTE 9
 #define DQUOTE 10
 #define WORD 11
-
 #define BUFFER_SIZE 1
 
-//
-// LEXER FUNCTIONS
-//
-
-// check if token->string is valid on a later step?
-// what if quotes appear not at the beginning of the token->string?
-
-int	ft_s_token_get_type(void *content)
-{
-	char	*token;
-	int		type;
-	int		len;
-
-	type = -1;
-	if (content != NULL)
-	{
-		token = content;
-		len = ft_strlen(token);
-		if (token[0] == '&' && token[1] == '&' && len == 2)
-			type = AND;
-		else if (token[0] == '|' && token[1] == '|' && len == 2)
-			type = OR;
-		else if (token[0] == '|' && token[1] == '\0')
-			type = PIPE;
-		else if (token[0] == '(')
-			type = OPAR;
-		else if (token[0] == ')')
-			type = CPAR;
-		else if (token[0] == '<' && token[1] == '<' && len == 2)
-			type = HERE_DOC;
-		else if (token[0] == '<' && token[1] == '\0')
-			type = IRD;
-		else if (token[0] == '>' && token[1] == '>' && len == 2)
-			type = ORD_APP;
-		else if (token[0] == '>' && token[1] == '\0')
-			type = ORD_TRC;
-		else if (ft_strchr(token, '\'')) // what if quotes appear on a later char?
-			type = QUOTE;
-		else if (token[0] == '"') // what if quotes appear on a later char?
-			type = DQUOTE;
-		else if (ft_isalnum(token[0]) || token[0] == '_') // what if quotes appear on a later char?
-			type = WORD;
-	}
-	return (type);
-}
-
-void	*ft_s_token_create(void *content)
+void	*ft_t_token_create(void *content)
 {
 	t_token	*token;
 
@@ -86,12 +39,11 @@ void	*ft_s_token_create(void *content)
 	token->string = content;
 	token->args = NULL;
 	token->cmd_arr = NULL;
-	token->type = ft_s_token_get_type(content);
-	token->layer = 0;
+	token->type = -1;
 	return (token);
 }
 
-void	*ft_s_node_create(void *content)
+void	*ft_t_node_create(void *content)
 {
 	t_node	*node;
 
@@ -111,7 +63,7 @@ void	*ft_s_node_get_last(void *head)
 	return (head);
 }
 
-void	ft_s_node_add_back(t_node **head, t_node *node)
+void	ft_t_node_add_back(t_node **head, t_node *node)
 {
 	t_node	*current;
 
@@ -129,31 +81,21 @@ void	ft_s_node_free(t_node *head)
 {
 	t_token	*token;
 	t_node	*temp;
-	t_node	*temp_args;
 
 	while (head != NULL)
 	{
 		token = (t_token *)head->content;
 		free(token->string);
 		token->string = NULL;
-		while (token->args != NULL)
-		{
-			printf("token args content %p\n", token->args->content);
-			free(token->args->content);
-			token->args->content = NULL;
-			temp_args = token->args;
-			token->args = token->args->next;
-			printf("temp args %p\n", temp_args);
-			free(temp_args);
-			temp_args = NULL;
-		}
 		free(token);
+		token = NULL;
 		temp = head;
 		head = head->next;
 		free(temp);
 		temp = NULL;
 	}
 }
+
 // skips set of characters specified in char *set
 void	ft_skip_set(char *input, int *pos, char *set)
 {
@@ -161,102 +103,20 @@ void	ft_skip_set(char *input, int *pos, char *set)
 		(*pos)++;
 }
 
-void	ft_skip_whitespace(char *input, int *pos)
+// initializes struct s_word
+int	ft_t_word_init(t_word *word)
 {
-	while (ft_strchr(" \t\n", input[*pos]) && input[*pos] != '\0')
-		(*pos)++;
-}
-
-void	ft_skip_quotes(char *input, int *pos)
-{
-	char	quote;
-
-	quote = input[(*pos)++];
-	while (input[*pos] != quote && input[*pos] != '\0')
-		(*pos)++;
-	if (input[*pos] == '\0')
-		exit(EXIT_FAILURE); // FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE FREE ERROR HANDLING ERROR HANDLING ERROR HANDLING
-}
-
-void	ft_operator_length(char *input, int *i)
-{
-	char	operator;
-
-	operator = input[*i];
-	if (operator == '(' || operator == ')')
-		(*i)++;
-	else
-	{
-		while (input[*i] == operator)
-			(*i)++;
-	}
-}
-
-// counts the length of the token. For allocation reasons.
-int	ft_token_get_length(char *input)
-{
-	int		i;
-
-	i = 0;
-	if (ft_strchr("|&()<>", input[i]))
-		ft_operator_length(input, &i);
-	else
-	{
-		while (!ft_strchr("|&()<>", input[i]) && input[i] != '\0')
-		{
-			if ((input[i] == '\'' || input[i] == '"'))
-				ft_skip_quotes(input, &i);
-			i++;
-		}
-		while (ft_strchr(" \t\n", input[i - 1]))
-			i--;
-	}
-	return (i);
-}
-
-// interates through input string and returns the next token string
-// (divides input string in cmdstrings and operators)
-char	*ft_get_next_token(char *input, int *i)
-{
-	int	len;
-	char	*bytes;
-
-	ft_skip_whitespace(input, i);
-	len = ft_token_get_length(input + (*i));
-	bytes = (char *)malloc(sizeof(char) * len + 1);
-	if (bytes == NULL)
-		return (NULL);
-	ft_memcpy(bytes, input + (*i), len);
-	bytes[len] = '\0';
-	(*i) += len;
-	return (bytes);
-}
-
-/*
-** cmd_string_handling
-*/
-
-//space after var_name and '=' sign is not allowed
-//not assigned variable gives empty line or new prompt
-//no spaces in var_name
-//var_name has to start with alpha or '_'
-//no special character in var_name
-
-// must handle $?
-
-// initializes struct s_word word
-int	ft_s_word_init(t_word *word)
-{
+	word->type = -1;
+	word->status = -1;
 	word->write_head = 0;
 	word->alloc = BUFFER_SIZE;
 	word->chars = malloc(sizeof(char) * word->alloc);
-	printf("%p\n", word->chars);
 	if (word->chars == NULL)
 		return (1);
 	return (0);
 }
 
-//appends character to struct s_word chars buffer
+//appends character to struct s_word member chars
 int	ft_t_word_append_char(t_word *word, char c)
 {
 	unsigned int	new_alloc;
@@ -279,8 +139,8 @@ int	ft_t_word_append_char(t_word *word, char c)
 	return (0);
 }
 
-//creates a copy of the terminated word, frees struct s_word word->chars buffer
-char	*ft_s_word_get_str(t_word *word)
+//creates a copy of the terminated string, frees struct s_word member chars
+char	*ft_t_word_get_str(t_word *word)
 {
 	char	*str;
 
@@ -301,62 +161,145 @@ char	*ft_s_word_get_str(t_word *word)
 	return (str);
 }
 
-//creates copy of terminated word, saves it in a new node and adds node to list
-int	ft_t_token_add_word_helper(t_token *token, t_word *word)
+void	ft_s_node_print_content(t_node *head)
 {
-	int		ret;
-	char	*str;
-	struct s_node	*node;
+	t_token	*token;
+
+	while (head != NULL)
+	{
+		token = (t_token *)head->content;
+		printf("[%d] :%s:\n", token->type, token->string);
+		head = head->next;
+	}
+}
+
+//changes quotation status
+int	ft_change_status(char *input, int *i, char *status, t_word *word)
+{
+	int	ret;
 
 	ret = 0;
-	str = ft_s_word_get_str(word);
-	printf("[%d] %p\n",__LINE__, str);
-	if (str == NULL)
-		ret = -1;
-	node = ft_s_node_create(str);
-	printf("[%d] %p\n",__LINE__, node);
-	if (node == NULL)
+	if (*status == -1 && (input[*i] == '"' || input[*i] == '\''))
+	{
+		*status = input[*i];
+		word->type = *status;
+		word->status = *status;
+		(*i)++;
+		ret = 1;
+	}
+	else if (input[*i] == *status)
+	{
+		*status = -1;
+		word->status = -1;
+		(*i)++;
+		ret = 1;
+	}
+	return (ret);
+}
+
+//defines type of the token (operator or word)
+char	ft_set_type(t_word *word)
+{
+	char	ret;
+
+	ret = WORD;
+	if (word->type == -1)
+	{
+		if (word->chars[0] == '&' && word->chars[1] == '&')
+			ret = AND;
+		else if (word->chars[0] == '|' && word->write_head == 1)
+			ret = PIPE;
+		else if (word->chars[0] == '|' && word->chars[1] == '|')
+			ret = OR;
+		else if (word->chars[0] == '(' && word->write_head == 1)
+			ret = OPAR;
+		else if (word->chars[0] == ')' && word->write_head == 1)
+			ret = CPAR;
+		else if (word->chars[0] == '<' && word->write_head == 1)
+			ret = IRD;
+		else if (word->chars[0] == '<' && word->chars[1] == '<')
+			ret = HERE_DOC;
+		else if (word->chars[0] == '>' && word->write_head == 1)
+			ret = ORD_TRC;
+		else if (word->chars[0] == '>' && word->chars[1] == '>')
+			ret = ORD_APP;
+	}
+	return (ret);
+}
+
+//creates t_token * and t_node * and adds t_node * to the back of the list
+int	ft_append_token_helper(char *str, t_node **head, int type)
+{
+	t_token	*token;
+	t_node	*node;
+
+	token = ft_t_token_create(str);
+	if (token == NULL)
 	{
 		free (str);
 		str = NULL;
-		ret = -1;
+		return (1);
 	}
-	ft_s_node_add_back(&(token->args), node);
+	token->type = type;
+	node = ft_t_node_create(token);
+	if (node == NULL)
+	{
+		free(str);
+		str = NULL;
+		free(token);
+		token = NULL;
+		return (1);
+	}
+	ft_t_node_add_back(head, node);
+	return (0);
+}
+
+//gets the type of the token, does the appendage and if necessary inits
+//a new t_word *
+int	ft_append_token(t_word *word, t_node **head, int end)
+{
+	char	*str;
+	int		type;
+
+	type = ft_set_type(word);
+	str = ft_t_word_get_str(word);
+	if (str == NULL)
+		return (1);
+	if (ft_append_token_helper(str, head, type))
+		return (1);
+	if (end == 0)
+		ft_t_word_init(word);
+	return (0);
+}
+
+// terminates_token on unquoted metacharacter, inits appendage of token
+int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
+{
+	int		ret;
+
+	ret = 0;
+	if (word->status == -1 && word->write_head != 0)
+	{
+		if (ft_strchr(" \t\n", input[*i]))
+			ret = 2;
+		else if (ft_strchr("<>|&()", input[*i]))
+			ret = 1;
+		if (ret > 0)
+			ft_append_token(word, head, 0);
+		if (ret == 2)
+			ft_skip_set(input, i, " \t\n");
+	}
+	else if (word->status == -1 && word->write_head == 0)
+		ft_skip_set(input, i, " \t\n");
 	return (ret);
 }
-// checks if var_name is valid. Returns var_name.
-char	*ft_var_name_is_valid(char *str, int i)
-{
-	int		i_start;
-	char	*var_name;
 
-	i_start = i;
-	if (str[i] == '?')
-	{
-		var_name = malloc(2);
-		var_name[0] = '?';
-		var_name[1] = '\0';
-		return (var_name);
-	}
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (NULL);
-	while (str[i] != '\0' && str[i] != '"' && str[i] != '\'' && str[i] != '$' &&
-		str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (NULL);
-		i++;
-	}
-	var_name = ft_substr(str, i_start, i - i_start);
-	return (var_name);
-}
-
-//dquoted $ -> var_value == one word
-int ft_t_word_variable_dquoted(char *var_value, char status, t_word *word)
+//handles dquoted variable appendage
+int	ft_variable_dquoted(char *var_value, t_word *word)
 {
 	int	j;
 
-	if (status == '"')
+	if (word->status == '"')
 	{
 		j = 0;
 		while (var_value[j] != '\0')
@@ -377,23 +320,23 @@ int ft_t_word_variable_dquoted(char *var_value, char status, t_word *word)
 	return (0);
 }
 
-//unquoted $ -> var_value may contain several words
-int	ft_t_word_variable_unquoted(t_token *token, char *var_value, char status,
-		t_word *word)
+//handles unquoted variable appendage
+// var_value may be splitted in several words
+int	ft_variable_unquoted(char *var_value, t_word *word, t_node **head)
 {
 	int	j;
 
-	if (status == -1)
+	if (word->status == -1)
 	{
 		j = 0;
 		while (var_value[j] != '\0')
 		{
 			if (ft_whitespaces(var_value[j]))
 			{
-				ft_skip_whitespace(var_value, &j);
-				if (ft_t_token_add_word_helper(token, word) == -1)
+				ft_skip_set(var_value, &j, " \t\n");
+				if (ft_append_token(word, head, 0))
 					return (-1);
-				ft_s_word_init(word);
+				ft_t_word_init(word);
 				continue ;
 			}
 			else if (ft_t_word_append_char(word, var_value[j]))
@@ -404,15 +347,41 @@ int	ft_t_word_variable_unquoted(t_token *token, char *var_value, char status,
 	return (0);
 }
 
+//checks if var_name is valid and returns string with var_name
+char	*ft_get_var_name(char *str, int i)
+{
+	int		i_start;
+	char	*var_name;
+
+	i_start = i;
+	if (str[i] == '?')
+	{
+		var_name = malloc(2);
+		var_name[0] = '?';
+		var_name[1] = '\0';
+		return (var_name);
+	}
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (NULL);
+	while (!ft_strchr(" \t\n\"'$|&()<>", str[i]) && str[i] != '\0')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (NULL);
+		i++;
+	}
+	var_name = ft_substr(str, i_start, i - i_start);
+	return (var_name);
+}
+
 // is called if variable is found: checks for
 // valid var_name, gets var_value, checks for wildcard character
 // and appends chars to word and terminates word if necessary
-int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
+int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 {
 	char	*var_name;
 	char	*var_value;
 
-	var_name = ft_var_name_is_valid(token->string, *i + 1);
+	var_name = ft_get_var_name(input, *i + 1);
 	if (var_name == NULL)
 		return (-1);
 	var_value = getenv(var_name);
@@ -423,53 +392,35 @@ int	ft_t_word_handle_variable(t_token *token, t_word *word, char status, int *i)
 	}
 	*i += ft_strlen(var_name);
 	free(var_name);
-	if (ft_t_word_variable_dquoted(var_value, status, word) == -1)
+	if (ft_variable_dquoted(var_value, word) == -1)
 		return (-1);
-	if (ft_t_word_variable_unquoted(token, var_value, status, word) == -1)
+	if (ft_variable_unquoted(var_value, word, head) == -1)
 		return (-1);
 	return (0);
 }
 
-int	ft_t_token_add_word(t_token *token, char status, t_word *word, int *i)
-{
-	if ((token->string[*i] == ' ' || token->string[*i] == '\t' ||
-		token->string[*i] == '\n') && status !=  '\'' && status != '"')
-	{
-		if (ft_t_token_add_word_helper(token, word) == -1)
-			return (-1);
-		ft_s_word_init(word);
-		ft_skip_whitespace(token->string, i);
-		return (1);
-	}
-	return (0);
-}
-//changes status of quotation
-int	ft_cmdstring_change_status(t_token *token, char *status, int *i)
+// skips set of chars, gives information if characters were skipped
+int	ft_skip_chars(char *input, int *pos, char *chars)
 {
 	int	ret;
+	int	temp;
 
 	ret = 0;
-	if (*status == -1 && (token->string[*i] == '"' ||
-		token->string[*i] == '\''))
-	{
-		*status = token->string[*i];
-		(*i)++;
+	temp = *pos;
+	while (ft_strchr(chars, input[*pos]) && input[*pos] != '\0')
+		(*pos)++;
+	if (temp != *pos)
 		ret = 1;
-	}
-	else if (token->string[*i] == *status)
-	{
-		*status = -1;
-		(*i)++;
-		ret = 1;
-	}
 	return (ret);
 }
 
-int	ft_t_word_append_wildcard(t_token *token, char status, int *i, t_word *word)
+//handles wildcard appandage
+int	ft_append_wildcard(char *input, int *i, t_word *word)
 {
-	if (token->string[*i] == '*' && (status == '\'' || status == '"'))
+	if (input[*i] == '*' && (word->status == '\'' || word->status == '"'))
 	{
-		ft_skip_set(token->string, i, "*");
+		if (ft_skip_chars(input, i, "*") == 1)
+			(*i)--;
 		if (ft_t_word_append_char(word, '"') == -1)
 			return (-1);
 		if (ft_t_word_append_char(word, '*') == -1)
@@ -478,126 +429,64 @@ int	ft_t_word_append_wildcard(t_token *token, char status, int *i, t_word *word)
 			return (-1);
 		return (1);
 	}
-	return (0);
-}
-
-// manages wildcard, char and variable appendtion
-int	ft_cmdstring_append_char(t_token *token, char status, int *i, t_word *word)
-{
-	if (status == '\'' || token->string[*i] != '$')
+	else
 	{
-		if (ft_t_word_append_wildcard(token , status, i, word))
-			return (1);
-		else if (ft_t_word_append_char(word, token->string[*i]))
-		{
-			free(word->chars);
+		if (ft_t_word_append_char(word, '*') == -1)
 			return (-1);
-		}
-	}
-	else if (token->string[*i] == '$')
-	{
-		if (ft_t_word_handle_variable(token, word, status, i) == -1)
-		{
-			free(word->chars);
-			return (-1);
-		}
 	}
 	return (0);
 }
 
-// breaks down cmdstrings and filenames into:
-// single words, unquotes, expands variables and wildcards
-int	ft_handle_cmdstring(t_token *token)
+//manages appendage of characters
+void	ft_append(char *input, int *i, t_word *word, t_node **head)
 {
-	int				i;
-	char			status;
-	t_word			word;
-	int				ret;
+	char	c;
 
-	status = -1;
-	ft_s_word_init(&word);
-	i = 0;
-	while (token->string[i] != '\0')
+	if (word->status == '\'' && input[*i] != '*')
+		ft_t_word_append_char(word, input[*i]);
+	else if (input[*i] == '$')
+		ft_append_variable(input, i, word, head);
+	else if (input[*i] == '*')
+		ft_append_wildcard(input, i, word);
+	else if (word->status == -1 && (input[*i] == '(' || input[*i] == ')'))
 	{
-		if (ft_t_token_add_word(token, status, &word, &i))
-			continue ; // error not handled
-		else if (ft_cmdstring_change_status(token, &status, &i))
-			continue ; // error not handled
-		ret = ft_cmdstring_append_char(token, status, &i, &word);
-		if (ret == 1)
-			continue ; // error not handled
-		else if (ret == -1)
-			return (ret);
-		i++;
+		ft_t_word_append_char(word, input[*i]);
+		ft_terminate_token(input, i, word, head);
 	}
-	if (ft_t_token_add_word_helper(token, &word) == -1)
-		return (-1);
-	return (1);
+	else if (word->status == -1 && ft_strchr("<>|&", input[*i]))
+	{
+		c = input[*i];
+		while (input[*i] == c)
+			ft_t_word_append_char(word, input[(*i)++]);
+		(*i)--;
+		ft_terminate_token(input, i, word, head);
+	}
+	else
+		ft_t_word_append_char(word, input[*i]);
 }
 
-// checks nodes->token for type and calls function to split string
-// (cmd plus flags and arguments OR filenames) into words and puts them in a
-// argument list
-// prints content of argument list
-void	ft_handle_nodes(t_node *head)
-{
-	t_token	*token;
-	t_node	*node;
-
-	while (head != NULL)
-	{
-		token = (t_token *)head->content;
-		node = token->args;
-		if (token->type == WORD || token->type == DQUOTE ||
-			token->type == QUOTE)
-			ft_handle_cmdstring(token);
-		while (node != NULL)
-		{
-			printf(":%s:\n", node->content);
-			node = node->next;
-		}
-		head = head->next;
-	}
-}
-
-// lexer: breaks input string from readline into:
-// cmd_strings, filenames, control operator or redirection operators
-t_node	*lexer(char *input)
+t_node	*ft_lexer_v2(char *input)
 {
 	int		i;
-	char	*bytes;
-	t_node	*node;
+	char	status;
+	t_word	word;
 	t_node	*head;
-	t_token	*token;
 
-	head = NULL;
+	ft_t_word_init(&word);
+	status = -1;
 	i = 0;
+	ft_skip_set(input, &i, " \t\n");
 	while (input[i] != '\0')
 	{
-		bytes = ft_get_next_token(input, &i);
-		if (bytes == NULL)
-			return (NULL);
-		token = ft_s_token_create(bytes);
-		if (token == NULL)
-			return (NULL);
-		node = ft_s_node_create(token);
-		if (node == NULL)
-			return (NULL);
-		ft_s_node_add_back(&head, node);
+		if (ft_terminate_token(input, &i, &word, &head))
+			continue ;
+		if (ft_change_status(input, &i, &status, &word))
+			continue ;
+		ft_append(input, &i, &word, &head);
+		i++;
 	}
+	ft_append_token(&word, &head, 1);
 	return (head);
-}
-
-void	ft_s_node_print_content(t_node *head)
-{
-	t_token	*token;
-
-	while (head != NULL)
-	{
-		token = (t_token *)head->content;
-		printf("[%d] :%s:\n", token->type, token->string);
-		head = head->next;
-	}
 }
 
 int	main(int argc, char **argv)
@@ -606,224 +495,18 @@ int	main(int argc, char **argv)
 
 	if (argc == 2)
 	{
-		head = lexer(argv[1]);
-		ft_handle_nodes(head);
+		head = ft_lexer_v2(argv[1]);
 		ft_s_node_print_content(head);
-		//create cmd_arr (char **)
 		ft_s_node_free(head);
-		system("leaks lexer");
+		//system("leaks lexer");
 		return (0);
 	}
 	return (1);
 }
 
+
+//todos
 /*
-//breaks down cmdstrings and filenames into single words, unquotes, expands variables and wildcards
-int	ft_handle_cmdstring(t_token *token)
-{
-	int				i;
-	char			status;
-	t_word			word;
-	int				ret;
-
-	status = -1;
-	ft_s_word_init(&word);
-	i = 0;
-	while (token->string[i] != '\0')
-	{
-		//add word to list
-		if ((token->string[i] == ' ' || token->string[i] == '\t' || token->string[i] == '\n') && status !=  '\'' && status != '"')
-		{
-			if (ft_t_token_add_word_helper(token, &word) == -1)
-				return (-1);
-			ft_s_word_init(&word);
-			ft_skip_whitespace(token->string, &i);
-			continue ;
-		}
-		//set status
-		else if (status == -1 && (token->string[i] == '"' || token->string[i] == '\''))
-		{
-			status = token->string[i];
-			i++;
-			continue ;
-		}
-		//unset status
-		else if (token->string[i] == status)
-		{
-			status = -1;
-			i++;
-			continue ;
-		}
-		//append char as literal (includes single quoted $)
-		else if (status == '\'' || token->string[i] != '$')
-		{
-			if (token->string[i] == '*' && (status == '\'' || status == '"'))
-			{
-				ft_skip_set(token->string, &i, "*");
-				ft_t_word_append_char(&word, '"');
-				ft_t_word_append_char(&word, '*');
-				ft_t_word_append_char(&word, '"');
-				continue ;
-			}
-			else if (ft_t_word_append_char(&word, token->string[i]))
-			{
-				free(word.chars);
-				return (-1);
-			}
-		}
-		// found variable in dquoted or unquoted state
-		else if (token->string[i] == '$')
-		{
-			if (ft_t_word_handle_variable(token, &word, status, &i) == -1)
-			{
-				free(word.chars);
-				return (-1);
-			}
-		}
-		i++;
-	}
-	if (ft_t_token_add_word_helper(token, &word) == -1)
-		return (-1);
-	return (1);
-}
- */
-
-//
-// unused utils
-//
-
-/* int	ft_quotes_count(char *input)
-{
-	int		i;
-	int		counter;
-
-	counter = 0;
-	i = 0;
-	while (input[i] != '\0')
-	{
-		if (input[i] == '\'' || input[i] == '"')
-		{
-			ft_skip_quotes(input, &i);
-			counter = counter + 2;
-		}
-		i++;
-	}
-	return (counter);
-}
-
-char	*memcpy_skip_quotes(char *dst, char *src)
-{
-	int		i;
-	int		j;
-	char	quote;
-
-	if (!dst && !src)
-		return (NULL);
-	i = 0;
-	j = 0;
-	quote = -1;
-	while (src[i] != '\0')
-	{
-		if ((src[i] == '\'' || src[i] == '"') && quote == -1)
-		{
-			quote = src[i++];
-			continue ;
-		}
-		else if (src[i] == quote)
-		{
-			quote = -1;
-			i++;
-			continue ;
-		}
-		dst[j++] = src[i++];
-	}
-	dst[j] = '\0';
-	return (dst);
-}
-
-char	*ft_unquote_string(char *str)
-{
-	char	*new_string;
-	int		len;
-
-	len = ft_strlen(str);
-	len = len - ft_quotes_count(str);
-	new_string = (char *)malloc(sizeof(char) * len + 1);
-	memcpy_skip_quotes(new_string, str);
-	free (str);
-	return (new_string);
-}
-
-static int	ft_get_num_str(char *s, char *set)
-{
-	int		found;
-	int		num_str;
-	int		i;
-
-	found = 0;
-	num_str = 0;
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == '\'' || s[i] == '"')
-			ft_skip_quotes(s, &i);
-		if (ft_strchr(set, s[i]))
-			found = 0;
-		else if (found == 0)
-		{
-			num_str++;
-			found = 1;
-		}
-		i++;
-	}
-	return (num_str);
-}
-
-static char	*ft_get_substr(char *s, char* set, int *pos)
-{
-	int		i;
-	char	*substr;
-
-	while (ft_strchr(set, s[*pos]))
-		(*pos)++;
-	i = *pos;
-	while (!ft_strchr(set, s[i]) && s[i] != '\0')
-	{
-		if (s[i] == '\'' || s[i] == '"')
-			ft_skip_quotes(s, &i);
-		i++;
-	}
-	substr = ft_substr(s, *pos, i - *pos);
-	if (substr == NULL)
-		return (NULL);
-	*pos = i + 1;
-	return (substr);
-}
-
-char	**ft_split_on_set_obey_quoting(char *s, char* set)
-{
-	int		num_str;
-	char	**ret;
-	int		i;
-	char	*substr;
-	int		pos;
-
-	if (s == NULL)
-		return (NULL);
-	num_str = ft_get_num_str(s, set);
-	ret = ft_calloc(sizeof(char *), num_str + 1);
-	if (ret == NULL)
-		return (NULL);
-	i = 0;
-	pos = 0;
-	while (i < num_str)
-	{
-		substr = ft_get_substr(s, set, &pos);
-		if (substr == NULL)
-			return (NULL);
-		ret[i] = substr;
-		i++;
-	}
-	ret[num_str] = NULL;
-	return (ret);
-} */
+** check for invalid operators (wrong amount of chars)
+** wildcard expansion function + includes of t_nodes
+*/
