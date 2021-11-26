@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wild.c                                             :+:      :+:    :+:   */
+/*   wild_copy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/26 20:05:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/26 22:23:54 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <dirent.h>
-#include "libft.h"
-#include "minis.h"
+#include "./include/libft.h"
+#include "./include/minis.h"
 #include <fcntl.h>
 
 char	**ft_realloc_charpp(char ***old, size_t new_size)
@@ -236,6 +236,18 @@ t_node	*wild_main(char *string)
 
 int main(int argc, char **argv)
 {
+	t_node	*node;
+	t_node	*temp;
 	if (!(argc < 2))
-		printf("%s\n", wild_main(argv[1]));
+	{
+		node = wild_main(argv[1]);
+		if (node == NULL)
+			return (1);
+		temp = node;
+		while (temp != NULL)
+		{
+			printf("%s\n", (char *)temp->content);
+			temp = temp->next;
+		}
+	}
 }

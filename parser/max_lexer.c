@@ -40,6 +40,7 @@ void	*ft_t_token_create(void *content)
 	token->args = NULL;
 	token->cmd_arr = NULL;
 	token->type = -1;
+	token->quote_status = -1;
 	return (token);
 }
 
@@ -168,7 +169,7 @@ void	ft_s_node_print_content(t_node *head)
 	while (head != NULL)
 	{
 		token = (t_token *)head->content;
-		printf("[%d] :%s:\n", token->type, token->string);
+		printf("[%d][%c] :%s:\n", token->type, token->quote_status, token->string);
 		head = head->next;
 	}
 }
@@ -205,7 +206,8 @@ char	ft_set_type(t_word *word)
 	ret = WORD;
 	if (word->type == -1)
 	{
-		if (word->chars[0] == '&' && word->chars[1] == '&')
+		if (word->chars[0] == '&' && word->chars[1] == '&' &&
+			word->write_head == 2)
 			ret = AND;
 		else if (word->chars[0] == '|' && word->write_head == 1)
 			ret = PIPE;
@@ -228,7 +230,7 @@ char	ft_set_type(t_word *word)
 }
 
 //creates t_token * and t_node * and adds t_node * to the back of the list
-int	ft_append_token_helper(char *str, t_node **head, int type)
+int	ft_append_token_helper(char *str, t_node **head, int type, int status)
 {
 	t_token	*token;
 	t_node	*node;
@@ -241,6 +243,7 @@ int	ft_append_token_helper(char *str, t_node **head, int type)
 		return (1);
 	}
 	token->type = type;
+	token->quote_status = status;
 	node = ft_t_node_create(token);
 	if (node == NULL)
 	{
@@ -260,12 +263,14 @@ int	ft_append_token(t_word *word, t_node **head, int end)
 {
 	char	*str;
 	int		type;
+	int		status;
 
+	status = word->type;
 	type = ft_set_type(word);
 	str = ft_t_word_get_str(word);
 	if (str == NULL)
 		return (1);
-	if (ft_append_token_helper(str, head, type))
+	if (ft_append_token_helper(str, head, type, status))
 		return (1);
 	if (end == 0)
 		ft_t_word_init(word);
@@ -380,7 +385,14 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 {
 	char	*var_name;
 	char	*var_value;
+	t_node	*last_node;
 
+	last_node = ft_s_node_get_last(*head);
+	if (((t_token *)last_node->content)->type == HERE_DOC)
+	{
+		ft_t_word_append_char(word, input[*i]);
+		return (0);
+	}
 	var_name = ft_get_var_name(input, *i + 1);
 	if (var_name == NULL)
 		return (-1);
@@ -414,9 +426,36 @@ int	ft_skip_chars(char *input, int *pos, char *chars)
 	return (ret);
 }
 
-//handles wildcard appandage
-int	ft_append_wildcard(char *input, int *i, t_word *word)
+//checks if token has type of a redirection
+int	ft_is_type_redirection(t_node *node)
 {
+	t_token	*token;
+	int	ret;
+
+	ret = 0;
+	token = (t_token *)node->content;
+	if (token->type == HERE_DOC)
+		ret = 1;
+	else if (token->type == IRD)
+		ret = 1;
+	else if (token->type == ORD_APP)
+		ret = 1;
+	else if (token->type == ORD_TRC)
+		ret = 1;
+	return (ret);
+}
+
+//handles wildcard appandage
+int	ft_append_wildcard(char *input, int *i, t_word *word, t_node **head)
+{
+	t_node	*last_node;
+
+	last_node = ft_s_node_get_last(*head);
+	if (ft_is_type_redirection(last_node))
+	{
+		printf("ambigious redirection\n");
+		return (-1);
+	}
 	if (input[*i] == '*' && (word->status == '\'' || word->status == '"'))
 	{
 		if (ft_skip_chars(input, i, "*") == 1)
@@ -447,7 +486,7 @@ void	ft_append(char *input, int *i, t_word *word, t_node **head)
 	else if (input[*i] == '$')
 		ft_append_variable(input, i, word, head);
 	else if (input[*i] == '*')
-		ft_append_wildcard(input, i, word);
+		ft_append_wildcard(input, i, word, head);
 	else if (word->status == -1 && (input[*i] == '(' || input[*i] == ')'))
 	{
 		ft_t_word_append_char(word, input[*i]);
@@ -485,28 +524,55 @@ t_node	*ft_lexer_v2(char *input)
 		ft_append(input, &i, &word, &head);
 		i++;
 	}
-	ft_append_token(&word, &head, 1);
+	if (word.write_head != 0)
+		ft_append_token(&word, &head, 1);
 	return (head);
+}
+
+int	ft_operator_is_valid(t_node *head)
+{
+	t_token	*token;
+	int		ret;
+
+	ret = 0;
+	while (head != NULL)
+	{
+		token = (t_token *)head->content;
+		if (token->type != WORD && ft_strlen(token->string) > 2)
+		{
+			ret = 1;
+			break ;
+		}
+		head = head->next;
+	}
+	return (ret);
 }
 
 int	main(int argc, char **argv)
 {
 	t_node	*head;
+	int		ret;
 
+	ret = 1;
 	if (argc == 2)
 	{
 		head = ft_lexer_v2(argv[1]);
-		ft_s_node_print_content(head);
+		if (ft_operator_is_valid(head))
+			printf("invalid operator\n");
+		else
+		{
+			ft_s_node_print_content(head);
+			//system("leaks lexer");
+			ret = 0;
+		}
 		ft_s_node_free(head);
-		//system("leaks lexer");
-		return (0);
 	}
-	return (1);
+	return (ret);
 }
 
 
 //todos
 /*
-** check for invalid operators (wrong amount of chars)
 ** wildcard expansion function + includes of t_nodes
+** here_doc
 */

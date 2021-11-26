@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/25 20:21:34 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/26 16:39:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_token
 	struct s_node	*args;
 	char			**cmd_arr;
 	int				type;
+	int				quote_status;
 }	t_token;
 
 typedef struct s_node
