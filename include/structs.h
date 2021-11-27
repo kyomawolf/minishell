@@ -6,13 +6,15 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/26 16:39:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/27 00:48:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCTS_H
 
 # define STRUCTS_H
+
+#define BUFFER_SIZE 1
 
 typedef enum e_op
 {
@@ -98,6 +100,7 @@ typedef struct s_token
 {
 	char			*string;
 	struct s_node	*args;
+	struct s_node	*heredoc;
 	char			**cmd_arr;
 	int				type;
 	int				quote_status;
