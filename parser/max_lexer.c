@@ -12,22 +12,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <readline/readline.h>
 #include "../include/structs.h"
 #include "../include/libft.h"
-
-#define AND 0
-#define OR	1
-#define PIPE 2
-#define OPAR 3
-#define CPAR 4
-#define HERE_DOC 5
-#define IRD 6
-#define ORD_APP 7
-#define ORD_TRC 8
-#define QUOTE 9
-#define DQUOTE 10
-#define WORD 11
-#define BUFFER_SIZE 1
 
 void	*ft_t_token_create(void *content)
 {
@@ -39,6 +26,7 @@ void	*ft_t_token_create(void *content)
 	token->string = content;
 	token->args = NULL;
 	token->cmd_arr = NULL;
+	token->heredoc = NULL;
 	token->type = -1;
 	token->quote_status = -1;
 	return (token);
@@ -87,6 +75,19 @@ void	ft_s_node_free(t_node *head)
 	{
 		token = (t_token *)head->content;
 		free(token->string);
+		if (token->heredoc != NULL)
+		{
+			while (token->heredoc != NULL)
+			{
+				free (token->heredoc->content);
+				token->heredoc->content = NULL;
+				token->heredoc = token->heredoc->next;
+				free(token->heredoc->prev);
+				token->heredoc->prev = NULL;
+			}
+			free(token->heredoc->prev);
+			token->heredoc->prev = NULL;
+		}
 		token->string = NULL;
 		free(token);
 		token = NULL;
@@ -446,16 +447,16 @@ int	ft_is_type_redirection(t_node *node)
 }
 
 //handles wildcard appandage
-int	ft_append_wildcard(char *input, int *i, t_word *word, t_node **head)
+int	ft_append_wildcard(char *input, int *i, t_word *word)//, t_node **head)
 {
-	t_node	*last_node;
+/* 	t_node	*last_node;
 
 	last_node = ft_s_node_get_last(*head);
 	if (ft_is_type_redirection(last_node))
 	{
 		printf("ambigious redirection\n");
 		return (-1);
-	}
+	} */
 	if (input[*i] == '*' && (word->status == '\'' || word->status == '"'))
 	{
 		if (ft_skip_chars(input, i, "*") == 1)
@@ -486,7 +487,7 @@ void	ft_append(char *input, int *i, t_word *word, t_node **head)
 	else if (input[*i] == '$')
 		ft_append_variable(input, i, word, head);
 	else if (input[*i] == '*')
-		ft_append_wildcard(input, i, word, head);
+		ft_append_wildcard(input, i, word);									//, head);
 	else if (word->status == -1 && (input[*i] == '(' || input[*i] == ')'))
 	{
 		ft_t_word_append_char(word, input[*i]);
@@ -529,6 +530,7 @@ t_node	*ft_lexer_v2(char *input)
 	return (head);
 }
 
+// checks if operator has valid amount of characters
 int	ft_operator_is_valid(t_node *head)
 {
 	t_token	*token;
@@ -548,6 +550,60 @@ int	ft_operator_is_valid(t_node *head)
 	return (ret);
 }
 
+int	ft_handle_heredoc_input(t_node *head, t_token *token, t_token *delimiter)
+{
+	char	*input;
+	size_t	len;
+	t_node	*node;
+	t_node	*head2;
+
+	(void)head;
+	(void)token;
+	head2 = NULL;
+	node = NULL;
+	len = ft_strlen(delimiter->string);
+	input = "";
+	while (ft_strncmp(delimiter->string, input, len))
+	{
+		input = readline(">");
+		if (input != NULL && ft_strncmp(delimiter->string, input, len))
+		{
+			// expand variable if necessary
+			node = ft_t_node_create(input);
+			if (node == NULL)
+				return (1);
+			ft_t_node_add_back(&head2, node);
+		}
+	}
+	while (head2 != NULL)
+	{
+		printf(":%s:\n", head2->content);
+		head2 = head2->next;
+	}
+	return (0);
+}
+
+int	ft_heredoc(t_node *head)
+{
+	t_token	*token;
+	t_token	*delimiter;
+
+	while (head != NULL)
+	{
+		token = ((t_token *)head->content);
+		if (token->type == HERE_DOC)
+		{
+			delimiter = ((t_token *)((t_node *)head->next)->content);
+			if (delimiter->type != WORD)
+				return (1);
+			else
+				ft_handle_heredoc_input(head, token, delimiter);
+		}
+		head = head->next;
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv)
 {
 	t_node	*head;
@@ -561,6 +617,7 @@ int	main(int argc, char **argv)
 			printf("invalid operator\n");
 		else
 		{
+			ft_heredoc(head);
 			ft_s_node_print_content(head);
 			//system("leaks lexer");
 			ret = 0;
@@ -574,5 +631,6 @@ int	main(int argc, char **argv)
 //todos
 /*
 ** wildcard expansion function + includes of t_nodes
+** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
 ** here_doc
 */
