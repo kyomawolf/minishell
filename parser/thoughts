@@ -25,3 +25,17 @@ reads heredoc for grep bye, buffers output
 reads input for grep hello, when finished prints buffered output
 
 executes cmd with heredoc first, and buffers.
+
+VARIABLES
+	copy env from bash, then use this as your own env. read var names from the copy.
+	(do not use getenv)
+
+
+PARSER
+	parsing per pipeline! (not with lexer once at the beginning)
+	ignore parts in (), execute them in subshell and pass exit status
+
+var expandage once per pipeline! not for the whole input string!
+
+export TEST=max
+bash-3.2$ << END grep $TEST && export TEST=maximilian && << $TEST grep $TEST
