@@ -59,24 +59,30 @@ void	*ft_t_node_get_last(void *head)
 
 void	ft_t_node_add_back(t_node **head, t_node *node)
 {
-	t_node	*current;
+	t_node	*last;
 
 	if (*head == NULL)
 		*head = node;
 	else
 	{
-		current = ft_t_node_get_last(*head);
-		node->prev = current;
-		current->next = node;
+		last = ft_t_node_get_last(*head);
+		node->prev = last;
+		last->next = node;
 	}
 }
 
 void	ft_t_node_detach_and_free(t_node *to_detach)
 {
 	((t_node *)to_detach->prev)->next = to_detach->next;
-	((t_node *)to_detach->next)->prev = to_detach->prev;
+	if ((t_node *)to_detach->next != NULL)
+		((t_node *)to_detach->next)->prev = to_detach->prev;
 	if (to_detach->content != NULL)
+	{
+		free(((t_token *)to_detach->content)->string);
+		((t_token *)to_detach->content)->string = NULL;
 		free(to_detach->content);
+		to_detach->content = NULL;
+	}
 	to_detach->next = NULL;
 	to_detach->prev = NULL;
 	free(to_detach);
@@ -88,7 +94,8 @@ void	ft_t_node_free(t_node *head)
 	t_token	*token;
 	t_node	*temp;
 
-
+	temp = NULL;
+	token = NULL;
 	while (head != NULL)
 	{
 		token = (t_token *)head->content;
@@ -166,17 +173,20 @@ char	*ft_t_word_get_str(t_word *word)
 	if (word->write_head <= 0)
 	{
 		free(word->chars);
+		word->chars = NULL;
 		return (NULL);
 	}
 	str = malloc(sizeof(char) * word->write_head + 1);
 	if (str == NULL)
 	{
 		free(word->chars);
+		word->chars = NULL;
 		return (NULL);
 	}
 	ft_memcpy(str, word->chars, word->write_head);
 	str[word->write_head] = '\0';
 	free (word->chars);
+	word->chars = NULL;
 	return (str);
 }
 
@@ -445,10 +455,12 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 		if (var_value == NULL)
 		{
 			free(var_name);
+			var_name = NULL;
 			return (-1);
 		}
 		*i += ft_strlen(var_name);
 		free(var_name);
+		var_name = NULL;
 		if (ft_variable_dquoted(var_value, word) == -1)
 			return (-1);
 		if (ft_variable_unquoted(var_value, word, head) == -1)
@@ -571,6 +583,11 @@ t_node	*ft_lexer_v2(char *input)
 	}
 	if (word.write_head != 0)
 		ft_append_token(&word, &head, 1);
+	if (word.chars != NULL)
+	{
+		free(word.chars);
+		word.chars = NULL;
+	}
 	return (head);
 }
 
@@ -594,15 +611,16 @@ int	ft_operator_is_valid(t_node *head)
 	return (ret);
 }
 
-int	ft_handle_heredoc_input(t_node *head, t_token *token, t_token *delimiter)
+// reads stdin, saves input in list until line is equal to delimiter string
+// saves list of input in token member heredoc
+int	ft_handle_heredoc_input(t_token *token, t_token *delimiter)
 {
 	char	*line;
 	size_t	len;
 	t_node	*node;
-	t_node	*head2;
+	t_node	*head;
 
-	(void)head;
-	head2 = NULL;
+	head = NULL;
 	node = NULL;
 	len = ft_strlen(delimiter->string) + 1;
 	while (1)
@@ -615,16 +633,22 @@ int	ft_handle_heredoc_input(t_node *head, t_token *token, t_token *delimiter)
 			node = ft_t_node_create(line);
 			if (node == NULL)
 				return (1);
-			ft_t_node_add_back(&head2, node);
+			ft_t_node_add_back(&head, node);
 		}
 	}
 	if (line != NULL)
+	{
 		free(line);
-	if (head2 != NULL)
-		token->heredoc = head2;
+		line = NULL;
+	}
+	if (head != NULL)
+		token->heredoc = head;
 	return (0);
 }
 
+//searches list for token with type heredoc. If next list elements content is of type word
+// the function ft_handle_heredoc_input is called. The quoted status of the "delimiter" token
+// is copied to the here_doc token and the delimiter token is removed from the list.
 int	ft_heredoc(t_node *head)
 {
 	t_token	*token;
@@ -640,12 +664,94 @@ int	ft_heredoc(t_node *head)
 				return (1);
 			else
 			{
-				ft_handle_heredoc_input(head, token, delimiter);
+				ft_handle_heredoc_input(token, delimiter);
 				token->quote_status = delimiter->quote_status;
 				ft_t_node_detach_and_free(head->next);
 			}
 		}
 		head = head->next;
+	}
+	return (0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//								PARSER										  //
+
+int	ft_is_type_control_op(t_node *head)
+{
+	int		ret;
+	t_token	*token;
+
+	ret = 0;
+	token = (t_token *)head->content;
+	if (token->type == AND || token->type == OR || token->type == PIPE)
+		ret = 1;
+	return (ret);
+}
+
+int	ft_is_type_operator(t_node *head)
+{
+	int		ret;
+
+	ret = 0;
+	if (ft_is_type_redirection(head) || ft_is_type_control_op(head))
+		ret = 1;
+	return (ret);
+}
+
+// if controll operator is last token: reads stdin for input, lexes and adds to list
+int	ft_ask_for_cmd(t_node *head)
+{
+	char 	*input;
+	t_node	*head_append;
+
+	head_append = ft_t_node_get_last(head);
+	if (((t_token *)head_append->content)->type == HERE_DOC)
+		return (0);
+	input = readline(">");
+	if (input != NULL)
+	{
+		head_append = ft_lexer_v2(input);
+		ft_t_node_add_back(&head, head_append);
+		free(input);
+		input = NULL;
+		return (0);
+	}
+	return (1);
+
+}
+
+// checks for valid syntax (currently without parentheses)
+int	ft_parser(t_node *head)
+{
+	int	start;
+	t_token	*current;
+	t_token *last;
+
+	start = 1;
+	last = NULL;
+	while (head != NULL)
+	{
+		current = (t_token *)head->content;
+		//first token in pipeline must be word of redirop or par
+		if (start == 1 && ft_is_type_control_op(head))
+			return (1);
+		//after operator token (exept here_doc (delimiter was already removed))
+		// there must be a token type word
+		else  if (last != NULL && ft_is_type_operator(head->prev) &&
+			current->type != WORD && last->type != HERE_DOC)
+			return (1);
+		// no operator as last token (PAR not handled right now!!!!!)
+		else if (ft_is_type_operator(head) && head->next == NULL)
+		{
+			if (ft_ask_for_cmd(head))
+				return (1);
+		}
+		start = 0;
+		head = head->next;
+		last = current;
 	}
 	return (0);
 }
@@ -664,19 +770,22 @@ int	main(int argc, char **argv)
 		else
 		{
 			ft_heredoc(head);
-			ft_s_node_print_content(head);
 			ret = 0;
+			if (ft_parser(head))
+			{
+				ret = 1;
+				printf("parser error\n");
+			}
+			ft_s_node_print_content(head);
 		}
 		ft_t_node_free(head);
-		//system("leaks test");
+		system("leaks test");
 	}
 	return (ret);
 }
 
-
 //todos
 /*
-** wildcard expansion function + includes of t_nodes
 ** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
-** here_doc delete delimiter
+** build tree, handle parentheses
 */

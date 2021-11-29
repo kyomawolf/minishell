@@ -1,23 +1,13 @@
 REDIRECTION
-	//after redirection operator wildcard expansion only if wildcard expands to one filename else ambiguious input error
+	after redirection operator wildcard expansion only if wildcard expands to one filename else ambiguious input error
 
 	HERE_DOC
-		/quoted status of delimiter defines if variables in HERE_DOC are expanded or not.
+		//quoted status of delimiter defines if variables in HERE_DOC are expanded or not.
 		wildcards are not expanded in HERE_DOC
 		//if var is delimiter var does not expand and is used with $var_name as delimiter.
-		define t_node heredoc, define t_node delimiter, define t_node cmd (?!)
-		start             in between         end
-		<< END grep hello; grep << END hello;  grep hello << END;
-		if << is 1st node: 1st word after delim is cmd (reset if multiple heredocs in a row)
-		else 1st word in cmd list is cmd
-		control operator resets counter
-
 
 WILDCARD
 	if wildcard expansion failed -> gives back string with wildcard character
-
-
-& && & --> same memory used -> line 209 was true. added second check
 
 grep hello && grep bye << END
 
