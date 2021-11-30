@@ -235,7 +235,7 @@ int	ft_change_status(char *input, int *i, t_word *word, t_node **head)
 		else
 		{
 			word->type = word->status;
-			word->status = word->status;
+			//word->status = word->status;
 			(*i)++;
 		}
 		ret = 1;
@@ -432,6 +432,8 @@ char	*ft_get_var_name(char *str, int i)
 // is called if variable is found: checks for
 // valid var_name, gets var_value, checks for wildcard character
 // and appends chars to word and terminates word if necessary
+
+//new: status of var is stored in char after $.
 int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 {
 	char	*var_name;
@@ -444,8 +446,13 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 		ft_t_word_append_char(word, input[*i]);
 		return (0);
 	}
-	if (input[*i] == '$') //expandsion in executor!
-		ft_t_word_append_char(word, input[*i]);
+	ft_t_word_append_char(word, input[*i]);
+	if (input[*i] == '$' && word->status == -1) //expandsion in executor!
+		ft_t_word_append_char(word, ' ');
+	else if (input[*i] == '$' && word->status == '"')
+		ft_t_word_append_char(word, '"');
+	else if (input[*i] == '$' && word->status == '\'')
+		ft_t_word_append_char(word, '\'');
 	else //original code, wont execute!  (because: expandsion in lexer is wrong)
 	{
 		var_name = ft_get_var_name(input, *i + 1);
@@ -779,13 +786,14 @@ int	main(int argc, char **argv)
 			ft_s_node_print_content(head);
 		}
 		ft_t_node_free(head);
-		system("leaks test");
+		//system("leaks test");
 	}
 	return (ret);
 }
 
 //todos
 /*
+** multiple quoted and unquoted vars which are one token.
 ** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
 ** build tree, handle parentheses
 */
