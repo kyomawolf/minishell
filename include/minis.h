@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/16 17:11:15 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 15:21:43 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,8 @@ void				get_prompt(t_data *data);
 t_data				*new_t_data(void);
 //built in functions
 // TODO: cd, echo, env, exit, export, pwd, unset
+char				**ft_realloc_charpp(char ***old, size_t new_size);
+t_node				*wild_main(char *string);
+void				print_binary_tree(t_bin *prin, int dep);
+void				free_t_node_list(t_node *head);
 #endif
