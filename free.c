@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/15 18:11:03 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 15:15:58 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,37 @@ struct s_simple_com	**free_simple_com_list(struct s_simple_com ***tofree, int l)
 	free(*tofree);
 	*tofree = NULL;
 	return (*tofree);
+}
+
+void	free_t_node_list(t_node *head)
+{
+	t_token	*token;
+	t_node	*temp;
+
+	temp = NULL;
+	token = NULL;
+	while (head != NULL)
+	{
+		token = (t_token *)head->content;
+		free(token->string);
+		token->string = NULL;
+		if (token->heredoc != NULL)
+		{
+			while (token->heredoc != NULL)
+			{
+				free (token->heredoc->content);
+				token->heredoc->content = NULL;
+				temp = token->heredoc;
+				token->heredoc = token->heredoc->next;
+				free (temp);
+				temp = NULL;
+			}
+		}
+		free(token);
+		token = NULL;
+		temp = head;
+		head = head->next;
+		free(temp);
+		temp = NULL;
+	}
 }

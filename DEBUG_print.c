@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:31:46 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/12 18:45:29 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 15:13:49 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	print_command(t_simple_com *com)
 		printf("| %s\n", com->arguments[com->command]);
 }
 
-void	print_binary_tree(b_tree *prin, int dep)
+void	print_binary_tree(t_bin *prin, int dep)
 {
 	int	i;
 

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/30 20:55:25 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 14:43:30 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,20 +231,4 @@ t_node	*wild_main(char *string)
 	free_char_array(&times);
 	free_char_array(&all_dir);
 	return (wild_combine(selected_dir));
-}
-
-int main(int argc, char **argv)
-{
-	t_node	*ret;
-	int		i;
-
-	ret = wild_main(argv[1]);
-	if (argc < 2)
-		return 1;
-	i = 0;
-	while (ret != NULL)
-	{
-		printf("%s\n", ((t_token *)ret->content)->string);
-		ret = ret->next;	
-	}
 }
