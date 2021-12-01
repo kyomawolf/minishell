@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/26 20:05:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/11/30 20:55:25 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <dirent.h>
-#include "libft.h"
-#include "minis.h"
+#include "./include/libft.h"
+#include "./include/minis.h"
 #include <fcntl.h>
 
 char	**ft_realloc_charpp(char ***old, size_t new_size)
@@ -201,7 +201,7 @@ t_node	*wild_combine(char **sel_dir)
 	int		i;
 
 	curr = ft_calloc(1, sizeof(t_node));
-	curr->content = (t_token *) ft_calloc(1, sizeof(t_token));
+	curr->content = ft_calloc(1, sizeof(t_token));
 	((t_token *)curr->content)->string = sel_dir[0];
 	((t_token *)curr->content)->type = WORD;
 	ret = curr;
@@ -211,12 +211,11 @@ t_node	*wild_combine(char **sel_dir)
 		curr->next = ft_calloc(1, sizeof(t_node));
 		((t_node *)curr->next)->prev = curr;
 		curr = curr->next;
-		curr->content = (t_token *) ft_calloc(1, sizeof(t_token));
-		((t_token *)curr->content)->string = sel_dir[0];
+		curr->content = ft_calloc(1, sizeof(t_token));
+		((t_token *)curr->content)->string = sel_dir[i];
 		((t_token *)curr->content)->type = WORD;
 		i++;
 	}
-	free_char_array(&sel_dir);
 	return (ret);
 }
 
@@ -236,6 +235,16 @@ t_node	*wild_main(char *string)
 
 int main(int argc, char **argv)
 {
-	if (!(argc < 2))
-		printf("%s\n", wild_main(argv[1]));
+	t_node	*ret;
+	int		i;
+
+	ret = wild_main(argv[1]);
+	if (argc < 2)
+		return 1;
+	i = 0;
+	while (ret != NULL)
+	{
+		printf("%s\n", ((t_token *)ret->content)->string);
+		ret = ret->next;	
+	}
 }
