@@ -816,7 +816,7 @@ int	main(int argc, char **argv)
 
 //todos
 /*
-** multiple quoted and unquoted vars which are one token.
+**
 ** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
 ** build tree, handle parentheses
 */
