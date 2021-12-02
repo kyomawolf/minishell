@@ -17,6 +17,7 @@
 #include "../include/libft.h"
 
 int	ft_append_token(t_word *word, t_node **head, int end);
+int	ft_var_expansion(t_node **head);
 
 void	*ft_t_token_create(void *content)
 {
@@ -806,17 +807,22 @@ int	main(int argc, char **argv)
 				ret = 1;
 				printf("parser error\n");
 			}
+			if (ft_var_expansion(&head))
+			{
+				printf("invalid var_name\n");
+				return (1);
+			}
 			ft_s_node_print_content(head);
 		}
 		ft_t_node_free(head);
-		//system("leaks test");
+		//system("leaks a.out");
 	}
 	return (ret);
 }
 
 //todos
 /*
-**
+** single $ sign is not handled correct
 ** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
 ** build tree, handle parentheses
 */
