@@ -790,7 +790,7 @@ int	ft_parser(t_node *head)
 	return (0);
 }
 
-int	main(int argc, char **argv)
+/* int	main(int argc, char **argv)
 {
 	t_node	*head;
 	int		ret;
@@ -826,7 +826,7 @@ int	main(int argc, char **argv)
 		//system("leaks a.out");
 	}
 	return (ret);
-}
+} */
 
 //todos
 /*

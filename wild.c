@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 17:49:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 18:00:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,16 +99,25 @@ char	**wild_pattern_match(char **all_dir, char **matcher)
 	int		*ident;
 	int		i;
 	char	**ret;
+	int		sw;
 
 	len = 0;
 	ident = ft_calloc(ft_char_arr_len(all_dir), sizeof(int));
 	i = 0;
+	sw = 0;
 	while (all_dir[i] != NULL)
 	{
 		ident[i] = wild_sub_match(all_dir[i], matcher);
 		len += ident[i];
+		if (ident[i] != 0)
+		{
+			printf("%s\n\n", all_dir[i]);
+			sw = 1;
+		}
 		i++;
 	}
+	if (!sw)
+		return (NULL);
 	ret = ft_calloc(len + 1, sizeof(char *));
 	while (i-- > 0)
 	{
@@ -130,7 +139,7 @@ char	**wild_get_narrows(char *string)
 	ii = 0;
 	iii = 0;
 	ret = ft_calloc(ii + 2, sizeof(char *));
-	if (ret == NULL || ret[0] == NULL)
+	if (ret == NULL)
 		return (NULL);
 	ret[0] = ft_calloc(ft_strlen(string), 1);
 	if (string[i] == '*')
@@ -221,6 +230,32 @@ t_node	*wild_combine(char **sel_dir)
 	return (ret);
 }
 
+t_node	*formatted_string(char *string)
+{
+	int		i;
+	int		ii;
+	char	*ret;
+	t_node	*node;
+
+	ret = ft_calloc(1, ft_strlen(string));
+	i = 0;
+	ii = 0;
+	while (string[ii] != '\0')
+	{
+		if (string[ii] == -1 || string[ii] == -2)
+		{
+			ii++;
+			continue ;
+		}
+		ret[i++] = string[ii++];
+	}
+	node = ft_calloc(1, sizeof(t_node));
+	node->content = ft_calloc(1, sizeof(t_token));
+	((t_token *)node->content)->string = ret;
+	((t_token *)node->content)->type = WORD;
+	return (node);
+}
+
 t_node	*wild_main(char *string)
 {
 	char	**times;
@@ -230,7 +265,38 @@ t_node	*wild_main(char *string)
 	times = wild_get_narrows(string);
 	all_dir = wild_open_dir();
 	selected_dir = wild_pattern_match(all_dir, times);
-	//free_char_array(&times);
-	//free_char_array(&all_dir);
+	if (selected_dir == NULL)
+		return (formatted_string(string));
+	free_char_array(&times);
+	free_char_array(&all_dir);
 	return (wild_combine(selected_dir));
+}
+
+#include <string.h>
+
+int	main(int argc, char **argv)
+{
+	char	*string;
+	int		i;
+	int		ii;
+	t_node	*node;
+
+	i = 0;
+	ii = 0;
+	if (argc != 2)
+		return (1);
+	string = malloc(strlen(argv[1]) * 2);
+	while (argv[1][ii] != 0)
+	{
+		string[i] = argv[1][ii++];
+		if (string[i++] == '*')
+			string[i++] = -1;
+	}
+	printf("%s\n", string);
+	node = wild_main(string);
+	while (node != NULL)
+	{
+		printf("%s\n", ((t_token *)node->content)->string);
+		node = node->next;
+	}
 }
