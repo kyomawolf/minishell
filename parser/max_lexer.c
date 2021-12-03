@@ -789,7 +789,7 @@ int	ft_parser(t_node *head)
 	return (0);
 }
 
-/* int	main(int argc, char **argv)
+t_node	*ft_lexer(int argc, char *argv)
 {
 	t_node	*head;
 	int		ret;
@@ -797,7 +797,7 @@ int	ft_parser(t_node *head)
 	ret = 1;
 	if (argc == 2)
 	{
-		head = ft_lexer_v2(argv[1]);
+		head = ft_lexer_v2(argv);
 		if (ft_operator_is_valid(head))
 			printf("invalid token\n");
 		else
@@ -812,15 +812,16 @@ int	ft_parser(t_node *head)
 			if (ft_var_expansion(&head))
 			{
 				printf("invalid var_name\n");
-				return (1);
+				return (NULL);
 			}
 			ft_s_node_print_content(head);
 		}
+		return (head);
 		ft_t_node_free(head);
 		//system("leaks a.out");
 	}
-	return (ret);
-} */
+	return (NULL);
+}
 
 //todos
 /*

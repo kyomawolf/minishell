@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 15:35:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 21:38:30 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ void	ft_handle_unquoted_var(t_node *head, t_word *word, t_node **list, \
 	int	j;
 
 	j = 0;
+	(void)head;
 	while (var[1][j] != '\0')
 	{
 		if (ft_whitespaces(var[1][j]))
@@ -178,7 +179,6 @@ int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 {
 	t_token	*token;
 	char	quoted_status;
-	int		j;
 	char	**var;
 	int		len;
 

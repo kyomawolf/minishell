@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander_wildcard.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 16:36:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 21:39:32 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 
 t_node	*wild_main(char *string);
 void	ft_exchange_tokens(t_node **head, t_node *list);
+void	ft_get_beginning_of_list(t_node *temp, t_node **head);
 
 int	ft_check_for_wc_expansion(t_node **head)
 {

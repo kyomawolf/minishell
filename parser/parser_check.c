@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 16:22:27 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/03 22:50:14 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,26 @@ int	check_io(t_node *head)
 	return (0);
 }
 
+int	check_wordpar(t_node *head)
+{
+	t_e_op	token;
+	t_e_op	last_token;
+
+	last_token = ((t_token *)head->content)->type;
+	head = head->next;
+	while (head != NULL)
+	{
+		token = ((t_token *)head->content)->type;
+		if (token == OPAR && last_token > CPAR)
+			return (1);
+		else if (last_token == CPAR && token > CPAR)
+			return (1);
+		head = head->next;
+		last_token = token;
+	}
+	return (0);
+}
+
 int	check_op(t_node *head)
 {
 	int		sw;
@@ -97,16 +117,14 @@ int	check_input(t_node *head)
 {
 	int	err;
 
-	err = check_pars(head);
-	if (err)
-		return (err);
+	err = 0;
+	err += check_pars(head);
 	write(1, "passed pars\n", 12);
-	err = check_io(head);
-	if (err)
-		return (err);
+	err += check_io(head);
 	write(1, "passed io\n", 10);
-	err = check_op(head);
+	err += check_op(head);
 	write(1, "passed ops\n", 11);
-	write(1, "OK\n", 4);
+	err += check_wordpar(head);
+	write(1, "OK\n", 3);
 	return (err);
 }
