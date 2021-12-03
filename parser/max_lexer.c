@@ -533,17 +533,19 @@ int	ft_append_wildcard(char *input, int *i, t_word *word)//, t_node **head)
 	{
 		if (ft_skip_chars(input, i, "*") == 1)
 			(*i)--;
-		if (ft_t_word_append_char(word, '"') == -1)
-			return (-1);
+		/* if (ft_t_word_append_char(word, '"') == -1)
+			return (-1); */
 		if (ft_t_word_append_char(word, '*') == -1)
 			return (-1);
-		if (ft_t_word_append_char(word, '"') == -1)
+		if (ft_t_word_append_char(word, -1) == -1)
 			return (-1);
 		return (1);
 	}
 	else
 	{
 		if (ft_t_word_append_char(word, '*') == -1)
+			return (-1);
+		if (ft_t_word_append_char(word, -2) == -1)
 			return (-1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 00:47:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 15:35:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ void	ft_handle_unquoted_var(t_node *head, t_word *word, t_node **list, \
 			continue ;
 		}
 		ft_t_word_append_char(word, var[1][j]);
+		if (var[1][j] == '*')
+			ft_t_word_append_char(word, -2);
 		j++;
 	}
 }
@@ -110,7 +112,13 @@ void	ft_handle_dquoted_var(t_word *word, char **var)
 	j = 0;
 	while (var[1][j] != '\0')
 	{
-		ft_t_word_append_char(word, var[1][j]);
+		if (var[1][j] == '*')
+		{
+			ft_t_word_append_char(word, var[1][j]);
+			ft_t_word_append_char(word, -1);
+		}
+		else
+			ft_t_word_append_char(word, var[1][j]);
 		j++;
 	}
 }
