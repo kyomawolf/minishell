@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 17:13:08 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/03 20:34:39 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ char	**ft_realloc_charpp(char ***old, size_t new_size)
 //	free(*arr);
 //}
 
-int	wild_sub_match(char *str, char **match)
+/* int	wild_sub_match(char *str, char **match)
 {
 	int		i;
 	int		ii;
@@ -91,41 +91,6 @@ int	wild_sub_match(char *str, char **match)
 		i--;
 	}
 	return (1);
-}
-
-char	**wild_pattern_match(char **all_dir, char **matcher)
-{
-	int		len;
-	int		*ident;
-	int		i;
-	char	**ret;
-	int		sw;
-
-	len = 0;
-	ident = ft_calloc(ft_char_arr_len(all_dir), sizeof(int));
-	i = 0;
-	sw = 0;
-	while (all_dir[i] != NULL)
-	{
-		ident[i] = wild_sub_match(all_dir[i], matcher);
-		len += ident[i];
-		if (ident[i] != 0)
-		{
-			printf("%s\n\n", all_dir[i]);
-			sw = 1;
-		}
-		i++;
-	}
-	if (!sw)
-		return (NULL);
-	ret = ft_calloc(len + 1, sizeof(char *));
-	while (i-- > 0)
-	{
-		if (ident[i])
-			ret[len-- - 1] = ft_strdup(all_dir[i]);
-	}
-	free(ident);
-	return (ret);
 }
 
 char	**wild_get_narrows(char *string)
@@ -173,6 +138,129 @@ char	**wild_get_narrows(char *string)
 		iii++;
 	}
 	ret[ii + 1] = NULL;
+	return (ret);
+}
+*/
+
+int	wild_sub_match(char *dir, char **matcher)
+{
+	int	i;
+	int	ii;
+
+	i = 0;
+	ii = 0;
+	if (matcher[ii][0] != -1)
+	{
+		if (dir - ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) != 0)
+			return (0);
+	}
+	else
+		ii++;
+	while (matcher[ii + 1] != NULL)
+	{
+		if (matcher[ii][0] != -1)
+		{
+			if (ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) == NULL)
+				return (0);
+		}
+		if (matcher[ii][0] != -1)
+			i += ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) + 1 - dir;
+		ii++;
+	}
+	if (matcher[ii][0] == -1)
+		return (1);
+	if (ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) == NULL)
+		return (0);
+	i = ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) - dir;
+	if (dir[i + ft_strlen(matcher[ii])] != '\0')
+		return (0);
+	return (1);
+}
+
+char	**wild_pattern_match(char **all_dir, char **matcher)
+{
+	int		len;
+	int		*ident;
+	int		i;
+	char	**ret;
+	int		sw;
+
+	len = 0;
+	ident = ft_calloc(ft_char_arr_len(all_dir), sizeof(int));
+	i = 0;
+	sw = 0;
+	while (all_dir[i] != NULL)
+	{
+		ident[i] = wild_sub_match(all_dir[i], matcher);
+		len += ident[i];
+		if (ident[i] != 0)
+		{
+			sw = 1;
+		}
+		i++;
+	}
+	if (!sw)
+		return (NULL);
+	ret = ft_calloc(len + 1, sizeof(char *));
+	while (i-- > 0)
+	{
+		if (ident[i])
+			ret[len-- - 1] = ft_strdup(all_dir[i]);
+	}
+	free(ident);
+	return (ret);
+}
+
+char	**wild_get_seperator(char *string)
+{
+	int		i;
+	int		ii;
+	int		iii;
+	char	**ret;
+
+	i = 0;
+	ii = 0;
+	iii = 0;
+	ret = ft_calloc(ft_strlen(string) + 1, sizeof(char *));
+	if (string[0] == '*')
+	{
+		if (string[1] == -2)
+		{
+			ret[ii] = ft_calloc(2, 1);
+			ret[ii][0] = -1;
+			ret[++ii] = ft_calloc(ft_strlen(string) + 2, 1);
+			iii = 0;
+		}
+		else
+			ret[ii][iii] = string[i];
+		i = 2;
+	}
+	else
+		ret[ii] = ft_calloc(ft_strlen(string) + 2, 1);
+	while (string[i] != '\0')
+	{
+		if (string[i] == '*')
+		{
+			if (string[++i] == -2)
+			{
+				if (iii != 0)
+					ret[++ii] = ft_calloc(2, 1);
+				ret[ii][0] = -1;
+				if (string[i + 1] == '\0')
+					break ;
+				ret[++ii] = ft_calloc(ft_strlen(string) + 2, 1);
+				iii = -1;
+			}
+			else
+				ret[ii][iii] = '*';
+		}
+		else
+			ret[ii][iii] = string[i];
+		i++;
+		iii++;
+		if (string[i - 1] == '\0')
+			break ;
+	}
 	return (ret);
 }
 
@@ -262,7 +350,7 @@ t_node	*wild_main(char *string)
 	char	**all_dir;
 	char	**selected_dir;
 
-	times = wild_get_narrows(string);
+	times = wild_get_seperator(string);
 	all_dir = wild_open_dir();
 	selected_dir = wild_pattern_match(all_dir, times);
 	if (selected_dir == NULL)
@@ -290,9 +378,8 @@ int	main(int argc, char **argv)
 	{
 		string[i] = argv[1][ii++];
 		if (string[i++] == '*')
-			string[i++] = -1;
+			string[i++] = -2;
 	}
-	printf("%s\n", string);
 	node = wild_main(string);
 	while (node != NULL)
 	{
