@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 14:43:30 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 16:04:50 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,18 +44,18 @@ char	**ft_realloc_charpp(char ***old, size_t new_size)
 	return (new);
 }
 
-void	free_char_array(char ***arr)
-{
-	int	i;
-
-	i = 0;
-	while ((*arr)[i] != NULL)
-	{
-		free((*arr)[i]);
-		i++;
-	}
-	free(*arr);
-}
+//void	free_char_array(char ***arr)
+//{
+//	int	i;
+//
+//	i = 0;
+//	while ((*arr)[i] != NULL)
+//	{
+//		free((*arr)[i]);
+//		i++;
+//	}
+//	free(*arr);
+//}
 
 int	wild_sub_match(char *str, char **match)
 {

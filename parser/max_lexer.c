@@ -763,33 +763,33 @@ int	ft_parser(t_node *head)
 	return (0);
 }
 
-int	main(int argc, char **argv)
-{
-	t_node	*head;
-	int		ret;
-
-	ret = 1;
-	if (argc == 2)
-	{
-		head = ft_lexer_v2(argv[1]);
-		if (ft_operator_is_valid(head))
-			printf("invalid operator\n");
-		else
-		{
-			ft_heredoc(head);
-			ret = 0;
-			if (ft_parser(head))
-			{
-				ret = 1;
-				printf("parser error\n");
-			}
-			ft_s_node_print_content(head);
-		}
-		ft_t_node_free(head);
-		//system("leaks test");
-	}
-	return (ret);
-}
+//int	main(int argc, char **argv)
+//{
+//	t_node	*head;
+//	int		ret;
+//
+//	ret = 1;
+//	if (argc == 2)
+//	{
+//		head = ft_lexer_v2(argv[1]);
+//		if (ft_operator_is_valid(head))
+//			printf("invalid operator\n");
+//		else
+//		{
+//			ft_heredoc(head);
+//			ret = 0;
+//			if (ft_parser(head))
+//			{
+//				ret = 1;
+//				printf("parser error\n");
+//			}
+//			ft_s_node_print_content(head);
+//		}
+//		ft_t_node_free(head);
+//		//system("leaks test");
+//	}
+//	return (ret);
+//}
 
 //todos
 /*

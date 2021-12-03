@@ -6,11 +6,11 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:31:46 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 15:13:49 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/02 20:30:14 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
+#include "structs.h"
 #include <stdio.h>
 
 void	print_chars(int amount, char c)
@@ -24,10 +24,18 @@ void	print_chars(int amount, char c)
 
 void	print_command(t_simple_com *com)
 {
+	int	i;
+
+	i = 0;
+	printf("|");
 	if (com->arguments == NULL)
-		printf("| (NULL)\n");
+		printf(" (NEXT)");
 	else
-		printf("| %s\n", com->arguments[com->command]);
+	{
+		while (com->arguments[i] != NULL)
+		printf(" %s ", com->arguments[i++]);
+	}
+	printf("\n");
 }
 
 void	print_binary_tree(t_bin *prin, int dep)
@@ -44,7 +52,7 @@ void	print_binary_tree(t_bin *prin, int dep)
 			else
 			{
 				print_chars(dep, '\t');
-				print_command(prin->child[i]->com);
+				print_command(prin->child[i]->command);
 			}
 			i++;
 		}
