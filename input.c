@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 19:36:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 20:44:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ void	input_readline(t_data *data)
 {
 	data->input = readline(data->prompt);
 	input_attributes_add();
-	add_history(data->input);
+	if (data->input[0] != '\0')
+		add_history(data->input);
 }

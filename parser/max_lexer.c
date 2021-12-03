@@ -259,8 +259,7 @@ char	ft_set_type(t_word *word)
 	ret = WORD;
 	if (word->type == -1)
 	{
-		if (word->chars[0] == '&' && word->chars[1] == '&' &&
-			word->write_head == 2)
+		if (word->chars[0] == '&' && word->chars[1] == '&') //&& word->write_head == 2)
 			ret = AND;
 		else if (word->chars[0] == '|' && word->write_head == 1)
 			ret = PIPE;
@@ -805,8 +804,8 @@ t_node	*ft_lexer(char *input)
 		ret = 0;
 		if (ft_parser(head))
 		{
-			ret = 1;
 			printf("parser error\n");
+			return (NULL);
 		}
 		if (ft_var_expansion(&head))
 		{
