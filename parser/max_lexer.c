@@ -18,6 +18,7 @@
 
 int	ft_append_token(t_word *word, t_node **head, int end);
 int	ft_var_expansion(t_node **head);
+int	ft_wildcard_expansion(t_node **head);
 
 void	*ft_t_token_create(void *content)
 {
@@ -812,6 +813,11 @@ int	main(int argc, char **argv)
 			if (ft_var_expansion(&head))
 			{
 				printf("invalid var_name\n");
+				return (1);
+			}
+			if (ft_wildcard_expansion(&head))
+			{
+				printf("Error while wc expansion\n");
 				return (1);
 			}
 			ft_s_node_print_content(head);
