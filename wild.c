@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 18:00:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 19:48:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ char	**ft_realloc_charpp(char ***old, size_t new_size)
 	return (new);
 }
 
-void	free_char_array(char ***arr)
+void	free_char_array2(char ***arr)
 {
 	int	i;
 
@@ -111,7 +111,7 @@ char	**wild_pattern_match(char **all_dir, char **matcher)
 		len += ident[i];
 		if (ident[i] != 0)
 		{
-			printf("%s\n\n", all_dir[i]);
+			//printf("%s\n\n", all_dir[i]);
 			sw = 1;
 		}
 		i++;
@@ -267,12 +267,12 @@ t_node	*wild_main(char *string)
 	selected_dir = wild_pattern_match(all_dir, times);
 	if (selected_dir == NULL)
 		return (formatted_string(string));
-	free_char_array(&times);
-	free_char_array(&all_dir);
+	free_char_array2(&times);
+	free_char_array2(&all_dir);
 	return (wild_combine(selected_dir));
 }
 
-#include <string.h>
+/* #include <string.h>
 
 int	main(int argc, char **argv)
 {
@@ -299,4 +299,4 @@ int	main(int argc, char **argv)
 		printf("%s\n", ((t_token *)node->content)->string);
 		node = node->next;
 	}
-}
+} */

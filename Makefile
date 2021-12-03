@@ -1,14 +1,14 @@
 
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Werror -Wextra 
+FLAGS = -Wall -Werror -Wextra
 #-fsanitize=address -fno-omit-frame-pointer -static-libsan
 
 SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
 SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
-      parser/max_lexer.c wild.c parser/parser_check.c free.c DEBUG_print.c
+      parser/max_lexer.c executor/expander_wildcard.c executor/expander.c wild.c parser/parser_check.c free.c DEBUG_print.c
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 17:56:52 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 18:16:15 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,10 @@ int	ft_check_for_wc_expansion(t_node **head)
 		{
 			if (token->string[i] == '*')
 			{
-				printf("%d\n", __LINE__);
 				list = wild_main(token->string);
 				if (list == NULL)
 					return (1);
-				printf("%d\n", __LINE__);
 				ft_exchange_tokens(head, list);
-				printf("%d\n", __LINE__);
 				break ;
 			}
 			i++;

@@ -532,8 +532,8 @@ int	ft_append_wildcard(char *input, int *i, t_word *word)//, t_node **head)
 	} */
 	if (input[*i] == '*' && (word->status == '\'' || word->status == '"'))
 	{
-		if (ft_skip_chars(input, i, "*") == 1)
-			(*i)--;
+		/* if (ft_skip_chars(input, i, "*") == 1)
+			(*i)--; */
 		/* if (ft_t_word_append_char(word, '"') == -1)
 			return (-1); */
 		if (ft_t_word_append_char(word, '*') == -1)
@@ -788,6 +788,41 @@ int	ft_parser(t_node *head)
 		last = current;
 	}
 	return (0);
+}
+
+t_node	*ft_lexer(char *input)
+{
+	t_node	*head;
+	int		ret;
+
+	ret = 1;
+	head = ft_lexer_v2(input);
+	if (ft_operator_is_valid(head))
+		printf("invalid token\n");
+	else
+	{
+		ft_heredoc(head);
+		ret = 0;
+		if (ft_parser(head))
+		{
+			ret = 1;
+			printf("parser error\n");
+		}
+		if (ft_var_expansion(&head))
+		{
+			printf("invalid var_name\n");
+			return (NULL);
+		}
+		if (ft_wildcard_expansion(&head))
+		{
+			printf("Error while wc expansion\n");
+			return (NULL);
+		}
+		ft_s_node_print_content(head);
+	}
+	//ft_t_node_free(head);
+	//system("leaks a.out");
+	return (head);
 }
 
 /* int	main(int argc, char **argv)

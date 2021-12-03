@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 15:35:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/03 19:39:55 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 
 // appends chars to word in case of an unquoted variable
 //  creates new word and token if necessary
-void	ft_handle_unquoted_var(t_node *head, t_word *word, t_node **list, \
+void	ft_handle_unquoted_var(t_word *word, t_node **list, \
 			char **var)
 {
 	int	j;
@@ -178,7 +178,6 @@ int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 {
 	t_token	*token;
 	char	quoted_status;
-	int		j;
 	char	**var;
 	int		len;
 
@@ -192,7 +191,7 @@ int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 		if (var == NULL)
 			return (1);
 		if (quoted_status == ' ')
-			ft_handle_unquoted_var(head, word, list, var);
+			ft_handle_unquoted_var(word, list, var);
 		else if (quoted_status == '"')
 			ft_handle_dquoted_var(word, var);
 		len = ft_strlen(var[0]);
