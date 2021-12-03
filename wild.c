@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 16:04:50 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/03 15:51:13 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,37 +124,32 @@ char	**wild_get_narrows(char *string)
 	int		i;
 	int		ii;
 	int		iii;
-	int		ign;
 	char	**ret;
 
 	i = 0;
 	ii = 0;
 	iii = 0;
-	ign = -1;
 	ret = ft_calloc(ii + 2, sizeof(char *));
-	if (ret == NULL)
+	if (ret == NULL || ret[0] == NULL)
 		return (NULL);
 	ret[0] = ft_calloc(ft_strlen(string), 1);
-	if (ret[0] == NULL)
-		return (NULL);
-	if (string[i] == '*')
+	if (string[i] == '*' && string[i + 1] == -1)
 	{
 		ret[ii++][0] = '*';
 		ret = ft_realloc_charpp(&ret, ii + 2);
 		ret[ii] = ft_calloc(ft_strlen(string), 1);
-		i++;
+		i += 2;
 	}
 	while (string[i] != '\0')
 	{
-		if (string[i] == '\"')
-			ign *= -1;
-		else if (string[i] == '*' && ign == -1)
+		if (string[i] == '*' && string[i + 1] == -1)
 		{
 			ret = ft_realloc_charpp(&ret, ii + 2 + 2);
 			ret[++ii] = ft_calloc(ft_strlen(string), 1);
 			ret[ii + 1] = ft_calloc(ft_strlen(string), 1);
 			ret[ii++][0] = '*';
 			iii = -1;
+			i++;
 		}
 		else
 			ret[ii][iii] = string[i];
