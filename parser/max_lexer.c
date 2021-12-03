@@ -17,6 +17,7 @@
 #include "../include/libft.h"
 
 int	ft_append_token(t_word *word, t_node **head, int end);
+int	ft_var_expansion(t_node **head);
 
 void	*ft_t_token_create(void *content)
 {
@@ -313,15 +314,15 @@ int	ft_append_token_helper(char *str, t_node **head, int type, int status)
 int	ft_append_token(t_word *word, t_node **head, int end)
 {
 	char	*str;
-	int		type;
-	int		status;
+	int		token_type;
+	int		quote_status;
 
-	status = word->type;
-	type = ft_set_type(word);
+	quote_status = word->type;
+	token_type = ft_set_type(word);
 	str = ft_t_word_get_str(word);
 	if (str == NULL)
 		return (1);
-	if (ft_append_token_helper(str, head, type, status))
+	if (ft_append_token_helper(str, head, token_type, quote_status))
 		return (1);
 	if (end == 0)
 		ft_t_word_init(word);
@@ -437,8 +438,9 @@ char	*ft_get_var_name(char *str, int i)
 int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 {
 	char	*var_name;
-	char	*var_value;
+	//char	*var_value;
 	t_node	*last_node;
+	int		len;
 
 	last_node = ft_t_node_get_last(*head);
 	if (last_node != NULL && ((t_token *)last_node->content)->type == HERE_DOC)
@@ -447,32 +449,38 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 		return (0);
 	}
 	ft_t_word_append_char(word, input[*i]);
-	if (input[*i] == '$' && word->status == -1) //expandsion in executor!
+	if (word->status == -1) //expandsion in executor!
 		ft_t_word_append_char(word, ' ');
-	else if (input[*i] == '$' && word->status == '"')
+	else if (word->status == '"')
 		ft_t_word_append_char(word, '"');
-	else if (input[*i] == '$' && word->status == '\'')
+	else if (word->status == '\'')
 		ft_t_word_append_char(word, '\'');
-	else //original code, wont execute!  (because: expandsion in lexer is wrong)
+	var_name = ft_get_var_name(input, *i + 1);
+	if (var_name == NULL)
+		return (-1);
+	len = ft_strlen(var_name);
+	while (len > 0)
 	{
-		var_name = ft_get_var_name(input, *i + 1);
-		if (var_name == NULL)
-			return (-1);
-		var_value = getenv(var_name);
+		ft_t_word_append_char(word, input[++(*i)]);
+		len--;
+	}
+	free(var_name);
+	var_name = NULL;
+	ft_t_word_append_char(word, -1);
+		/* var_value = getenv(var_name);
 		if (var_value == NULL)
 		{
 			free(var_name);
 			var_name = NULL;
 			return (-1);
-		}
-		*i += ft_strlen(var_name);
+		} */
+		/* *i += ft_strlen(var_name);
 		free(var_name);
 		var_name = NULL;
 		if (ft_variable_dquoted(var_value, word) == -1)
 			return (-1);
 		if (ft_variable_unquoted(var_value, word, head) == -1)
-			return (-1);
-	}
+			return (-1); */
 	return (0);
 }
 
@@ -546,10 +554,20 @@ void	ft_append(char *input, int *i, t_word *word, t_node **head)
 {
 	char	c;
 
-	if (word->status == '\'' && input[*i] != '*')
+	if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
+	{
 		ft_t_word_append_char(word, input[*i]);
+		if (input[*i] == '$')
+			ft_t_word_append_char(word, '\'');
+	}
 	else if (input[*i] == '$')
-		ft_append_variable(input, i, word, head);
+	{
+		if(ft_append_variable(input, i, word, head) == -1)
+		{
+			printf("invalid var_name\n");
+			exit(EXIT_FAILURE);
+		}
+	}
 	else if (input[*i] == '*')
 		ft_append_wildcard(input, i, word);									//, head);
 	else if (word->status == -1 && (input[*i] == '(' || input[*i] == ')'))
@@ -594,6 +612,12 @@ t_node	*ft_lexer_v2(char *input)
 	{
 		free(word.chars);
 		word.chars = NULL;
+	}
+	if (word.status == '\'' || word.status == '"')
+	{
+		ft_t_node_free(head);
+		printf("missing quote\n");
+		exit(EXIT_FAILURE);
 	}
 	return (head);
 }
@@ -773,7 +797,7 @@ int	main(int argc, char **argv)
 	{
 		head = ft_lexer_v2(argv[1]);
 		if (ft_operator_is_valid(head))
-			printf("invalid operator\n");
+			printf("invalid token\n");
 		else
 		{
 			ft_heredoc(head);
@@ -783,17 +807,22 @@ int	main(int argc, char **argv)
 				ret = 1;
 				printf("parser error\n");
 			}
+			if (ft_var_expansion(&head))
+			{
+				printf("invalid var_name\n");
+				return (1);
+			}
 			ft_s_node_print_content(head);
 		}
 		ft_t_node_free(head);
-		//system("leaks test");
+		//system("leaks a.out");
 	}
 	return (ret);
 }
 
 //todos
 /*
-** multiple quoted and unquoted vars which are one token.
+** single $ sign is not handled correct
 ** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
 ** build tree, handle parentheses
 */
