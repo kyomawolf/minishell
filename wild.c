@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 20:34:39 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/03 21:39:47 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,7 +359,7 @@ t_node	*wild_main(char *string)
 	free_char_array(&all_dir);
 	return (wild_combine(selected_dir));
 }
-
+/* 
 #include <string.h>
 
 int	main(int argc, char **argv)
@@ -387,3 +387,4 @@ int	main(int argc, char **argv)
 		node = node->next;
 	}
 }
+ */

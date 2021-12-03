@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/02 20:25:05 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/03 22:20:49 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int	count_children(t_node *node)
 		if (token == OPAR)
 		{
 			count++;
-			node = jump_token(node, 4);
+			node = jump_token(node, CPAR);
 		}
 		else if (token > CPAR && token < QUOTE)
 			count++;
