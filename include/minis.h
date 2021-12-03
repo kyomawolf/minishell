@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 15:21:43 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 16:05:12 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,7 @@ char				**ft_realloc_charpp(char ***old, size_t new_size);
 t_node				*wild_main(char *string);
 void				print_binary_tree(t_bin *prin, int dep);
 void				free_t_node_list(t_node *head);
+t_node				*ft_lexer_v2(char *string);
+t_bin				*builder_main(t_node *list);
+void				free_char_array(char ***arr);
 #endif

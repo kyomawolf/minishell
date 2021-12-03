@@ -6,13 +6,14 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 15:27:11 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/02 20:25:05 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <string.h>
 #include "structs.h"
 #include "minis.h"
 #include "libft.h"
@@ -23,8 +24,11 @@ int	count_words(t_node *node)
 	int	counter;
 
 	counter = 0;
-	while (node == NULL && ((t_token *)node->content)->type == WORD)
+	while (node != NULL && ((t_token *)node->content)->type == WORD)
+	{
 		counter++;
+		node = node->next;
+	}
 	return (counter);
 }
 
@@ -79,43 +83,40 @@ t_node	*add_words(t_simple_com *command, t_node *node)
 	return (node);
 }
 
-t_bin	*add_operator(t_e_op en_op, t_bin *parent)
+t_bin	*add_node(t_e_op en, t_bin *par)
 {
 	t_bin	*ret;
 
 	ret = ft_calloc(1, sizeof(t_bin));
-	ret->parent = parent;
-	ret->control_op = en_op;
 	ret->command = ft_calloc(1, sizeof(t_simple_com));
-	ret->child = NULL;
+	ret->parent = par;
+	ret->control_op = en;
 	return (ret);
 }
 
 t_bin	*add_com(t_node **ori_node, t_bin *parent)
 {
 	t_bin	*ret;
-	t_node	*node;
 	t_e_op	token;
 
-	node = *ori_node;
-	token = ((t_token *)node->content)->type;
+	token = ((t_token *)(*ori_node)->content)->type;
 	if (token == OPAR)
 		return (NULL);
+	ret = add_node(token, parent);
 	if (token < OPAR)
 	{
-		ret = add_operator(token, parent);
-		node = node->next;
-		token = ((t_token *)node->content)->type;
+		*ori_node = (*ori_node)->next;
+		token = ((t_token *)(*ori_node)->content)->type;
 	}
-	while (node != NULL)
+	while (*ori_node != NULL)
 	{
 		if (token > CPAR && token < QUOTE)
-			node = add_io(ret, node);
-		if (token < OPAR)
+			*ori_node = add_io(ret, *ori_node);
+		if (token < HERE_DOC)
 			break ;
-		node = add_words(ret->command, node);
-		node = node->next;
-		token = ((t_token *)node->content)->type;
+		*ori_node = add_words(ret->command, *ori_node);
+		if (*ori_node != NULL)
+			token = ((t_token *)(*ori_node)->content)->type;
 	}
 	return (ret);
 }
@@ -134,7 +135,6 @@ t_node	*jump_token(t_node *node, int cmp)
 int	count_children(t_node *node)
 {
 	int		count;
-	int		sw;
 	t_e_op	token;
 
 	count = 1;
@@ -161,23 +161,26 @@ int	count_children(t_node *node)
 t_bin	*builder_main(t_node *head)
 {
 	t_bin	*tree;
+	t_node	*cpy;
 
-	if (check_input(head) != -1)
+	if (check_input(head))
 	{
 		write(1, "\nERROR\n", 7);
 		return (NULL);
 	}
-	tree = b_tree_init(head, 0);
+	//return (NULL);
+	cpy = head;
+	tree = b_tree_init(&cpy, 0);
+	print_binary_tree(tree, 2);
 	free_t_node_list(head);
 	return (tree);
 }
 
-int main(int argc, char **argv)
-{
-	t_node	*node;
-	t_bin	*tree;
-
-	node = wild_main(argv[1]);
-	tree = builder_main(node);
-	print_binary_tree(tree, 2);
-}
+//int main(int argc, char **argv)
+//{
+//	t_node	*node;
+//	t_bin	*tree;
+//
+//	node = wild_main(argv[1]);
+//	tree = builder_main(node);
+//}

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/11 15:52:36 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/02 19:56:19 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	main_loop(t_data *data)
 			continue ;
 		if (!ft_strncmp(data->input, "exit\0", 5))
 			return ;
+		//filter no newline from history
 		//if (!par_main(data))
 		//	error_main(data);
 		//else
@@ -73,10 +74,12 @@ int	main(int argc, char **argv, char **envp)
 	(void) envp;
 	(void) argc;
 	(void) argv;
-	//if (argc > 1)
-	//{
-	//	data->input = main_argv_to_input(argc, argv, data);
-	//}
+	if (argc > 1)
+	{
+		data->list = ft_lexer_v2(argv[1]);
+		data->tree = builder_main(data->list);
+		return (0);
+	}
 	if (data == NULL)
 		return (0);
 	main_loop(data);

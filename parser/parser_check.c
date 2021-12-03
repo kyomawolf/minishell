@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 15:27:18 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/01 16:22:27 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,18 @@ int	check_io(t_node *head)
 	while (head != NULL)
 	{
 		token = ((t_token *)head->content)->type;
-		if (token > HERE_DOC && token < QUOTE && !sw)
-			sw += 1;
-		else if (token == WORD)
-			sw -= 1;
-		else
+		if (token == WORD && sw)
+			sw = 0;
+		else if (token > HERE_DOC && token < QUOTE && !sw)
+		{
+			sw = 1;
+			head = head->next;
+			continue ;
+		}
+		else if (sw != 0)
 			return (1);
 		head = head->next;
 	}
-	if (sw != 0)
-		return (1);
 	return (0);
 }
 
@@ -96,12 +98,15 @@ int	check_input(t_node *head)
 	int	err;
 
 	err = check_pars(head);
-	if (err != -1)
+	if (err)
 		return (err);
+	write(1, "passed pars\n", 12);
 	err = check_io(head);
-	if (err != -1)
+	if (err)
 		return (err);
+	write(1, "passed io\n", 10);
 	err = check_op(head);
-	write(1, "\nOK\n", 4);
+	write(1, "passed ops\n", 11);
+	write(1, "OK\n", 4);
 	return (err);
 }
