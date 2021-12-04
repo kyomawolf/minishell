@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 21:06:35 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 21:58:16 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ typedef struct s_data
 	char				*input;
 	char				*prompt;
 	char				*currdir;
-	char				**envp;
+	t_node				*envp;
 	t_bin				*tree;
 	t_node				*list;
 }	t_data;

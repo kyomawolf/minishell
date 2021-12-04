@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 18:42:57 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 21:24:31 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,7 @@ int	main(int argc, char **argv, char **envp)
 		return (1);
 	}
 	data = NULL;
-	data = new_t_data();
-	(void) envp;
+	data = new_t_data(envp);
 	(void) argv;
 	/* if (argc == 2)
 	{

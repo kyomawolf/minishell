@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 16:40:05 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 21:32:04 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void				input_interrupt(int sig);
 void				input_attributes_clear(void);
 void				input_attributes_add(void);
 void				get_prompt(t_data *data);
-t_data				*new_t_data(void);
+t_data				*new_t_data(char **envp);
 //built in functions
 // TODO: cd, echo, env, exit, export, pwd, unset
 char				**ft_realloc_charpp(char ***old, size_t new_size);
@@ -37,4 +37,8 @@ t_node				*ft_lexer(char *input);
 t_node				*ft_lexer_v2(char *string);
 t_bin				*builder_main(t_node *list);
 void				free_char_array(char ***arr);
+
+void				*ft_s_node_create(void *content);
+void				ft_s_node_add_back(struct s_node **head, \
+										struct s_node *node);
 #endif

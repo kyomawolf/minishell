@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 16:45:22 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/17 17:17:11 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 21:34:14 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,17 @@
 
 void	*ft_s_token_create(void *content)
 {
-	struct s_token	*token;
+	t_token	*token;
 
-	token = (struct s_token *)malloc(sizeof(struct s_token));
+	token = (t_token *)malloc(sizeof(t_token));
 	if (token == NULL)
 		return (NULL);
 	token->string = content;
-	token->type = ft_s_token_get_type(content);
-	token->layer = 0;
+	token->args = NULL;
+	token->cmd_arr = NULL;
+	token->heredoc = NULL;
+	token->type = -1;
+	token->quote_status = -1;
 	return (token);
 }
 
