@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 19:39:55 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 12:51:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include "../include/structs.h"
-#include "../include/libft.h"
+#include "../lib/libft/libft.h"
 
 char	*ft_t_word_get_str(t_word *word);
 void	*ft_t_token_create(void *content);

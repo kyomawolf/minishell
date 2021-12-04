@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 20:39:56 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 12:51:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <dirent.h>
-#include "./include/libft.h"
+#include "./lib/libft/libft.h"
 #include "./include/minis.h"
 #include <fcntl.h>
 

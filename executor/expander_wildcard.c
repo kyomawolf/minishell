@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 18:16:15 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 12:50:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include "../include/structs.h"
-#include "../include/libft.h"
+#include "../lib/libft/libft.h"
 
 t_node	*wild_main(char *string);
 void	ft_exchange_tokens(t_node **head, t_node *list);

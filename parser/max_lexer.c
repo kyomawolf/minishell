@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include "../include/structs.h"
-#include "../include/libft.h"
+#include "../lib/libft/libft.h"
 
 int	ft_append_token(t_word *word, t_node **head, int end);
 int	ft_var_expansion(t_node **head);
