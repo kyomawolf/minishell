@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 22:51:58 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 16:38:59 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,23 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 	while (i < root->child_amount)
 	{
 		ret = 0;
-		printf("\nhandling token: %i and string: %s\n", ((t_token *)(*node)->content)->type, ((t_token *)(*node)->content)->string);
+		printf("interation: %i, pointer: %p\n", i, *node);
+		//printf("\nhandling token: %i and string: %s\n", ((t_token *)(*node)->content)->type, ((t_token *)(*node)->content)->string);
 		while (((t_token *)(*node)->content)->type == CPAR)
 		{
 			if ((*node)->next == NULL)
 				return(1);
 			(*node) = (*node)->next;
-			printf("\nhandling token: %i and string: %s\n", ((t_token *)(*node)->content)->type, ((t_token *)(*node)->content)->string);
+			//printf("\nhandling token: %i and string: %s\n", ((t_token *)(*node)->content)->type, ((t_token *)(*node)->content)->string);
 		}
+		//printf("entering now\n");
 		root->child[i] = add_com(node, root);//determines stage and fills comms
 		if (root->child[i] == NULL)
 		{
 			*node = (*node)->next;
 			root->child[i] = b_tree_init(node, root->depth + 1);
 		}
+		//printf("exit %i\n", root->child_amount);
 		i++;
 	}
 	return (ret);

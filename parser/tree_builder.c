@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 22:53:21 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 16:43:57 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,7 @@ int	count_children(t_node *node)
 			node = jump_token(node, CPAR);
 		}
 		else if (token > CPAR && token < QUOTE)
-			count++;
-		// NOT FINISHED IO
+			node = node->next;
 		else
 			node = node->next;
 	}
@@ -173,6 +172,7 @@ t_bin	*builder_main(t_node *head)
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
 	print_binary_tree(tree, 2);
+	printf("pointer: %s mode: %i\n", tree->child[0]->io->output[0], tree->child[0]->io->o_mode);
 	free_t_node_list(head);
 	return (tree);
 }
