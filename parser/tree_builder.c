@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 17:57:33 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 21:05:25 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ t_node	*add_io(t_bin *tree, t_node *node)
 {
 	if (tree->io == NULL)
 		tree->io = ft_calloc(1, sizeof(t_io));
-	if (((t_token *)node->content)->type == HERE_DOC || ((t_token *)node->content)->type == IRD)
+	if (((t_token *)node->content)->type == IRD)
 	{
-		tree->io->i_mode = ((t_token *)node->content)->type - HERE_DOC + 1;
+		tree->io->i_count++;
 		if (tree->io->input == NULL)
 			tree->io->input = ft_calloc(1, sizeof(char *));
 		else
@@ -46,6 +46,11 @@ t_node	*add_io(t_bin *tree, t_node *node)
 			ft_char_arr_len(tree->io->input) + 2);
 		tree->io->input[ft_char_arr_len(tree->io->input)] = \
 		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
+	}
+	else if (((t_token *)node->content)->type == HERE_DOC)
+	{
+		tree->io->heredoc_node = ((t_token *)node->content)->heredoc;
+		((t_token *)node->content)->heredoc = NULL;
 	}
 	else
 	{
@@ -56,7 +61,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 			tree->io->output = ft_realloc_charpp(&tree->io->output, \
 			ft_char_arr_len(tree->io->output) + 2);
 		tree->io->output[ft_char_arr_len(tree->io->output)] = \
-		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);//HERE PLS DONT DO THIS ANYMORE
+		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
 	}
 	return (((t_node *)node->next)->next);
 }
@@ -121,12 +126,19 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 	return (ret);
 }
 
-t_node	*jump_token(t_node *node, int cmp)
+t_node	*jump_pars(t_node *node)
 {
+	int	i;
+
+	i = 0;
 	while (node != NULL)
 	{
-		if (((t_token *)node->content)->type == cmp)
-			return (node->next);
+		if (((t_token *)node->content)->type == OPAR)
+			i++;
+		else if (((t_token *)node->content)->type == CPAR)
+			i--;
+		else if (i == 0)
+			return (node);
 		node = node->next;
 	}
 	return (node);
@@ -137,7 +149,12 @@ int	count_children(t_node *node)
 	int		count;
 	t_e_op	token;
 
-	count = 1;
+	count = 0;
+	token = ((t_token *)node->content)->type;
+	if (token == WORD)
+		count++;
+	if (token == OPAR)
+		node = node->next;
 	while (node != NULL)
 	{
 		token = ((t_token *)node->content)->type;
@@ -148,7 +165,7 @@ int	count_children(t_node *node)
 		if (token == OPAR)
 		{
 			count++;
-			node = jump_token(node, CPAR);
+			node = jump_pars(node);
 		}
 		else if (token > CPAR && token < QUOTE)
 			node = node->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 18:55:38 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 21:06:35 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define STRUCTS_H
 
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE  1
 # define VAR_UQUOTED -1
 # define VAR_SQUOTED -2
 # define VAR_DQUOTED -3
@@ -38,9 +38,17 @@ typedef enum e_op
 	WORD
 }	t_e_op;
 
+typedef struct s_node
+{
+	void	*next;
+	void	*prev;
+	void	*content;
+}	t_node;
+
 typedef struct s_io
 {
-	int		i_mode;
+	t_node	*heredoc_node;
+	int		i_count;
 	char	**input;
 	int		o_mode;
 	char	**output;
@@ -104,12 +112,6 @@ typedef struct s_token
 	int				quote_status;
 }	t_token;
 
-typedef struct s_node
-{
-	void	*next;
-	void	*prev;
-	void	*content;
-}	t_node;
 
 typedef struct s_data
 {
