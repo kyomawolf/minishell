@@ -1,7 +1,7 @@
 
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Werror -Wextra 
+FLAGS = -Wall -Werror -Wextra
 #-fsanitize=address -fno-omit-frame-pointer -static-libsan
 
 SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
@@ -16,7 +16,7 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
 BONUS_SRC =
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
-$(NAME) : $(OBJ) lib/libft.a
+$(NAME) : lib/libft.a $(OBJ)
 	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
 
 	@echo "compiled!"
@@ -49,7 +49,7 @@ clean :
 
 fclean :
 	make fclean -silent -C lib/libft/
-	rm -f *.out *.o *.~ $(NAME) ./parser/*.o
+	rm -f *.out *.o *.~ $(NAME) ./parser/*.o ./executor/*.o
 	rm -f ./lib/*.a ./include/libft.h
 
 help :

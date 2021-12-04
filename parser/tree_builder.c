@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2021/12/04 16:43:57 by jkasper          ###   ########.fr       */
+=======
+/*   Updated: 2021/12/04 13:53:10 by mstrantz         ###   ########.fr       */
+>>>>>>> 0078ad0c28390dc5c4ee71efcf7af848e40f46f0
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +175,7 @@ t_bin	*builder_main(t_node *head)
 	//return (NULL);
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
-	print_binary_tree(tree, 2);
-	printf("pointer: %s mode: %i\n", tree->child[0]->io->output[0], tree->child[0]->io->o_mode);
+	print_binary_tree(tree, 3);
 	free_t_node_list(head);
 	return (tree);
 }
