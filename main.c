@@ -3,17 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 21:42:05 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 14:05:50 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "minis.h"
 #include "libft.h"
 #include "struct.h"
@@ -56,7 +55,7 @@ void	main_loop(t_data *data)
 		if (!ft_strncmp(data->input, "exit\0", 5))
 			return ;
 		//filter no newline from history
-		data->list = ft_lexer(2, data->input);
+		data->list = ft_lexer(data->input);
 		data->tree = builder_main(data->list);
 		//else
 		//	execution_main(data);
@@ -69,14 +68,18 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
 
+	if (argc > 2)
+	{
+		write(2, "Error: Too many arguments. \
+		One or none arugment string allowed.", 64);
+		return (1);
+	}
 	data = NULL;
 	data = new_t_data();
 	(void) envp;
-	(void) argc;
-	(void) argv;
-	if (argc > 1)
+	if (argc == 2)
 	{
-		data->list = ft_lexer(2, argv[1]);
+		data->list = ft_lexer(argv[1]);
 		data->tree = builder_main(data->list);
 		return (0);
 	}

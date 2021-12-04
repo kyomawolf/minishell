@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 22:53:21 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 13:53:10 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ t_bin	*builder_main(t_node *head)
 	//return (NULL);
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
-	print_binary_tree(tree, 2);
+	print_binary_tree(tree, 3);
 	free_t_node_list(head);
 	return (tree);
 }

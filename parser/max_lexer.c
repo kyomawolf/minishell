@@ -14,10 +14,11 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include "../include/structs.h"
-#include "../include/libft.h"
+#include "../lib/libft/libft.h"
 
 int	ft_append_token(t_word *word, t_node **head, int end);
 int	ft_var_expansion(t_node **head);
+int	ft_wildcard_expansion(t_node **head);
 
 void	*ft_t_token_create(void *content)
 {
@@ -258,8 +259,7 @@ char	ft_set_type(t_word *word)
 	ret = WORD;
 	if (word->type == -1)
 	{
-		if (word->chars[0] == '&' && word->chars[1] == '&' &&
-			word->write_head == 2)
+		if (word->chars[0] == '&' && word->chars[1] == '&') //&& word->write_head == 2)
 			ret = AND;
 		else if (word->chars[0] == '|' && word->write_head == 1)
 			ret = PIPE;
@@ -351,7 +351,7 @@ int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 	return (ret);
 }
 
-//handles dquoted variable appendage
+/* //handles dquoted variable appendage
 int	ft_variable_dquoted(char *var_value, t_word *word)
 {
 	int	j;
@@ -375,9 +375,9 @@ int	ft_variable_dquoted(char *var_value, t_word *word)
 		}
 	}
 	return (0);
-}
+} */
 
-//handles unquoted variable appendage
+/* //handles unquoted variable appendage
 // var_value may be splitted in several words
 int	ft_variable_unquoted(char *var_value, t_word *word, t_node **head)
 {
@@ -402,7 +402,7 @@ int	ft_variable_unquoted(char *var_value, t_word *word, t_node **head)
 		}
 	}
 	return (0);
-}
+} */
 
 //checks if var_name is valid and returns string with var_name
 char	*ft_get_var_name(char *str, int i)
@@ -531,8 +531,8 @@ int	ft_append_wildcard(char *input, int *i, t_word *word)//, t_node **head)
 	} */
 	if (input[*i] == '*' && (word->status == '\'' || word->status == '"'))
 	{
-		if (ft_skip_chars(input, i, "*") == 1)
-			(*i)--;
+		/* if (ft_skip_chars(input, i, "*") == 1)
+			(*i)--; */
 		/* if (ft_t_word_append_char(word, '"') == -1)
 			return (-1); */
 		if (ft_t_word_append_char(word, '*') == -1)
@@ -789,7 +789,42 @@ int	ft_parser(t_node *head)
 	return (0);
 }
 
-t_node	*ft_lexer(int argc, char *argv)
+t_node	*ft_lexer(char *input)
+{
+	t_node	*head;
+	int		ret;
+
+	ret = 1;
+	head = ft_lexer_v2(input);
+	if (ft_operator_is_valid(head))
+		printf("invalid token\n");
+	else
+	{
+		ft_heredoc(head);
+		ret = 0;
+		if (ft_parser(head))
+		{
+			printf("parser error\n");
+			return (NULL);
+		}
+		if (ft_var_expansion(&head))
+		{
+			printf("invalid var_name\n");
+			return (NULL);
+		}
+		if (ft_wildcard_expansion(&head))
+		{
+			printf("Error while wc expansion\n");
+			return (NULL);
+		}
+		ft_s_node_print_content(head);
+	}
+	//ft_t_node_free(head);
+	//system("leaks a.out");
+	return (head);
+}
+
+/* int	main(int argc, char **argv)
 {
 	t_node	*head;
 	int		ret;
@@ -813,6 +848,11 @@ t_node	*ft_lexer(int argc, char *argv)
 			{
 				printf("invalid var_name\n");
 				return (NULL);
+			}
+			if (ft_wildcard_expansion(&head))
+			{
+				printf("Error while wc expansion\n");
+				return (1);
 			}
 			ft_s_node_print_content(head);
 		}

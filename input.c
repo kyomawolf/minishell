@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/11/16 17:32:50 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/03 20:44:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "struct.h"
+#include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <unistd.h>
@@ -72,5 +73,6 @@ void	input_readline(t_data *data)
 {
 	data->input = readline(data->prompt);
 	input_attributes_add();
-	add_history(data->input);
+	if (data->input[0] != '\0')
+		add_history(data->input);
 }

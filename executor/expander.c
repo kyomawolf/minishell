@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/03 21:38:30 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 13:47:13 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include "../include/structs.h"
-#include "../include/libft.h"
+#include "../lib/libft/libft.h"
 
 char	*ft_t_word_get_str(t_word *word);
 void	*ft_t_token_create(void *content);
@@ -83,13 +83,12 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 
 // appends chars to word in case of an unquoted variable
 //  creates new word and token if necessary
-void	ft_handle_unquoted_var(t_node *head, t_word *word, t_node **list, \
+void	ft_handle_unquoted_var(t_word *word, t_node **list, \
 			char **var)
 {
 	int	j;
 
 	j = 0;
-	(void)head;
 	while (var[1][j] != '\0')
 	{
 		if (ft_whitespaces(var[1][j]))
@@ -192,7 +191,7 @@ int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 		if (var == NULL)
 			return (1);
 		if (quoted_status == ' ')
-			ft_handle_unquoted_var(head, word, list, var);
+			ft_handle_unquoted_var(word, list, var);
 		else if (quoted_status == '"')
 			ft_handle_dquoted_var(word, var);
 		len = ft_strlen(var[0]);

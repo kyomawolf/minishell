@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 21:39:47 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 13:49:07 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <dirent.h>
-#include "./include/libft.h"
+#include "./lib/libft/libft.h"
 #include "./include/minis.h"
+#include "./include/structs.h"
 #include <fcntl.h>
 
 char	**ft_realloc_charpp(char ***old, size_t new_size)
@@ -44,18 +45,18 @@ char	**ft_realloc_charpp(char ***old, size_t new_size)
 	return (new);
 }
 
-//void	free_char_array(char ***arr)
-//{
-//	int	i;
-//
-//	i = 0;
-//	while ((*arr)[i] != NULL)
-//	{
-//		free((*arr)[i]);
-//		i++;
-//	}
-//	free(*arr);
-//}
+void	free_char_array2(char ***arr)
+{
+	int	i;
+
+	i = 0;
+	while ((*arr)[i] != NULL)
+	{
+		free((*arr)[i]);
+		i++;
+	}
+	free(*arr);
+}
 
 /* int	wild_sub_match(char *str, char **match)
 {
@@ -355,12 +356,12 @@ t_node	*wild_main(char *string)
 	selected_dir = wild_pattern_match(all_dir, times);
 	if (selected_dir == NULL)
 		return (formatted_string(string));
-	free_char_array(&times);
-	free_char_array(&all_dir);
+	free_char_array2(&times);
+	free_char_array2(&all_dir);
 	return (wild_combine(selected_dir));
 }
-/* 
-#include <string.h>
+
+/* #include <string.h>
 
 int	main(int argc, char **argv)
 {
@@ -387,4 +388,4 @@ int	main(int argc, char **argv)
 		node = node->next;
 	}
 }
- */
+*/
