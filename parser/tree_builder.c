@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 13:53:10 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 17:57:33 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,8 +151,7 @@ int	count_children(t_node *node)
 			node = jump_token(node, CPAR);
 		}
 		else if (token > CPAR && token < QUOTE)
-			count++;
-		// NOT FINISHED IO
+			node = node->next;
 		else
 			node = node->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 15:23:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 18:42:57 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,15 @@ void	main_loop(t_data *data)
 	}
 }
 
+void	main_print_entry(void)
+{
+	printf("         {\n      {   }\n       }_{ __{\n    .-{   }   }-.\n   (\
+	}     {  )\n   |`-.._____..-'|\n   |             ;--.\n   |           \
+ (__  \\\n   |             | )  )\n   |             |/  /\n   |        \
+     /  /                    \n   |            (  /\n   \\          \
+ 	 y'\n    `-.._____..-'		 -Minishell v.0.01- \n");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
@@ -88,6 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	} */
 	if (data == NULL)
 		return (0);
+	main_print_entry();
 	main_loop(data);
 	//memory_main(data);
 }
