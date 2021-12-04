@@ -10,5 +10,5 @@ int	main()
 	printf("cwd: %s\n", getcwd(NULL, 0));
 	chdir("..");
 	system("ls");
-	system("env");
+	//system("env");
 }

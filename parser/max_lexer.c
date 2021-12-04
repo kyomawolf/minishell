@@ -808,12 +808,12 @@ t_node	*ft_lexer(char *input)
 	{
 		ft_heredoc(head);
 		ret = 0;
-		if (ft_parser(head))
+		/* if (ft_parser(head))
 		{
 			printf("parser error\n");
 			ft_t_node_free(head);
 			return (NULL);
-		}
+		} */
 		if (ft_var_expansion(&head))
 		{
 			printf("invalid var_name\n");
