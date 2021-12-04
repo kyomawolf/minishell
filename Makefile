@@ -48,7 +48,7 @@ clean :
 
 fclean :
 	make fclean -silent -C lib/libft/
-	rm -f *.out *.o *.~ $(NAME) ./parser/*.o
+	rm -f *.out *.o *.~ $(NAME) ./parser/*.o ./executor/*.o
 	rm -f ./lib/*.a ./include/libft.h
 
 help :

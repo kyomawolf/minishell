@@ -351,7 +351,7 @@ int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 	return (ret);
 }
 
-//handles dquoted variable appendage
+/* //handles dquoted variable appendage
 int	ft_variable_dquoted(char *var_value, t_word *word)
 {
 	int	j;
@@ -375,9 +375,9 @@ int	ft_variable_dquoted(char *var_value, t_word *word)
 		}
 	}
 	return (0);
-}
+} */
 
-//handles unquoted variable appendage
+/* //handles unquoted variable appendage
 // var_value may be splitted in several words
 int	ft_variable_unquoted(char *var_value, t_word *word, t_node **head)
 {
@@ -402,7 +402,7 @@ int	ft_variable_unquoted(char *var_value, t_word *word, t_node **head)
 		}
 	}
 	return (0);
-}
+} */
 
 //checks if var_name is valid and returns string with var_name
 char	*ft_get_var_name(char *str, int i)
