@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 14:19:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 18:01:30 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,15 @@ void	main_loop(t_data *data)
 	}
 }
 
+void	main_print_entry(void)
+{
+	printf("         {\n      {   }\n       }_{ __{\n    .-{   }   }-.\n   (\
+	}     {  )\n   |`-.._____..-'|\n   |             ;--.\n   |           \
+ (__  \\\n   |             | )  )\n   |             |/  /\n   |        \
+     /  /                    \n   |            (  /\n   \\          \
+ 	 y'\n    `-.._____..-'		 -Minishell v.0.01- \n");
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
@@ -86,6 +95,7 @@ int	main(int argc, char **argv, char **envp)
 	} */
 	if (data == NULL)
 		return (0);
+	main_print_entry();
 	main_loop(data);
 	//memory_main(data);
 }
