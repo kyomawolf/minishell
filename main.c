@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 14:19:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 15:23:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	main_loop(t_data *data)
 			return ;
 		//filter no newline from history
 		data->list = ft_lexer(data->input);
+		if (data->list == NULL)
+			continue ;
 		data->tree = builder_main(data->list);
 		//else
 		//	execution_main(data);

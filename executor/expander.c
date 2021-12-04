@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/04 13:47:13 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/04 18:04:15 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,16 @@ char	*ft_get_var_name2(char *str, int i)
 		var_name[1] = '\0';
 		return (var_name);
 	}
+	if (str[i] == VAR_END)
+	{
+		var_name = malloc (2);
+		var_name[0] = '$';
+		var_name[1] = '\0';
+		return (var_name);
+	}
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (NULL);
-	while (str[i] != -1)
+	while (str[i] != VAR_END)
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (NULL);
@@ -74,7 +81,7 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 	token = (t_token *)head->content;
 	ft_t_word_append_char(word, token->string[*i]);
 	*i = *i + 2;
-	while (token->string[*i] != -1)
+	while (token->string[*i] != VAR_END)
 	{
 		ft_t_word_append_char(word, token->string[*i]);
 		(*i)++;
@@ -133,6 +140,7 @@ void	ft_free_char_array(char **arr)
 	{
 		free(arr[i]);
 		arr[i] = NULL;
+		i++;
 	}
 	free(arr);
 	arr = NULL;
@@ -161,14 +169,27 @@ char	**ft_get_variable_name(t_node *head, int *i)
 	var[0] = ft_get_var_name2(token->string, *i + 2);
 	if (var[0] == NULL)
 		return (NULL);
-	if (var[0][0] == '?' && var[0][1] == '\0')
-		var[1] = var[0];
+	if ((var[0][0] == '?' || var[0][0] == '$') && var[0][1] == '\0')
+	{
+		var_value_copy = ft_strdup(var[0]);
+		if (var_value_copy == NULL)
+		{
+			ft_get_variable_name_guard(var);
+			return (NULL);
+		}
+		var[1] = var_value_copy;
+	}
 	else
+	{
 		var[1] = getenv(var[0]);
-	var_value_copy = ft_strdup(var[1]);
-	if (var_value_copy == NULL)
-		ft_get_variable_name_guard(var);
-	var[1] = var_value_copy;
+		var_value_copy = ft_strdup(var[1]);
+		if (var_value_copy == NULL)
+		{
+			ft_get_variable_name_guard(var);
+			return (NULL);
+		}
+		var[1] = var_value_copy;
+	}
 	var[2] = NULL;
 	return (var);
 }
@@ -183,17 +204,19 @@ int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 
 	token = (t_token *)head->content;
 	quoted_status = token->string[(*i) + 1];
-	if (quoted_status == '\'')
+	if (quoted_status == VAR_SQUOTED)
 		ft_handle_squoted_var(head, word, i);
 	else
 	{
 		var = ft_get_variable_name(head, i);
 		if (var == NULL)
 			return (1);
-		if (quoted_status == ' ')
+		if (quoted_status == VAR_UQUOTED)
 			ft_handle_unquoted_var(word, list, var);
-		else if (quoted_status == '"')
+		else if (quoted_status == VAR_DQUOTED)
 			ft_handle_dquoted_var(word, var);
+		if (!ft_strncmp(var[0],"$", 2))
+			*i = *i - 1;
 		len = ft_strlen(var[0]);
 		*i = *i + len + 2;
 		ft_free_char_array(var);

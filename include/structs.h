@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 16:12:20 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/04 16:40:36 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 # define STRUCTS_H
 
 # define BUFFER_SIZE 1
+# define VAR_UQUOTED -1
+# define VAR_SQUOTED -2
+# define VAR_DQUOTED -3
+# define VAR_END     -4
 
 # include <stdlib.h>
 

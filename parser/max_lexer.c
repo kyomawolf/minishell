@@ -418,15 +418,16 @@ char	*ft_get_var_name(char *str, int i)
 		var_name[1] = '\0';
 		return (var_name);
 	}
-	if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (NULL);
-	while (!ft_strchr(" \t\n\"'$|&()<>", str[i]) && str[i] != '\0')
+	/* if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (malloc()); // NULL */
+	while (ft_isalnum(str[i]) || str[i] == '_')//(!ft_strchr(" \t\n\"'$|&()<>", str[i]) && str[i] != '\0')
 	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (NULL);
+		/* if (!ft_isalnum(str[i]) && str[i] != '_')
+			break ;//return (NULL); */
 		i++;
 	}
 	var_name = ft_substr(str, i_start, i - i_start);
+	printf("[%d]var_name = :%s:\n",__LINE__, var_name);
 	return (var_name);
 }
 
@@ -450,11 +451,11 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 	}
 	ft_t_word_append_char(word, input[*i]);
 	if (word->status == -1) //expandsion in executor!
-		ft_t_word_append_char(word, ' ');
+		ft_t_word_append_char(word, VAR_UQUOTED);
 	else if (word->status == '"')
-		ft_t_word_append_char(word, '"');
+		ft_t_word_append_char(word, VAR_DQUOTED);
 	else if (word->status == '\'')
-		ft_t_word_append_char(word, '\'');
+		ft_t_word_append_char(word, VAR_SQUOTED);
 	var_name = ft_get_var_name(input, *i + 1);
 	if (var_name == NULL)
 		return (-1);
@@ -466,7 +467,7 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 	}
 	free(var_name);
 	var_name = NULL;
-	ft_t_word_append_char(word, -1);
+	ft_t_word_append_char(word, VAR_END);
 		/* var_value = getenv(var_name);
 		if (var_value == NULL)
 		{
@@ -559,8 +560,8 @@ void	ft_append(char *input, int *i, t_word *word, t_node **head)
 	if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
 	{
 		ft_t_word_append_char(word, input[*i]);
-		if (input[*i] == '$')
-			ft_t_word_append_char(word, '\'');
+		/* if (input[*i] == '$')
+			ft_t_word_append_char(word, '\''); */
 	}
 	else if (input[*i] == '$')
 	{
@@ -796,8 +797,13 @@ t_node	*ft_lexer(char *input)
 
 	ret = 1;
 	head = ft_lexer_v2(input);
+	ft_s_node_print_content(head);
 	if (ft_operator_is_valid(head))
+	{
 		printf("invalid token\n");
+		ft_t_node_free(head);
+		return (NULL);
+	}
 	else
 	{
 		ft_heredoc(head);
@@ -805,16 +811,19 @@ t_node	*ft_lexer(char *input)
 		if (ft_parser(head))
 		{
 			printf("parser error\n");
+			ft_t_node_free(head);
 			return (NULL);
 		}
 		if (ft_var_expansion(&head))
 		{
 			printf("invalid var_name\n");
+			ft_t_node_free(head);
 			return (NULL);
 		}
 		if (ft_wildcard_expansion(&head))
 		{
 			printf("Error while wc expansion\n");
+			ft_t_node_free(head);
 			return (NULL);
 		}
 		ft_s_node_print_content(head);
