@@ -862,6 +862,7 @@ t_node	*ft_lexer(char *input)
 	}
 	return (NULL);
 }
+*/
 
 //todos
 /*

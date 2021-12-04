@@ -16,7 +16,7 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
 BONUS_SRC =
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
-$(NAME) : $(OBJ) lib/libft.a
+$(NAME) : lib/libft.a $(OBJ)
 	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
 
 	@echo "compiled!"
