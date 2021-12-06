@@ -13,7 +13,7 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 
-BONUS_SRC =
+#BONUS_SRC =
 OBJ = $(patsubst %.c,%.o,$(SRC))
 
 $(NAME) : lib/libft.a $(OBJ)

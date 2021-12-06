@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/05 22:10:51 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 15:12:26 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		tree->io->output[ft_char_arr_len(tree->io->output)] = \
 		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
 	}
+	printf("returning?!\n");
 	return (((t_node *)node->next)->next);
 }
 
@@ -72,19 +73,20 @@ t_node	*add_words(t_simple_com *command, t_node *node)
 	int	i;
 
 	n_words = count_words(node);
-	command->number_arguments += n_words;
-	if (command->number_arguments == n_words)
+	printf("%i\n", n_words);
+	if (command->number_arguments == 0)
 		command->arguments = calloc(n_words + 1, sizeof(char *));
 	else
 		command->arguments = ft_realloc_charpp(&command->arguments, \
-		command->number_arguments);
-	i = command->number_arguments - n_words;
+		command->number_arguments + n_words + 1);
+	i = 0;
 	while (i < n_words)
 	{
-		command->arguments[i] = ft_strdup(((t_token *)node->content)->string);
+		command->arguments[command->number_arguments + i] = ft_strdup(((t_token *)node->content)->string);
 		node = node->next;
 		i++;
 	}
+	command->number_arguments += n_words;
 	return (node);
 }
 
