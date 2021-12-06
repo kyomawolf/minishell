@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 21:00:33 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 15:12:32 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 	while (i < root->child_amount)
 	{
 		ret = 0;
-		printf("iteration: %i.%i, pointer: %p, content: %s\n", root->depth, i, *node, ((t_token *)(*node)->content)->string);
 		while (((t_token *)(*node)->content)->type == CPAR)
 		{
 			if ((*node)->next == NULL)

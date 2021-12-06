@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 21:05:25 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 15:12:26 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		tree->io->output[ft_char_arr_len(tree->io->output)] = \
 		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
 	}
+	printf("returning?!\n");
 	return (((t_node *)node->next)->next);
 }
 
@@ -72,30 +73,42 @@ t_node	*add_words(t_simple_com *command, t_node *node)
 	int	i;
 
 	n_words = count_words(node);
-	command->number_arguments += n_words;
-	if (command->number_arguments == n_words)
+	printf("%i\n", n_words);
+	if (command->number_arguments == 0)
 		command->arguments = calloc(n_words + 1, sizeof(char *));
 	else
 		command->arguments = ft_realloc_charpp(&command->arguments, \
-		command->number_arguments);
-	i = command->number_arguments - n_words;
+		command->number_arguments + n_words + 1);
+	i = 0;
 	while (i < n_words)
 	{
-		command->arguments[i] = ft_strdup(((t_token *)node->content)->string);
+		command->arguments[command->number_arguments + i] = ft_strdup(((t_token *)node->content)->string);
 		node = node->next;
 		i++;
 	}
+	command->number_arguments += n_words;
 	return (node);
 }
 
-t_bin	*add_node(t_e_op en, t_bin *par)
+t_e_op	add_last_operator(t_node *node)
+{
+	while (node->prev != NULL)
+	{
+		if (((t_token *)node->content)->type < OPAR)
+			return (((t_token *)node->content)->type);
+		node = node->prev;
+	}
+	return (0);
+}
+
+t_bin	*add_node(t_bin *par, t_node *node)
 {
 	t_bin	*ret;
 
 	ret = ft_calloc(1, sizeof(t_bin));
 	ret->command = ft_calloc(1, sizeof(t_simple_com));
 	ret->parent = par;
-	ret->control_op = en;
+	ret->control_op = add_last_operator(node);
 	return (ret);
 }
 
@@ -107,7 +120,7 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 	token = ((t_token *)(*ori_node)->content)->type;
 	if (token == OPAR)
 		return (NULL);
-	ret = add_node(token, parent);
+	ret = add_node(parent, *ori_node);
 	if (token < OPAR)
 	{
 		*ori_node = (*ori_node)->next;
