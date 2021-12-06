@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 21:58:16 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/05 18:19:55 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,14 @@ typedef struct s_simple_com
 	int		exit_status;
 }	t_simple_com;
 
-struct s_groups
+/* struct s_groups
 {
 	int	begin_com;
 	int	end_com;
 	int	group_id;
 };
-
-struct s_command
+ */
+/* struct s_command
 {
 	int				number_groups;
 	int				curr_group;
@@ -80,7 +80,7 @@ struct s_command
 	char			*in_file;
 	char			*out_file;
 	char			*err_file;
-};
+}; */
 
 typedef struct s_bin
 {
@@ -115,7 +115,7 @@ typedef struct s_token
 
 typedef struct s_data
 {
-	struct s_command	*allcom;
+	//struct s_command	*allcom;
 	char				*input;
 	char				*prompt;
 	char				*currdir;
