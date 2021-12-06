@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:42:10 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 21:35:17 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 13:03:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ t_data	*new_t_data(char **envp)
 	ret->currdir = getcwd(NULL, 0);//TO FREE
 	if (ret->currdir == NULL)
 		return (NULL);
-	ret->allcom = ft_calloc(1, sizeof(struct s_command));
+	/* ret->allcom = ft_calloc(1, sizeof(struct s_command));
 	if (ret->allcom == NULL)
-		return (NULL);
+		return (NULL); */
 	ret->input = NULL;
 	i = 1;
 	while (envp[i] != NULL)
