@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 14:17:29 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 17:20:27 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ typedef struct s_token
 	int				type;
 	int				quote_status;
 }	t_token;
-
 
 typedef struct s_data
 {
