@@ -6,15 +6,15 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 15:12:32 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 17:21:26 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minis.h"
-#include <stdio.h>
 #include "parser.h"
 #include "struct.h"
+#include <stdio.h>
 
 int		b_tree_add_child(t_node **node, t_bin *root);
 
@@ -25,6 +25,10 @@ t_bin	*b_tree_init(t_node **node, int depth)
 
 	root = ft_calloc(1, sizeof(t_bin));
 	root->depth = depth;
+	if ((t_node *)((*node)->prev) != NULL)
+		root->control_op = ((t_token *)(*node)->content)->type;
+	else
+		root->control_op = add_last_operator(*node);
 	root->child_amount = count_children(*node);
 	root->child = ft_calloc(root->child_amount + 1, sizeof(t_bin *));
 	while (1)
@@ -59,6 +63,7 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 		{
 			*node = (*node)->next;
 			root->child[i] = b_tree_init(node, root->depth + 1);
+			printf("opc: %i\n", root->child[i]->control_op);
 		}
 		i++;
 	}

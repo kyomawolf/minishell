@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 15:12:26 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 17:14:36 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,7 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 		if (*ori_node != NULL)
 			token = ((t_token *)(*ori_node)->content)->type;
 	}
+	printf("op: %i\n", ret->control_op);
 	return (ret);
 }
 
@@ -202,6 +203,7 @@ t_bin	*builder_main(t_node *head)
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
 	print_binary_tree(tree, 3);
+	printf("pipes: %i\n", pipe_count_main(tree));
 	free_t_node_list(head);
 	return (tree);
 }
