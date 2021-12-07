@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/04 13:49:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/06 17:53:10 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,6 +316,7 @@ t_node	*wild_combine(char **sel_dir)
 		((t_token *)curr->content)->type = WORD;
 		i++;
 	}
+	free(sel_dir);
 	return (ret);
 }
 
