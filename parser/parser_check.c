@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 22:50:14 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 23:50:31 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,16 @@ int	check_input(t_node *head)
 
 	err = 0;
 	err += check_pars(head);
-	write(1, "passed pars\n", 12);
+	if (!err)
+		write(1, "passed parenthesis\n", 19);
 	err += check_io(head);
-	write(1, "passed io\n", 10);
-	err += check_op(head);
-	write(1, "passed ops\n", 11);
+	if (!err)
+		write(1, "passed redirections\n", 20);
+	err += check_op(head);//no INPUT error: "e1 | "
+	if (!err)
+		write(1, "passed operators\n", 17);
 	err += check_wordpar(head);
-	write(1, "OK\n", 3);
+	if (!err)
+		write(1, "OK\n", 3);
 	return (err);
 }

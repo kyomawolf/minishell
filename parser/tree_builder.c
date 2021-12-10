@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:01:55 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 17:36:20 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 23:46:10 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ t_node	*add_words(t_simple_com *command, t_node *node)
 	int	i;
 
 	n_words = count_words(node);
-	printf("%i\n", n_words);
 	if (command->number_arguments == 0)
 		command->arguments = calloc(n_words + 1, sizeof(char *));
 	else
@@ -109,16 +108,36 @@ t_bin	*add_node(t_bin *par, t_node *node)
 	return (ret);
 }
 
+void	move_bracket(t_node **ori_node)
+{
+	while (((t_token *)(*ori_node)->content)->type != OPAR)
+		*ori_node = (t_node *)(*ori_node)->next;
+}
+
+t_bin	*bracket_check(t_node **ori_node, t_bin *parent)
+{
+	if ((t_node *)(*ori_node)->next == NULL)
+		return (add_com(ori_node, parent));
+	else if (((t_token *)((t_node *)(*ori_node)->next)->content)->type == OPAR)
+	{
+		move_bracket(ori_node);
+		return (NULL);
+	}
+	else if (((t_token *)(*ori_node)->content)->type == OPAR)
+	{
+		move_bracket(ori_node);
+		return (NULL);
+	}
+	else
+		return (add_com(ori_node, parent));
+}
+
 t_bin	*add_com(t_node **ori_node, t_bin *parent)
 {
 	t_bin	*ret;
 	t_e_op	token;
 
 	token = ((t_token *)(*ori_node)->content)->type;
-	if (((t_node *)(*ori_node)->next != NULL && ((t_token *)((t_node *)(*ori_node)->next)->content)->type == OPAR))
-		return (NULL);
-	if (token == OPAR)
-		return (NULL);
 	ret = add_node(parent, *ori_node);
 	if (token < OPAR)
 	{
@@ -202,7 +221,7 @@ t_bin	*builder_main(t_node *head)
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
 	print_binary_tree(tree, 3);
-	printf("pipes: %i\n", pipe_count_main(tree, 1));
+	//printf("pipes: %i\n", pipe_count_main(tree, 1));
 	free_t_node_list(head);
 	return (tree);
 }

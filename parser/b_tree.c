@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/07 19:16:08 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 23:44:03 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,11 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 				return (1);
 			(*node) = (*node)->next;
 		}
-		root->child[i] = add_com(node, root);//determines stage and fills comms
-		printf("op-n: %i\n", root->child[i]->control_op);
+		root->child[i] = bracket_check(node, root);
 		if (root->child[i] == NULL)
 		{
 			*node = (*node)->next;
 			root->child[i] = b_tree_init(node, root->depth + 1);
-			printf("opc: %i\n", root->child[i]->control_op);
 		}
 		i++;
 	}
