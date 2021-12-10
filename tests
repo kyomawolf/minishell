@@ -79,3 +79,12 @@ minishell@minishell_repo-> echo "$'abc'"
 invalid var_name
 bash-3.2$ echo "$'abc'"
 $'abc'
+
+
+minishell@minishell_repo-> e1 | e2 | e3 && ((e4 && e5) || e6)
+                        | e1
+                        | e2
+                        | e3
+                        | (NEXT)
+                                        | e4
+                                        | e5

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/06 17:29:11 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/10 17:24:46 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,52 @@
 #include "libft.h"
 #include "struct.h"
 
-int	ft_executor(t_data *data)
-{
+void	*ft_t_node_create(void *content);
+void	*ft_t_node_get_last(void *head);
+void	ft_t_node_add_back(t_node **head, t_node *node);
+void	ft_t_node_free(t_node *head);
 
+
+void	ft_print_nodes(t_node *head)
+{
+	while (head != NULL)
+	{
+		if (((t_bin *)head->content) == NULL)
+			printf("next\n");
+		else if (((t_bin *)head->content)->command == NULL)
+			printf("command null\n");
+		else if (((t_bin *)head->content)->command->arguments == NULL)
+			printf("argument null \n");
+		else
+			printf("%s\n", ((t_bin *)head->content)->command->arguments[0]);
+		head = head->next;
+	}
+}
+
+void	traverse_tree(t_bin *tree, t_node **head)
+{
+	traverse_tree_rec(tree, head);
+	ft_print_nodes(*head);
+}
+
+void	traverse_tree_rec(t_bin *tree, t_node **head)
+{
+	int	i;
+
+	if (tree->child == NULL)
+	{
+		if (tree->command != NULL && tree->command->arguments != NULL)
+		{
+			if (head != NULL && tree->control_op != PIPE)
+				ft_t_node_add_back(head, ft_t_node_create(NULL));
+			ft_t_node_add_back(head, ft_t_node_create(tree));
+		}
+		return ;
+	}
+	i = 0;
+	while (tree->child[i] != NULL)
+	{
+		traverse_tree_rec(tree->child[i], head);
+		i++;
+	}
 }

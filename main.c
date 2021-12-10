@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 14:28:22 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 15:13:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,9 @@ void	get_prompt(t_data *data)
 
 void	main_loop(t_data *data)
 {
+	t_node *head;
+
+	head = NULL;
 	while (1)
 	{
 		input_attributes_add();
@@ -60,6 +63,9 @@ void	main_loop(t_data *data)
 		if (data->list == NULL)
 			continue ;
 		data->tree = builder_main(data->list);
+		traverse_tree(data->tree, &head);
+		free(head);
+		head = NULL;
 		//else
 		//	execution_main(data);
 		//memory_loop_main(data);

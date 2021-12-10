@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:14:55 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 16:03:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,6 @@ int					pipe_count_main(t_bin *tree);
 void				*ft_s_node_create(void *content);
 void				ft_s_node_add_back(struct s_node **head, \
 										struct s_node *node);
+void	traverse_tree(t_bin *tree, t_node **head);
+void	traverse_tree_rec(t_bin *tree, t_node **head);
 #endif

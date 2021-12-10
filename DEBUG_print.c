@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   DEBUG_print.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:31:46 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/02 20:30:14 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 16:49:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ void	print_binary_tree(t_bin *prin, int dep)
 			else
 			{
 				print_chars(dep, '\t');
-				print_command(prin->child[i]->command);
+				if (prin->child[i]->command == NULL)
+					printf("NULL\n");
+				else
+					print_command(prin->child[i]->command);
 			}
 			i++;
 		}

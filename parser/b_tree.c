@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_tree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:21:26 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 16:50:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 		i++;
 	while (i < root->child_amount)
 	{
+		printf("test\n");
 		ret = 0;
 		while (((t_token *)(*node)->content)->type == CPAR)
 		{
