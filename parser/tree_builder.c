@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:01:55 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 17:01:58 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 17:36:20 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "minis.h"
 #include "libft.h"
 #include "parser.h"
+#include <stdio.h>
 
 int	count_words(t_node *node)
 {
@@ -114,7 +115,9 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 	t_e_op	token;
 
 	token = ((t_token *)(*ori_node)->content)->type;
-	if (token == OPAR || ((t_token *)((t_node *)(*ori_node)->next)->content)->type == OPAR)
+	if (((t_node *)(*ori_node)->next != NULL && ((t_token *)((t_node *)(*ori_node)->next)->content)->type == OPAR))
+		return (NULL);
+	if (token == OPAR)
 		return (NULL);
 	ret = add_node(parent, *ori_node);
 	if (token < OPAR)
@@ -158,29 +161,29 @@ int	count_children(t_node *node)
 {
 	int		count;
 	t_e_op	token;
+	int		sw;
 
 	count = 0;
-	token = ((t_token *)node->content)->type;
-	if (token == WORD)
-		count++;
-	if (token == OPAR)
-		node = node->next;
+	sw = 1;
 	while (node != NULL)
 	{
 		token = ((t_token *)node->content)->type;
 		if (token < OPAR)
-			count++;
+			sw = 1;
 		if (token == CPAR)
 			break ;
 		if (token == OPAR)
 		{
 			count++;
 			node = jump_pars(node);
+			continue ;
 		}
-		else if (token > CPAR && token < QUOTE)
-			node = node->next;
-		else
-			node = node->next;
+		else if (token == WORD && sw == 1)
+		{
+			sw = 0;
+			count++;
+		}
+		node = node->next;
 	}
 	return (count);
 }
