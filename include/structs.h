@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 23:57:41 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/11 00:00:13 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ typedef struct s_node
 typedef struct s_io
 {
 	t_node	*heredoc_node;
-	int		quoted_state;
+	int		quoted_status;
 	int		i_count;
 	char	**input;
 	int		o_mode;
