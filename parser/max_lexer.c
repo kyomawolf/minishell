@@ -797,7 +797,7 @@ t_node	*ft_lexer(char *input)
 
 	ret = 1;
 	head = ft_lexer_v2(input);
-	ft_s_node_print_content(head);
+	//ft_s_node_print_content(head);
 	if (ft_operator_is_valid(head))
 	{
 		printf("invalid token\n");
@@ -826,7 +826,7 @@ t_node	*ft_lexer(char *input)
 			ft_t_node_free(head);
 			return (NULL);
 		}
-		ft_s_node_print_content(head);
+		//ft_s_node_print_content(head);
 	}
 	//ft_t_node_free(head);
 	//system("leaks a.out");
