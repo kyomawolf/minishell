@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:14:36 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 16:26:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 	t_e_op	token;
 
 	token = ((t_token *)(*ori_node)->content)->type;
-	if (token == OPAR)
+	if (token == OPAR || ((t_token *)((t_node *)(*ori_node)->next)->content)->type == OPAR)
 		return (NULL);
 	ret = add_node(parent, *ori_node);
 	if (token < OPAR)
