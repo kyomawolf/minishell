@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:01:55 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 23:46:10 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 23:58:30 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 	{
 		tree->io->heredoc_node = ((t_token *)node->content)->heredoc;
 		((t_token *)node->content)->heredoc = NULL;
+		tree->io->quoted_status = ((t_token *)node->content)->quote_status;
 	}
 	else
 	{
