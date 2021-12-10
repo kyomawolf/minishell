@@ -6,6 +6,7 @@ FLAGS = -Wall -Werror -Wextra
 
 SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
+
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
 SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
       parser/max_lexer.c wild.c parser/parser_check.c free.c DEBUG_print.c \
@@ -14,8 +15,10 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 
+OBJ_DIR = obj/
+
 #BONUS_SRC =
-OBJ = $(patsubst %.c,%.o,$(SRC))
+OBJ = $(addprefix $(OBJ_DIR), $(patsubst %.c,%.o,$(SRC)))
 
 $(NAME) : lib/libft.a $(OBJ)
 	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
@@ -27,7 +30,7 @@ all : lib/libft.a $(NAME)
 debug : fclean lib/libft.a $(OBJ) $(SET)
 	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
-%.o: %.c
+$(OBJ_DIR)%.o: %.c
 	@gcc $(FLAGS) $(INC) -O0 -c $< -o $@
 
 re : fclean all
@@ -46,12 +49,14 @@ test : libs
 
 clean :
 	make clean -silent -C lib/libft/
-	rm -f *.o *.~ *.d
+	- rm -f $(OBJ)
+	@echo "object directory cleaned!"
 
 fclean :
 	make fclean -silent -C lib/libft/
 	rm -f *.out *.o *.~ $(NAME) ./parser/*.o ./executor/*.o
 	rm -f ./lib/*.a ./include/libft.h
+	@echo "fully cleaned!"
 
 help :
 	@echo "rules:	all [default]"

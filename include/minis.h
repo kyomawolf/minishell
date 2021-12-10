@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 16:03:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/10 17:42:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_node				*ft_lexer_v2(char *string);
 t_bin				*builder_main(t_node *list);
 void				free_char_array(char ***arr);
 
-int					pipe_count_main(t_bin *tree);
+int					pipe_count_main(t_bin *tree, int i);
 
 void				*ft_s_node_create(void *content);
 void				ft_s_node_add_back(struct s_node **head, \

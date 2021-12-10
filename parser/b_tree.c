@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 16:50:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/10 17:42:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ t_bin	*b_tree_init(t_node **node, int depth)
 	else
 		root->control_op = add_last_operator(*node);
 	root->child_amount = count_children(*node);
+	printf("children: %i\n", root->child_amount);
 	root->child = ft_calloc(root->child_amount + 1, sizeof(t_bin *));
 	while (1)
 	{
@@ -56,10 +57,11 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 		while (((t_token *)(*node)->content)->type == CPAR)
 		{
 			if ((*node)->next == NULL)
-				return(1);
+				return (1);
 			(*node) = (*node)->next;
 		}
 		root->child[i] = add_com(node, root);//determines stage and fills comms
+		printf("op-n: %i\n", root->child[i]->control_op);
 		if (root->child[i] == NULL)
 		{
 			*node = (*node)->next;

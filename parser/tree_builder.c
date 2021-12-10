@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/22 17:35:59 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 16:26:14 by mstrantz         ###   ########.fr       */
+/*   Created: 2021/12/10 17:01:55 by jkasper           #+#    #+#             */
+/*   Updated: 2021/12/10 17:01:58 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include "structs.h"
 #include "minis.h"
 #include "libft.h"
 #include "parser.h"
@@ -203,7 +199,7 @@ t_bin	*builder_main(t_node *head)
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
 	print_binary_tree(tree, 3);
-	printf("pipes: %i\n", pipe_count_main(tree));
+	printf("pipes: %i\n", pipe_count_main(tree, 1));
 	free_t_node_list(head);
 	return (tree);
 }

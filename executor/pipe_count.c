@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:51:06 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:26:28 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/06 17:39:42 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,11 @@ int	pipe_next_child(int i, t_bin *tree)
 		return (0);
 }
 
-int	pipe_count_main(t_bin *tree)
+int	pipe_count_main(t_bin *tree, int i)
 {
 	int	count;
-	int	i;
 
 	count = 1;
-	i = 1;
 	while (pipe_next_child(i, tree))
 	{
 		count += pipe_next_child(i, tree);
