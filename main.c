@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 14:28:22 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/11 01:18:39 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,13 @@ void	main_loop(t_data *data)
 		input_attributes_add();
 		input_readline(data);
 		input_attributes_clear();
-		if (data->input == NULL)
-			continue ;
-		printf("%s\n", data->input);
-		if (!ft_strncmp(data->input, "exit\0", 5))
+		if (data->input == NULL || !ft_strncmp(data->input, "exit\0", 5))
+		{
+			printf("\n\nWARNING: LEAVING MINISHELL\n");
 			return ;
+		}
+		if (data->input[0] == '\0')
+			continue ;
 		//filter no newline from history
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
