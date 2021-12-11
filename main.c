@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 15:13:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/11 13:42:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ void	get_prompt(t_data *data)
 void	main_loop(t_data *data)
 {
 	t_node *head;
+	t_node	*temp;
 
 	head = NULL;
 	while (1)
@@ -55,17 +56,23 @@ void	main_loop(t_data *data)
 		input_attributes_clear();
 		if (data->input == NULL)
 			continue ;
-		printf("%s\n", data->input);
+		printf(":%s:\n", data->input);
 		if (!ft_strncmp(data->input, "exit\0", 5))
 			return ;
 		//filter no newline from history
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
 			continue ;
+		ft_t_node_free(data->list);
 		data->tree = builder_main(data->list);
 		traverse_tree(data->tree, &head);
-		free(head);
-		head = NULL;
+		while (head != NULL)
+		{
+			temp = head;
+			head = head->next;
+			free(temp);
+			temp = NULL;
+		}
 		//else
 		//	execution_main(data);
 		//memory_loop_main(data);

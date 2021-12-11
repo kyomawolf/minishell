@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:01:55 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 17:01:58 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 17:46:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "minis.h"
 #include "libft.h"
 #include "parser.h"
+#include <stdio.h>
 
 int	count_words(t_node *node)
 {
