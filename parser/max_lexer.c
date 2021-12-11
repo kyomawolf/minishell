@@ -557,7 +557,9 @@ void	ft_append(char *input, int *i, t_word *word, t_node **head)
 {
 	char	c;
 
-	if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
+	if (input[*i] == '\0')
+		return ;
+	else if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
 	{
 		ft_t_word_append_char(word, input[*i]);
 		/* if (input[*i] == '$')
