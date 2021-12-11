@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 17:42:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/11 13:42:52 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int					pipe_count_main(t_bin *tree, int i);
 void				*ft_s_node_create(void *content);
 void				ft_s_node_add_back(struct s_node **head, \
 										struct s_node *node);
+//temporay
 void	traverse_tree(t_bin *tree, t_node **head);
 void	traverse_tree_rec(t_bin *tree, t_node **head);
+void	ft_t_node_free(t_node *head);
 #endif

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/03 22:50:14 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/11 00:52:59 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ int	check_io(t_node *head)
 		else if (token > HERE_DOC && token < QUOTE && !sw)
 		{
 			sw = 1;
-			head = head->next;
-			continue ;
 		}
 		else if (sw != 0)
 			return (1);
@@ -77,9 +75,9 @@ int	check_wordpar(t_node *head)
 	while (head != NULL)
 	{
 		token = ((t_token *)head->content)->type;
-		if (token == OPAR && last_token > CPAR)
+		if (token == OPAR && last_token > CPAR && last_token != HERE_DOC)
 			return (1);
-		else if (last_token == CPAR && token > CPAR)
+		else if (last_token == CPAR && token > CPAR && last_token != HERE_DOC)
 			return (1);
 		head = head->next;
 		last_token = token;
@@ -104,7 +102,7 @@ int	check_op(t_node *head)
 			sw = 1;
 		else if (token == CPAR || token == WORD)
 			sw = 0;
-		else
+		else if (token < OPAR)
 			sw = 2;
 		head = head->next;
 	}
@@ -119,12 +117,16 @@ int	check_input(t_node *head)
 
 	err = 0;
 	err += check_pars(head);
-	write(1, "passed pars\n", 12);
+	if (!err)
+		write(1, "passed parenthesis\n", 19);
 	err += check_io(head);
-	write(1, "passed io\n", 10);
+	if (!err)
+		write(1, "passed redirections\n", 20);
 	err += check_op(head);
-	write(1, "passed ops\n", 11);
+	if (!err)
+		write(1, "passed operators\n", 17);
 	err += check_wordpar(head);
-	write(1, "OK\n", 3);
+	if (!err)
+		write(1, "OK\n", 3);
 	return (err);
 }

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:40:53 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:10:08 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/10 23:19:07 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,5 @@ t_bin			*builder_main(t_node *head);
 int				count_children(t_node *node);
 t_bin			*add_com(t_node **ori_node, t_bin *parent);
 t_e_op			add_last_operator(t_node *node);
+t_bin			*bracket_check(t_node **ori_node, t_bin *parent);
 #endif /*PARSER_H*/
