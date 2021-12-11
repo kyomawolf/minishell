@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 01:18:39 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/11 17:17:18 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,9 @@ void	main_loop(t_data *data)
 		input_attributes_clear();
 		if (data->input == NULL || !ft_strncmp(data->input, "exit\0", 5))
 		{
+			free_main(data);
 			printf("\n\nWARNING: LEAVING MINISHELL\n");
-			return ;
+			exit(0);
 		}
 		if (data->input[0] == '\0')
 			continue ;
@@ -65,6 +66,7 @@ void	main_loop(t_data *data)
 		//else
 		//	execution_main(data);
 		//memory_loop_main(data);
+		free_tree(data->tree);
 		get_prompt(data);
 	}
 }
