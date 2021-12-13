@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 00:00:13 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/13 18:02:08 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ typedef struct s_data
 	t_node				*envp;
 	t_bin				*tree;
 	t_node				*list;
+	t_node				**opendes;
 }	t_data;
 
 #endif /*STRUCTS_H*/
