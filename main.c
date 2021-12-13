@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 13:45:57 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/13 11:45:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	main_loop(t_data *data)
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
 			continue ;
-		ft_t_node_free(data->list);
+		//ft_t_node_free(data->list);
 		data->tree = builder_main(data->list);
 		traverse_tree(data->tree, &head);
 		while (head != NULL)

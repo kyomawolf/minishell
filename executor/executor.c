@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/10 17:24:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/13 22:00:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ void	ft_t_node_free(t_node *head);
 
 void	ft_print_nodes(t_node *head)
 {
+	t_node	*temp;
+	int		i;
+
 	while (head != NULL)
 	{
 		if (((t_bin *)head->content) == NULL)
@@ -32,18 +35,28 @@ void	ft_print_nodes(t_node *head)
 		else if (((t_bin *)head->content)->command == NULL)
 			printf("command null\n");
 		else if (((t_bin *)head->content)->command->arguments == NULL)
-			printf("argument null \n");
+			printf("arguments null \n");
 		else
-			printf("%s\n", ((t_bin *)head->content)->command->arguments[0]);
+		{
+			i = 0;
+			while (((t_bin *)head->content)->command->arguments[i] != NULL)
+				printf("%s\n", ((t_bin *)head->content)->command->arguments[i++]);
+		}
+		if ((t_bin *)head->content != NULL &&
+			((t_bin *)head->content)->io != NULL &&
+			((t_bin *)head->content)->io->heredoc_node != NULL)
+		{
+			temp = ((t_bin *)head->content)->io->heredoc_node;
+			while (temp != NULL)
+			{
+				printf("Heredoc content :%s:\n", temp->content);
+				temp = temp->next;
+			}
+		}
 		head = head->next;
 	}
 }
 
-void	traverse_tree(t_bin *tree, t_node **head)
-{
-	traverse_tree_rec(tree, head);
-	ft_print_nodes(*head);
-}
 
 void	traverse_tree_rec(t_bin *tree, t_node **head)
 {
@@ -65,4 +78,12 @@ void	traverse_tree_rec(t_bin *tree, t_node **head)
 		traverse_tree_rec(tree->child[i], head);
 		i++;
 	}
+}
+
+void	traverse_tree(t_bin *tree, t_node **head)
+{
+	traverse_tree_rec(tree, head);
+	ft_print_nodes(*head);
+	ft_var_expansion1(*head);
+	ft_print_nodes(*head);
 }
