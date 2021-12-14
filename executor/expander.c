@@ -6,17 +6,17 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/02 18:23:37 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/04 18:04:15 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/14 11:12:49 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+/* #include <stdlib.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include "../include/structs.h"
-#include "../lib/libft/libft.h"
+#include "../lib/libft/libft.h" */
 
-char	*ft_t_word_get_str(t_word *word);
+/* char	*ft_t_word_get_str(t_word *word);
 void	*ft_t_token_create(void *content);
 void	*ft_t_node_create(void *content);
 int		ft_append_token_helper(char *str, t_node **head, int type, int status);
@@ -24,9 +24,9 @@ void	*ft_t_node_get_last(void *head);
 void	ft_t_node_add_back(t_node **head, t_node *node);
 void	ft_skip_set(char *input, int *pos, char *set);
 int		ft_t_word_init(t_word *word);
-int		ft_t_word_append_char(t_word *word, char c);
+int		ft_t_word_append_char(t_word *word, char c); */
 
-// terminates word, and creates token and node element to store the token
+/* // terminates word, and creates token and node element to store the token
 int	ft_terminate_word_and_add_to_list(t_node **list, t_word *word)
 {
 	char	*str;
@@ -38,9 +38,9 @@ int	ft_terminate_word_and_add_to_list(t_node **list, t_word *word)
 		return (1);
 	ft_t_word_init(word);
 	return (0);
-}
+} */
 
-// gets variable name, checks for valid variable name as well
+/* // gets variable name, checks for valid variable name as well
 char	*ft_get_var_name2(char *str, int i)
 {
 	int		i_start;
@@ -71,9 +71,9 @@ char	*ft_get_var_name2(char *str, int i)
 	}
 	var_name = ft_substr(str, i_start, i - i_start);
 	return (var_name);
-}
+} */
 
-// appends chars to word in case of a single quoted variable
+/* // appends chars to word in case of a single quoted variable
 void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 {
 	t_token	*token;
@@ -86,9 +86,9 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 		ft_t_word_append_char(word, token->string[*i]);
 		(*i)++;
 	}
-}
+} */
 
-// appends chars to word in case of an unquoted variable
+/* // appends chars to word in case of an unquoted variable
 //  creates new word and token if necessary
 void	ft_handle_unquoted_var(t_word *word, t_node **list, \
 			char **var)
@@ -109,9 +109,9 @@ void	ft_handle_unquoted_var(t_word *word, t_node **list, \
 			ft_t_word_append_char(word, -2);
 		j++;
 	}
-}
+} */
 
-// appends chars to word in case of a double quoted variable
+/* // appends chars to word in case of a double quoted variable
 void	ft_handle_dquoted_var(t_word *word, char **var)
 {
 	int	j;
@@ -128,9 +128,9 @@ void	ft_handle_dquoted_var(t_word *word, char **var)
 			ft_t_word_append_char(word, var[1][j]);
 		j++;
 	}
-}
+} */
 
-// frees char array
+/* // frees char array
 void	ft_free_char_array(char **arr)
 {
 	int	i;
@@ -144,18 +144,18 @@ void	ft_free_char_array(char **arr)
 	}
 	free(arr);
 	arr = NULL;
-}
+} */
 
-// guards against failed var_name in var_value conversion
+/* // guards against failed var_name in var_value conversion
 void	ft_get_variable_name_guard(char **var)
 {
 	free(var[0]);
 	var[0] = NULL;
 	free(var);
 	var = NULL;
-}
+} */
 
-// returns char array with variable name and variable value
+/* // returns char array with variable name and variable value
 char	**ft_get_variable_name(t_node *head, int *i)
 {
 	t_token	*token;
@@ -192,9 +192,9 @@ char	**ft_get_variable_name(t_node *head, int *i)
 	}
 	var[2] = NULL;
 	return (var);
-}
+} */
 
-// handles how the variable should be expanded according to the quoted state
+/* // handles how the variable should be expanded according to the quoted state
 int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 {
 	t_token	*token;
@@ -222,9 +222,9 @@ int	ft_handle_var_expansion(t_node *head, t_word *word, t_node **list, int *i)
 		ft_free_char_array(var);
 	}
 	return (0);
-}
+} */
 
-// terminates a word. Addes token to the token list
+/* // terminates a word. Addes token to the token list
 void	ft_terminate_word(t_word *word, t_node **list)
 {
 	if (word->write_head != 0)
@@ -234,9 +234,9 @@ void	ft_terminate_word(t_word *word, t_node **list)
 		free(word->chars);
 		word->chars = NULL;
 	}
-}
+} */
 
-// initializes the variable expansion
+/* // initializes the variable expansion
 t_node	*ft_init_var_expansion(t_node *head)
 {
 	t_token	*token;
@@ -261,9 +261,9 @@ t_node	*ft_init_var_expansion(t_node *head)
 	}
 	ft_terminate_word(&word, &list);
 	return (list);
-}
+} */
 
-// exchanges token with information about var_expansion with expaned tokens
+/* // exchanges token with information about var_expansion with expaned tokens
 void	ft_exchange_tokens(t_node **head, t_node *list)
 {
 	t_node	*last_in_list;
@@ -281,9 +281,9 @@ void	ft_exchange_tokens(t_node **head, t_node *list)
 	(*head)->content = NULL;
 	free(*head);
 	*head = last_in_list;
-}
+} */
 
-//loops through string and searches for char $.
+/* //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
 //  and calls function to exchange the old token with the new ones.
 int	ft_check_for_var_expansion(t_node **head)
@@ -310,17 +310,17 @@ int	ft_check_for_var_expansion(t_node **head)
 		}
 	}
 	return (0);
-}
+} */
 
-//sets *head to the beginning of the list
+/* //sets *head to the beginning of the list
 void	ft_get_beginning_of_list(t_node *temp, t_node **head)
 {
 	*head = temp;
 	while ((*head)->prev != NULL)
 		*head = (*head)->prev;
-}
+} */
 
-//loops through list of token and checks if variable expansion is necessary
+/* //loops through list of token and checks if variable expansion is necessary
 int	ft_var_expansion(t_node **head)
 {
 	t_node	*temp;
@@ -334,4 +334,4 @@ int	ft_var_expansion(t_node **head)
 	}
 	ft_get_beginning_of_list(temp, head);
 	return (0);
-}
+} */

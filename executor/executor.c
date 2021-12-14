@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/13 22:00:18 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/14 16:37:33 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*ft_t_node_get_last(void *head);
 void	ft_t_node_add_back(t_node **head, t_node *node);
 void	ft_t_node_free(t_node *head);
 
-
+//only for printing
 void	ft_print_nodes(t_node *head)
 {
 	t_node	*temp;
@@ -57,7 +57,6 @@ void	ft_print_nodes(t_node *head)
 	}
 }
 
-
 void	traverse_tree_rec(t_bin *tree, t_node **head)
 {
 	int	i;
@@ -84,6 +83,6 @@ void	traverse_tree(t_bin *tree, t_node **head)
 {
 	traverse_tree_rec(tree, head);
 	ft_print_nodes(*head);
-	ft_var_expansion1(*head);
+	ft_t_bin_variable_expansion(*head);
 	ft_print_nodes(*head);
 }

@@ -138,7 +138,7 @@ int	ft_t_word_init(t_word *word)
 	word->status = -1;
 	word->write_head = 0;
 	word->alloc = BUFFER_SIZE;
-	word->chars = malloc(sizeof(char) * word->alloc);
+	word->chars = ft_calloc(sizeof(char), word->alloc);
 	if (word->chars == NULL)
 		return (1);
 	return (0);
@@ -427,7 +427,6 @@ char	*ft_get_var_name(char *str, int i)
 		i++;
 	}
 	var_name = ft_substr(str, i_start, i - i_start);
-	printf("[%d]var_name = :%s:\n",__LINE__, var_name);
 	return (var_name);
 }
 
@@ -799,7 +798,6 @@ t_node	*ft_lexer(char *input)
 
 	ret = 1;
 	head = ft_lexer_v2(input);
-	//ft_s_node_print_content(head);
 	if (ft_operator_is_valid(head))
 	{
 		printf("invalid token\n");
