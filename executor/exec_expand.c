@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/15 22:23:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 23:24:30 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,8 +180,7 @@ void	ft_set_variable_name_and_value(char ***var, t_data *data)
 		var_value_copy = ft_strdup(var[0][0]);
 	else
 	{
-		var[0][1] = mini_getenv(data, var[0][0]);//var[0][1] = getenv(var[0][0]);
-		printf("var value %s\n", var[0][1]);
+		var[0][1] = mini_getenv(data, var[0][0]);
 		var_value_copy = ft_strdup(var[0][1]);
 	}
 	if (var_value_copy == NULL)
@@ -204,46 +203,37 @@ char	**ft_get_variable_name_and_value(t_node **head, int *i, t_data *data)
 		return (NULL);
 	token = (t_token *)(*head)->content;
 	var[0] = ft_expander_get_var_name(token->string, *i + 2);
-	printf("var_name :%s:\n", var[0]);
 	if (var[0] == NULL)
 		return (NULL);
-	printf("test11\n");
 	ft_set_variable_name_and_value(&var, data);
-	printf("test12\n");
 	return (var);
 }
 
 // handles how the variable should be expanded according to the quoted state
-int	ft_handle_var_expansion(t_node **head, t_expand *expand_data, t_data *data)//t_word **word, t_node **list, int *i)
+int	ft_handle_var_expansion(t_node **head, t_expand *exp_data, t_data *data)
 {
 	t_token	*token;
 	char	quoted_status;
 	char	**var;
 	int		len;
 
-	printf("test1\n");
 	token = (t_token *)(*head)->content;
-	quoted_status = token->string[(*(expand_data->i)) + 1];
+	quoted_status = token->string[exp_data->i + 1];
 	if (quoted_status == VAR_SQUOTED)
-		ft_handle_squoted_var(*head, expand_data->word, expand_data->i);//ft_handle_squoted_var(*head, *word, i);
+		ft_handle_squoted_var(*head, exp_data->word, &(exp_data->i));
 	else
 	{
-		printf("test2\n");
-		var = ft_get_variable_name_and_value(head, expand_data->i, data);//var = ft_get_variable_name_and_value(head, i);
+		var = ft_get_variable_name_and_value(head, &(exp_data->i), data);
 		if (var == NULL)
-		{
-			printf("test3\n");
 			return (1);
-		}
-		printf("test4\n");
 		if (quoted_status == VAR_UQUOTED)
-			ft_handle_unquoted_var(expand_data->word, &(expand_data->list), var);//ft_handle_unquoted_var(*word, list, var);
+			ft_handle_unquoted_var(exp_data->word, &(exp_data->list), var);
 		else if (quoted_status == VAR_DQUOTED)
-			ft_handle_dquoted_var(expand_data->word, var);//ft_handle_dquoted_var(*word, var);
+			ft_handle_dquoted_var(exp_data->word, var);
 		if (!ft_strncmp(var[0], "$", 2))
-			*(expand_data->i) = *(expand_data->i) - 1;//*i = *i - 1;
+			(exp_data->i) = (exp_data->i) - 1;
 		len = ft_strlen(var[0]);
-		*(expand_data->i) = *(expand_data->i) + len + 2;//*i = *i + len + 2;
+		(exp_data->i) = (exp_data->i) + len + 2;
 		ft_free_char_array(var);
 	}
 	return (0);
@@ -265,50 +255,39 @@ void	ft_terminate_word(t_word *word, t_node **list)
 	word = NULL;
 }
 
-void	ft_t_expand_init(t_expand *expand_data)
+void	ft_t_expand_init(t_expand *exp_data)
 {
-	int	i;
-
-	i = 0;
-	expand_data->i = &i;
-	expand_data->list = NULL;
-	expand_data->word = ft_calloc(1, sizeof(t_word));
-	ft_t_word_init(expand_data->word);
+	exp_data->i = 0;
+	exp_data->list = NULL;
+	exp_data->word = ft_calloc(1, sizeof(t_word));
+	ft_t_word_init(exp_data->word);
 }
 
 // initializes the variable expansion
 t_node	*ft_init_var_expansion(t_node **head, t_data *data)
 {
 	t_token	*token;
-	/* int		i;
-	t_word	*word;
-	t_node	*list; */
 	char	*temp;
-	t_expand	expand_data;
+	t_expand	exp_data;
 
-	ft_t_expand_init(&expand_data);
-	/* list = NULL;
-	word = ft_calloc(1, sizeof(t_word));
-	ft_t_word_init(word); */
+	ft_t_expand_init(&exp_data);
 	token = (t_token *)(*head)->content;
 	temp = token->string;
-	//i = 0;
-	while (temp[*(expand_data.i)] != '\0')
+	while (temp[exp_data.i] != '\0')
 	{
-
-		if (temp[*(expand_data.i)] == '$')
+		if (temp[exp_data.i] == '$')
 		{
-			if (ft_handle_var_expansion(head, &expand_data, data))//&word, &list, &i))
+			if (ft_handle_var_expansion(head, &exp_data, data))
 				return (NULL);
-			(*(expand_data.i))++;
-			if (temp[*(expand_data.i)] == '\0')
+			exp_data.i++;
+			if (temp[exp_data.i] == '\0')
 				break ;
 			continue ;
 		}
-		ft_t_word_append_char(expand_data.word, temp[(*(expand_data.i))++]);
+		ft_t_word_append_char(exp_data.word, temp[exp_data.i++]);
 	}
-	ft_terminate_word(expand_data.word, &expand_data.list);
-	return (expand_data.list);//deleted?
+	ft_terminate_word(exp_data.word, &exp_data.list);
+	return (exp_data.list);
 }
 
 // exchanges token with information about var_expansion with expaned tokens
