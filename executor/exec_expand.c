@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/15 18:14:23 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 19:37:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,18 +308,6 @@ void	ft_exchange_tokens(t_node **head, t_node *list)
 	*head = last_in_list;
 }
 
-/* void	ft_printlist(t_node *list)
-{
-	char	*str;
-
-	while (list != NULL)
-	{
-		str = ((t_token *)list->content)->string;
-		printf("List string :%s:\n", str);
-		list = list->next;
-	}
-} */
-
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
 //  and calls function to exchange the old token with the new ones.
@@ -384,22 +372,36 @@ t_node	*wild_combine_2(char **sel_dir)
 	t_node	*curr;
 	int		i;
 
+	printf("[%d]\n", __LINE__);
 	curr = ft_calloc(1, sizeof(t_node));
+	printf("[%d]\n", __LINE__);
 	curr->content = ft_calloc(1, sizeof(t_token));
+	printf("[%d]\n", __LINE__);
 	if (sel_dir[0] == NULL)
 		return (NULL);
+	printf("[%d]\n", __LINE__);
 	((t_token *)curr->content)->string = ft_strdup(sel_dir[0]);
+	printf("[%d]\n", __LINE__);
 	((t_token *)curr->content)->type = WORD;
+	printf("[%d]\n", __LINE__);
 	ret = curr;
 	i = 1;
 	while (sel_dir[i] != NULL)
 	{
+		printf("[%d]\n", __LINE__);
 		curr->next = ft_calloc(1, sizeof(t_node));
+		printf("[%d]\n", __LINE__);
 		((t_node *)curr->next)->prev = curr;
+		printf("[%d]\n", __LINE__);
 		curr = curr->next;
+		printf("[%d]\n", __LINE__);
 		curr->content = ft_calloc(1, sizeof(t_token));
-		((t_token *)curr->content)->string = ft_strdup(sel_dir[i]);
+		printf("[%d] i = %d before :%s:\n", __LINE__, i, sel_dir[0]);
+		//((t_token *)curr->content)->string = ft_strdup(sel_dir[i]);
+		((t_token *)curr->content)->string = ft_strdup("DUMMY\0");
+		printf("[%d]\n", __LINE__);
 		((t_token *)curr->content)->type = WORD;
+		printf("[%d]\n", __LINE__);
 		i++;
 	}
 	return (ret);
@@ -412,14 +414,19 @@ int	ft_str_array_var_expansion(char ***str_arr)
 	if (*str_arr != NULL)
 	{
 		head_token = NULL;
+		printf("[%d]\n", __LINE__);
 		head_token = wild_combine_2(*str_arr);
+		printf("[%d]\n", __LINE__);
 		if (head_token == NULL)
 			return (0);
 		if (ft_t_token_variable_expansion(&head_token))
 			return (1);
+		printf("[%d]\n", __LINE__);
 		if (ft_wildcard_expansion(&head_token))
 			return (1);
+		printf("[%d]\n", __LINE__);
 		ft_exchange_str_arr(str_arr, head_token);
+		printf("[%d]\n", __LINE__);
 	}
 	return (0);
 }
@@ -562,12 +569,17 @@ int	ft_t_bin_var_expansion_check(t_node *head)
 		return (0);
 	else
 	{
+		printf("[%d]\n", __LINE__);
 		ft_str_array_var_expansion(&(tree->command->arguments));
+		printf("[%d]\n", __LINE__);
 		if (tree->io != NULL)
 		{
+			printf("[%d]\n", __LINE__);
 			ft_t_io_heredoc_var_expansion(tree->io);
+			printf("[%d]\n", __LINE__);
 			ft_str_array_var_expansion(&(tree->io->input));
 			ft_str_array_var_expansion(&(tree->io->output));
+
 		}
 	}
 	return (0);
