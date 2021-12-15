@@ -6,15 +6,16 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/12 01:39:08 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/14 00:57:18 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/14 17:07:06 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "minis.h"
+#include "minis.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-//#include "struct.h"
+#include "struct.h"
+#include "libft.h"
 
 /*
 	explaining: flag
@@ -32,6 +33,30 @@
 	15 -> end of the pipe
 */
 
+int	setflag(int fp, int sp)
+{
+	int	ret;
+
+	ret = 0;
+	if (fp == 0)
+		ret += 1;
+	if (fp == 1)
+		ret += 2;
+	if (fp == 2)
+		ret += 4;
+	if (fp == 3)
+		ret += 8;
+	if (sp == 4)
+		ret += 16;
+	if (sp == 5)
+		ret += 32;
+	if (sp == 6)
+		ret += 64;
+	if (sp == 7)
+		ret += 128;
+	return (ret);
+}
+
 int	**child_setpipes(int **a_pipes, int flag)
 {
 	return (a_pipes);
@@ -48,7 +73,7 @@ int	child_process(t_data *data, int **a_pipes, t_bin *tree, int flag)
 	exit(tree->command->exit_status);
 }
 
-int	child_init(it_data *data, int **a_pipes, t_node *tree_list, pid_t children[2])
+int	child_init(t_data *data, int **a_pipes, t_node *tree_list, pid_t children[2])
 {
 	a_pipes[0][0] = ft_calloc(1, sizeof(int));
 	a_pipes[0][1] = ft_calloc(1, sizeof(int));
