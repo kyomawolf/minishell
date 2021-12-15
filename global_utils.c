@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:32:03 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 21:13:16 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 21:17:04 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*mini_getenv(t_data *data, char *var_name)
 
 	temp = data->envp;
 	format_s = ft_strjoin(var_name, "=");
-	start = strlen(format_s);
+	start = ft_strlen(format_s);
 	while (temp != NULL)
 	{
 		if (ft_strnstr(temp->content, format_s, start) != NULL)
@@ -32,5 +32,5 @@ char	*mini_getenv(t_data *data, char *var_name)
 	}
 	if (temp == NULL)
 		return (NULL);
-	return (temp->content[start]);
+	return (&((char *)temp->content)[start]);
 }
