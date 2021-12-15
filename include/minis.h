@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 21:14:28 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 22:06:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void				traverse_tree(t_bin *tree, t_node **head);
 void				traverse_tree_rec(t_bin *tree, t_node **head);
 void				ft_t_node_free(t_node *head);
 void				ft_t_node_free_heredoc(t_token *token, t_node *temp);
-int					ft_t_bin_variable_expansion(t_node *head);
+int					ft_t_bin_variable_expansion(t_node *head, t_data *data);
 t_node				*wild_combine(char **sel_dir);
 int					ft_wildcard_expansion(t_node **head);
 int					ft_get_beginning_of_list(t_node *temp, t_node **head);

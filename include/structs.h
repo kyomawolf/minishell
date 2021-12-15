@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 12:58:08 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 21:50:58 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,26 +65,6 @@ typedef struct s_simple_com
 	int		exit_status;
 }	t_simple_com;
 
-/* struct s_groups
-{
-	int	begin_com;
-	int	end_com;
-	int	group_id;
-};
- */
-/* struct s_command
-{
-	int				number_groups;
-	int				curr_group;
-	struct s_groups	**group_list;
-	int				number_commands;
-	int				curr_command;
-	t_simple_com	**command_list;
-	char			*in_file;
-	char			*out_file;
-	char			*err_file;
-}; */
-
 typedef struct s_bin
 {
 	struct s_bin	*parent;
@@ -115,9 +95,15 @@ typedef struct s_token
 	int				quote_status;
 }	t_token;
 
+typedef struct s_expand
+{
+	int		*i;
+	t_node	*list;
+	t_word	*word;
+}	t_expand;
+
 typedef struct s_data
 {
-	//struct s_command	*allcom;
 	char				*input;
 	char				*prompt;
 	char				*currdir;

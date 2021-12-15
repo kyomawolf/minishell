@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:32:03 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 21:17:04 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 21:21:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char	*mini_getenv(t_data *data, char *var_name)
 			break ;
 		temp = temp->next;
 	}
+	free (format_s);
+	format_s = NULL;
 	if (temp == NULL)
 		return (NULL);
 	return (&((char *)temp->content)[start]);

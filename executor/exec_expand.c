@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/15 19:37:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 22:23:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	ft_t_node_add_back(t_node **head, t_node *node);
 void	ft_skip_set(char *input, int *pos, char *set);
 int		ft_t_word_init(t_word *word);
 int		ft_t_word_append_char(t_word *word, char c);
-int		ft_t_token_variable_expansion(t_node **head);
+int		ft_t_token_variable_expansion(t_node **head, t_data *data);
 void	ft_s_node_print_content(t_node *head);
 
 // terminates word, and creates token and node element to store the token
@@ -171,7 +171,7 @@ void	ft_get_variable_name_guard(char **var)
 	var = NULL;
 }
 
-void	ft_set_variable_name_and_value(char ***var)
+void	ft_set_variable_name_and_value(char ***var, t_data *data)
 {
 	char	*var_value_copy;
 
@@ -180,7 +180,8 @@ void	ft_set_variable_name_and_value(char ***var)
 		var_value_copy = ft_strdup(var[0][0]);
 	else
 	{
-		var[0][1] = getenv(var[0][0]);
+		var[0][1] = mini_getenv(data, var[0][0]);//var[0][1] = getenv(var[0][0]);
+		printf("var value %s\n", var[0][1]);
 		var_value_copy = ft_strdup(var[0][1]);
 	}
 	if (var_value_copy == NULL)
@@ -193,7 +194,7 @@ void	ft_set_variable_name_and_value(char ***var)
 }
 
 // returns char array with variable name and variable value
-char	**ft_get_variable_name_and_value(t_node **head, int *i)
+char	**ft_get_variable_name_and_value(t_node **head, int *i, t_data *data)
 {
 	t_token	*token;
 	char	**var;
@@ -203,37 +204,46 @@ char	**ft_get_variable_name_and_value(t_node **head, int *i)
 		return (NULL);
 	token = (t_token *)(*head)->content;
 	var[0] = ft_expander_get_var_name(token->string, *i + 2);
+	printf("var_name :%s:\n", var[0]);
 	if (var[0] == NULL)
 		return (NULL);
-	ft_set_variable_name_and_value(&var);
+	printf("test11\n");
+	ft_set_variable_name_and_value(&var, data);
+	printf("test12\n");
 	return (var);
 }
 
 // handles how the variable should be expanded according to the quoted state
-int	ft_handle_var_expansion(t_node **head, t_word **word, t_node **list, int *i)
+int	ft_handle_var_expansion(t_node **head, t_expand *expand_data, t_data *data)//t_word **word, t_node **list, int *i)
 {
 	t_token	*token;
 	char	quoted_status;
 	char	**var;
 	int		len;
 
+	printf("test1\n");
 	token = (t_token *)(*head)->content;
-	quoted_status = token->string[(*i) + 1];
+	quoted_status = token->string[(*(expand_data->i)) + 1];
 	if (quoted_status == VAR_SQUOTED)
-		ft_handle_squoted_var(*head, *word, i);
+		ft_handle_squoted_var(*head, expand_data->word, expand_data->i);//ft_handle_squoted_var(*head, *word, i);
 	else
 	{
-		var = ft_get_variable_name_and_value(head, i);
+		printf("test2\n");
+		var = ft_get_variable_name_and_value(head, expand_data->i, data);//var = ft_get_variable_name_and_value(head, i);
 		if (var == NULL)
+		{
+			printf("test3\n");
 			return (1);
+		}
+		printf("test4\n");
 		if (quoted_status == VAR_UQUOTED)
-			ft_handle_unquoted_var(*word, list, var);
+			ft_handle_unquoted_var(expand_data->word, &(expand_data->list), var);//ft_handle_unquoted_var(*word, list, var);
 		else if (quoted_status == VAR_DQUOTED)
-			ft_handle_dquoted_var(*word, var);
+			ft_handle_dquoted_var(expand_data->word, var);//ft_handle_dquoted_var(*word, var);
 		if (!ft_strncmp(var[0], "$", 2))
-			*i = *i - 1;
+			*(expand_data->i) = *(expand_data->i) - 1;//*i = *i - 1;
 		len = ft_strlen(var[0]);
-		*i = *i + len + 2;
+		*(expand_data->i) = *(expand_data->i) + len + 2;//*i = *i + len + 2;
 		ft_free_char_array(var);
 	}
 	return (0);
@@ -255,37 +265,50 @@ void	ft_terminate_word(t_word *word, t_node **list)
 	word = NULL;
 }
 
+void	ft_t_expand_init(t_expand *expand_data)
+{
+	int	i;
+
+	i = 0;
+	expand_data->i = &i;
+	expand_data->list = NULL;
+	expand_data->word = ft_calloc(1, sizeof(t_word));
+	ft_t_word_init(expand_data->word);
+}
+
 // initializes the variable expansion
-t_node	*ft_init_var_expansion(t_node **head)
+t_node	*ft_init_var_expansion(t_node **head, t_data *data)
 {
 	t_token	*token;
-	int		i;
+	/* int		i;
 	t_word	*word;
-	t_node	*list;
+	t_node	*list; */
 	char	*temp;
+	t_expand	expand_data;
 
-	list = NULL;
+	ft_t_expand_init(&expand_data);
+	/* list = NULL;
 	word = ft_calloc(1, sizeof(t_word));
-	ft_t_word_init(word);
+	ft_t_word_init(word); */
 	token = (t_token *)(*head)->content;
 	temp = token->string;
-	i = 0;
-	while (temp[i] != '\0')
+	//i = 0;
+	while (temp[*(expand_data.i)] != '\0')
 	{
 
-		if (temp[i] == '$')
+		if (temp[*(expand_data.i)] == '$')
 		{
-			if (ft_handle_var_expansion(head, &word, &list, &i))
+			if (ft_handle_var_expansion(head, &expand_data, data))//&word, &list, &i))
 				return (NULL);
-			i++;
-			if (temp[i] == '\0')
+			(*(expand_data.i))++;
+			if (temp[*(expand_data.i)] == '\0')
 				break ;
 			continue ;
 		}
-		ft_t_word_append_char(word, temp[i++]);
+		ft_t_word_append_char(expand_data.word, temp[(*(expand_data.i))++]);
 	}
-	ft_terminate_word(word, &list);
-	return (list);
+	ft_terminate_word(expand_data.word, &expand_data.list);
+	return (expand_data.list);//deleted?
 }
 
 // exchanges token with information about var_expansion with expaned tokens
@@ -311,7 +334,7 @@ void	ft_exchange_tokens(t_node **head, t_node *list)
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
 //  and calls function to exchange the old token with the new ones.
-int	ft_t_token_var_expansion_check(t_node **head)
+int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 {
 	t_token	*token;
 	t_node	*list;
@@ -319,7 +342,7 @@ int	ft_t_token_var_expansion_check(t_node **head)
 	token = (t_token *)(*head)->content;
 	if (token->type == WORD && ft_strchr(token->string, '$'))
 	{
-		list = ft_init_var_expansion(head);
+		list = ft_init_var_expansion(head, data);
 		if (list == NULL)
 			return (1);
 		ft_exchange_tokens(head, list);
@@ -372,61 +395,42 @@ t_node	*wild_combine_2(char **sel_dir)
 	t_node	*curr;
 	int		i;
 
-	printf("[%d]\n", __LINE__);
 	curr = ft_calloc(1, sizeof(t_node));
-	printf("[%d]\n", __LINE__);
 	curr->content = ft_calloc(1, sizeof(t_token));
-	printf("[%d]\n", __LINE__);
 	if (sel_dir[0] == NULL)
 		return (NULL);
-	printf("[%d]\n", __LINE__);
 	((t_token *)curr->content)->string = ft_strdup(sel_dir[0]);
-	printf("[%d]\n", __LINE__);
 	((t_token *)curr->content)->type = WORD;
-	printf("[%d]\n", __LINE__);
 	ret = curr;
 	i = 1;
 	while (sel_dir[i] != NULL)
 	{
-		printf("[%d]\n", __LINE__);
 		curr->next = ft_calloc(1, sizeof(t_node));
-		printf("[%d]\n", __LINE__);
 		((t_node *)curr->next)->prev = curr;
-		printf("[%d]\n", __LINE__);
 		curr = curr->next;
-		printf("[%d]\n", __LINE__);
 		curr->content = ft_calloc(1, sizeof(t_token));
-		printf("[%d] i = %d before :%s:\n", __LINE__, i, sel_dir[0]);
-		//((t_token *)curr->content)->string = ft_strdup(sel_dir[i]);
-		((t_token *)curr->content)->string = ft_strdup("DUMMY\0");
-		printf("[%d]\n", __LINE__);
+		((t_token *)curr->content)->string = ft_strdup(sel_dir[i]);
 		((t_token *)curr->content)->type = WORD;
-		printf("[%d]\n", __LINE__);
 		i++;
 	}
 	return (ret);
 }
 
-int	ft_str_array_var_expansion(char ***str_arr)
+int	ft_str_array_var_expansion(char ***str_arr, t_data *data)
 {
 	t_node	*head_token;
 
 	if (*str_arr != NULL)
 	{
 		head_token = NULL;
-		printf("[%d]\n", __LINE__);
 		head_token = wild_combine_2(*str_arr);
-		printf("[%d]\n", __LINE__);
 		if (head_token == NULL)
 			return (0);
-		if (ft_t_token_variable_expansion(&head_token))
+		if (ft_t_token_variable_expansion(&head_token, data))
 			return (1);
-		printf("[%d]\n", __LINE__);
 		if (ft_wildcard_expansion(&head_token))
 			return (1);
-		printf("[%d]\n", __LINE__);
 		ft_exchange_str_arr(str_arr, head_token);
-		printf("[%d]\n", __LINE__);
 	}
 	return (0);
 }
@@ -474,7 +478,7 @@ char	*ft_heredoc_get_var_name(char *str, int i)
 	return (var_name);
 }
 
-char	**ft_heredoc_get_variable_name(t_node *node, int i)
+char	**ft_heredoc_get_variable_name(t_node *node, int i, t_data *data)
 {
 	char	**var;
 
@@ -484,16 +488,16 @@ char	**ft_heredoc_get_variable_name(t_node *node, int i)
 	var[0] = ft_heredoc_get_var_name(node->content, i);
 	if (var[0] == NULL)
 		return (NULL);
-	ft_set_variable_name_and_value(&var);
+	ft_set_variable_name_and_value(&var, data);
 	return (var);
 }
 
-int	ft_heredoc_handle_var_expansion(t_node *node, t_word *word, int *i)
+int	ft_heredoc_handle_var_expansion(t_node *node, t_word *word, int *i, t_data *data)
 {
 	char	**var;
 	int		j;
 
-	var = ft_heredoc_get_variable_name(node, *i + 1);
+	var = ft_heredoc_get_variable_name(node, *i + 1, data);
 	if (var == NULL)
 		return (1);
 	j = 0;
@@ -509,7 +513,7 @@ int	ft_heredoc_handle_var_expansion(t_node *node, t_word *word, int *i)
 	return (0);
 }
 
-int	ft_heredoc_var_expansion_init(t_node **node)
+int	ft_heredoc_var_expansion_init(t_node **node, t_data *data)
 {
 	t_word	word;
 	int		i;
@@ -520,7 +524,7 @@ int	ft_heredoc_var_expansion_init(t_node **node)
 	{
 		if (((char *)(*node)->content)[i] == '$')
 		{
-			if (ft_heredoc_handle_var_expansion(*node, &word, &i))
+			if (ft_heredoc_handle_var_expansion(*node, &word, &i, data))
 				return (1);
 			i++;
 			continue ;
@@ -532,7 +536,7 @@ int	ft_heredoc_var_expansion_init(t_node **node)
 	return (0);
 }
 
-void	ft_heredoc_var_expansion_check(t_node **node)
+void	ft_heredoc_var_expansion_check(t_node **node, t_data *data)
 {
 	t_node	*temp;
 
@@ -541,26 +545,26 @@ void	ft_heredoc_var_expansion_check(t_node **node)
 	{
 		if (ft_strchr((*node)->content, '$'))
 		{
-			ft_heredoc_var_expansion_init(node);
+			ft_heredoc_var_expansion_init(node, data);
 		}
 		*node = (*node)->next;
 	}
 	ft_get_beginning_of_list(temp, node);
 }
 
-void	ft_t_io_heredoc_var_expansion(t_io *io)
+void	ft_t_io_heredoc_var_expansion(t_io *io, t_data *data)
 {
 	if (io != NULL)
 	{
 		if (io->quoted_status == VAR_UQUOTED)
 		{
-			ft_heredoc_var_expansion_check(&(io->heredoc_node));
+			ft_heredoc_var_expansion_check(&(io->heredoc_node), data);
 		}
 	}
 }
 //Heredoc variable expansion : End
 
-int	ft_t_bin_var_expansion_check(t_node *head)
+int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 {
 	t_bin	*tree;
 
@@ -569,16 +573,12 @@ int	ft_t_bin_var_expansion_check(t_node *head)
 		return (0);
 	else
 	{
-		printf("[%d]\n", __LINE__);
-		ft_str_array_var_expansion(&(tree->command->arguments));
-		printf("[%d]\n", __LINE__);
+		ft_str_array_var_expansion(&(tree->command->arguments), data);
 		if (tree->io != NULL)
 		{
-			printf("[%d]\n", __LINE__);
-			ft_t_io_heredoc_var_expansion(tree->io);
-			printf("[%d]\n", __LINE__);
-			ft_str_array_var_expansion(&(tree->io->input));
-			ft_str_array_var_expansion(&(tree->io->output));
+			ft_t_io_heredoc_var_expansion(tree->io, data);
+			ft_str_array_var_expansion(&(tree->io->input), data);
+			ft_str_array_var_expansion(&(tree->io->output), data);
 
 		}
 	}
@@ -603,14 +603,14 @@ int	ft_get_beginning_of_list(t_node *temp, t_node **head)
 	return (ret);
 }
 
-int	ft_t_token_variable_expansion(t_node **head_token)
+int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 {
 	t_node	*temp;
 	int		ret;
 
 	while (*head_token != NULL)
 	{
-		if (ft_t_token_var_expansion_check(head_token))
+		if (ft_t_token_var_expansion_check(head_token, data))
 			return (1);
 		temp = *head_token;
 		*head_token = (*head_token)->next;
@@ -619,11 +619,11 @@ int	ft_t_token_variable_expansion(t_node **head_token)
 	return (ret);
 }
 
-int	ft_t_bin_variable_expansion(t_node *head)
+int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 {
 	while (head != NULL)
 	{
-		if (ft_t_bin_var_expansion_check(head))
+		if (ft_t_bin_var_expansion_check(head, data))
 			return (1);
 		head = head->next;
 	}
