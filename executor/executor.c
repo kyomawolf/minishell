@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/15 17:07:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 19:55:41 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,13 @@ void	ft_print_nodes(t_node *head)
 			i = 0;
 			while (((t_bin *)head->content)->command->arguments[i] != NULL)
 			{
+				if (i == 0)
+					printf("Command: \n");
+				else if (i == 1)
+					printf("Arguments: \n");
 				printf("%s\n", ((t_bin *)head->content)->command->arguments[i++]);
+
+
 			}
 			if ((t_bin *)head->content != NULL &&
 				((t_bin *)head->content)->io != NULL &&
@@ -110,8 +116,6 @@ void	traverse_tree_rec(t_bin *tree, t_node **head)
 void	traverse_tree(t_bin *tree, t_node **head)
 {
 	traverse_tree_rec(tree, head);
-	ft_print_nodes(*head);
 	ft_t_bin_variable_expansion(*head);
-	//print_binary_tree(tree, 3);
 	ft_print_nodes(*head);
 }

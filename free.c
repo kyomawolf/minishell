@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 19:55:23 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 21:01:52 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,14 @@ void	free_char_array(char ***arr)
 	i = 0;
 	if (*arr == NULL)
 		return ;
-	while ((*arr)[i] != NULL)
+	while (arr[0][i] != NULL)
 	{
-		free((*arr)[i]);
+		free(arr[0][i]);
+		arr[0][i] = NULL;
 		i++;
 	}
 	free(*arr);
+	*arr = NULL;
 }
 
 void	free_t_node_content_list(t_node *head)
@@ -86,7 +88,8 @@ void	free_io(t_io *io)
 {
 	if (io == NULL)
 		return ;
-	free_t_node_content_list(io->heredoc_node);
+	if (io->heredoc_node != NULL)
+		free_t_node_content_list(io->heredoc_node);
 	if (io->input != NULL)
 		free_char_array(&(io->input));
 	if (io->output != NULL)
@@ -113,10 +116,14 @@ void	free_tree(t_bin *tree)
 	while (tree->child != NULL && tree->child[i] != NULL)
 	{
 		free_tree(tree->child[i]);
+		tree->child[i] = NULL;
 		i++;
 	}
 	if (tree->child != NULL)
+	{
 		free(tree->child);
+		tree->child = NULL;
+	}
 	if (tree->command != NULL)
 		free_simplecommand(tree->command);
 	if (tree->io != NULL)
