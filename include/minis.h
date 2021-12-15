@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 22:29:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 23:18:24 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void				*ft_s_node_create(void *content);
 void				ft_s_node_add_back(struct s_node **head, \
 										struct s_node *node);
 //temporay
-void				traverse_tree(t_bin *tree, t_node **head);
+void				traverse_tree(t_bin *tree, t_node **head, t_data *data);
 void				traverse_tree_rec(t_bin *tree, t_node **head);
 void				ft_t_node_free(t_node *head);
 void				ft_t_node_free_heredoc(t_token *token, t_node *temp);

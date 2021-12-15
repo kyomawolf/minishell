@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 21:50:58 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 22:44:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ typedef struct s_token
 
 typedef struct s_expand
 {
-	int		*i;
+	int		i;
 	t_node	*list;
 	t_word	*word;
 }	t_expand;
