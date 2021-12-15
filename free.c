@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 19:51:07 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 19:55:23 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	free_char_array(char ***arr)
 	int	i;
 
 	i = 0;
+	if (*arr == NULL)
+		return ;
 	while ((*arr)[i] != NULL)
 	{
 		free((*arr)[i]);
@@ -82,6 +84,8 @@ void	free_t_node_list(t_node *head)
 
 void	free_io(t_io *io)
 {
+	if (io == NULL)
+		return ;
 	free_t_node_content_list(io->heredoc_node);
 	if (io->input != NULL)
 		free_char_array(&(io->input));
@@ -92,6 +96,8 @@ void	free_io(t_io *io)
 
 void	free_simplecommand(t_simple_com *command)
 {
+	if (command == NULL)
+		return ;
 	if (command->arguments != NULL)
 		free_char_array(&(command->arguments));
 	free(command);
