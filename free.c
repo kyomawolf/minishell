@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 17:17:32 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 19:51:07 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	free_io(t_io *io)
 
 void	free_simplecommand(t_simple_com *command)
 {
-	free_char_array(&(command->arguments));
+	if (command->arguments != NULL)
+		free_char_array(&(command->arguments));
 	free(command);
 }
 
