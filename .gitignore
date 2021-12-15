@@ -2,3 +2,4 @@
 *.out
 *.d
 ./parser/archive/
+minishell
