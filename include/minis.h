@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 21:14:28 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 22:16:09 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,9 @@ t_node				*wild_combine(char **sel_dir);
 int					ft_wildcard_expansion(t_node **head);
 int					ft_get_beginning_of_list(t_node *temp, t_node **head);
 
+//wildcard
+char				**wild_pattern_match(char **all_dir, char **matcher);
+char				**wild_get_seperator(char *string);
+char				**ft_realloc_charpp(char ***old, size_t new_size);
+void				free_char_array2(char ***arr);
 #endif

@@ -9,9 +9,10 @@ SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
 SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder.c \
-      parser/max_lexer.c wild.c parser/parser_check.c free.c DEBUG_print.c \
+      parser/max_lexer.c parser/parser_check.c free.c DEBUG_print.c \
 	  executor/exec_expand_wildcard.c executor/pipe_count.c llist.c \
-	  executor/executor.c executor/exec_expand.c global_utils.c
+	  executor/executor.c executor/exec_expand.c global_utils.c \
+	  wildcard/wild1.c wildcard/wild2.c wildcard/wild3.c
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 18:19:46 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 22:15:42 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,44 +19,6 @@
 #include "./include/structs.h"
 #include <fcntl.h>
 
-char	**ft_realloc_charpp(char ***old, size_t new_size)
-{
-	char	**new;
-	int		i;
-	int		ii;
-
-	new = ft_calloc(new_size, sizeof(char *));
-	i = 0;
-	while ((*old) != NULL && (*old)[i] != NULL)
-	{
-		ii = 0;
-		new[i] = ft_calloc(ft_strlen((*old)[i]) + 1, 1);
-		while ((*old)[i][ii] != '\0')
-		{
-			new[i][ii] = (*old)[i][ii];
-			ii++;
-		}
-		new[i][ii] = '\0';
-		free((*old)[i]);
-		i++;
-	}
-	if ((*old) != NULL)
-		free(*old);
-	return (new);
-}
-
-void	free_char_array2(char ***arr)
-{
-	int	i;
-
-	i = 0;
-	while ((*arr)[i] != NULL)
-	{
-		free((*arr)[i]);
-		i++;
-	}
-	free(*arr);
-}
 
 int	wild_comp_end(char *matcher, char *dir)
 {
