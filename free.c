@@ -6,13 +6,14 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/01 15:15:58 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/11 17:17:32 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include "minis.h"
 #include "struct.h"
+#include <stdio.h>
 
 void	free_char_array(char ***arr)
 {
@@ -27,27 +28,22 @@ void	free_char_array(char ***arr)
 	free(*arr);
 }
 
-struct s_simple_com	**free_simple_com_list(struct s_simple_com ***tofree, int l)
+void	free_t_node_content_list(t_node *head)
 {
-	int	i;
-	int	ii;
+	t_node	*temp;
 
-	i = 0;
-	while (i < l && (*tofree)[i] != NULL)
+	temp = NULL;
+	while (head != NULL)
 	{
-		ii = 0;
-		while (ii < (*tofree)[i]->number_arguments)
+		if (head->content != NULL)
 		{
-			free((*tofree)[i]->arguments[ii]);
-			ii++;
+			free(head->content);
 		}
-		free((*tofree)[i]->arguments);
-		free((*tofree)[i]);
-		i++;
+		temp = head;
+		head = head->next;
+		free(temp);
+		temp = NULL;
 	}
-	free(*tofree);
-	*tofree = NULL;
-	return (*tofree);
 }
 
 void	free_t_node_list(t_node *head)
@@ -60,10 +56,11 @@ void	free_t_node_list(t_node *head)
 	while (head != NULL)
 	{
 		token = (t_token *)head->content;
-		free(token->string);
-		token->string = NULL;
-		if (token->heredoc != NULL)
+		if (token != NULL)
 		{
+			if (token->string != NULL)
+				free(token->string);
+			token->string = NULL;
 			while (token->heredoc != NULL)
 			{
 				free (token->heredoc->content);
@@ -73,12 +70,62 @@ void	free_t_node_list(t_node *head)
 				free (temp);
 				temp = NULL;
 			}
+			free(token);
+			token = NULL;
 		}
-		free(token);
-		token = NULL;
 		temp = head;
 		head = head->next;
 		free(temp);
 		temp = NULL;
 	}
+}
+
+void	free_io(t_io *io)
+{
+	free_t_node_content_list(io->heredoc_node);
+	if (io->input != NULL)
+		free_char_array(&(io->input));
+	if (io->output != NULL)
+		free_char_array(&(io->output));
+	free(io);
+}
+
+void	free_simplecommand(t_simple_com *command)
+{
+	free_char_array(&(command->arguments));
+	free(command);
+}
+
+void	free_tree(t_bin *tree)
+{
+	int	i;
+
+	i = 0;
+	if (tree == NULL)
+		return ;
+	while (tree->child != NULL && tree->child[i] != NULL)
+	{
+		free_tree(tree->child[i]);
+		i++;
+	}
+	if (tree->child != NULL)
+		free(tree->child);
+	if (tree->command != NULL)
+		free_simplecommand(tree->command);
+	if (tree->io != NULL)
+		free_io(tree->io);
+	free(tree);
+	tree = NULL;
+}
+
+void	free_main(t_data *data)
+{
+	if (data->input != NULL)
+		free(data->input);
+	if (data->prompt != NULL)
+		free(data->prompt);
+	if (data->input != NULL)
+		free(data->currdir);
+	free_t_node_content_list(data->envp);
+	free(data);
 }

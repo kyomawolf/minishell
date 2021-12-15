@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/13 11:45:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:21:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	get_prompt(t_data *data)
 	temp[ii++] = '>';
 	temp[ii++] = ' ';
 	temp[ii] = '\0';
+	if (data->prompt != NULL)
+		free(data->prompt);
 	data->prompt = ft_strjoin("minishell@", temp);
 	free(temp);
 }
@@ -56,8 +58,10 @@ void	main_loop(t_data *data)
 		input_attributes_clear();
 		if (data->input == NULL || !ft_strncmp(data->input, "exit\0", 5))
 		{
+			free_main(data);
 			printf("\n\nWARNING: LEAVING MINISHELL\n");
-			return ;
+			system("leaks minishell");
+			exit(0);
 		}
 		if (data->input[0] == '\0')
 			continue ;
@@ -78,6 +82,7 @@ void	main_loop(t_data *data)
 		//else
 		//	execution_main(data);
 		//memory_loop_main(data);
+		free_tree(data->tree);
 		get_prompt(data);
 	}
 }

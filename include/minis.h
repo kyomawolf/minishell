@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 15:19:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:21:52 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int					par_main(t_data *data);
 //frees a list of s_simple_com's
 struct s_simple_com	**free_simple_com_list(struct s_simple_com ***tofree,
 						int l);
+void				free_main(t_data *data);
+void				free_tree(t_bin *tree);
 
 void				input_readline(t_data *data);
 void				input_interrupt(int sig);
