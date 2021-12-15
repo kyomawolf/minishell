@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/15 16:41:18 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 18:14:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,18 @@ int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 {
 	t_token	*prev_token;
 
-	prev_token = ((t_token *)((t_node *)head->prev)->content);
-	if (prev_token != NULL && (prev_token->type > HERE_DOC && \
-		prev_token->type < QUOTE))
+	if (((t_node *)head->prev) != NULL)
 	{
-		if (ft_t_node_size(list) > 1)
+		prev_token = ((t_token *)((t_node *)head->prev)->content);
+		if (prev_token != NULL && (prev_token->type > HERE_DOC && \
+			prev_token->type < QUOTE))
 		{
-			ft_t_node_free(list);
-			printf("Error ambigious redirections\n");
-			return (1);
+			if (ft_t_node_size(list) > 1)
+			{
+				ft_t_node_free(list);
+				printf("Error ambigious redirections\n");
+				return (1);
+			}
 		}
 	}
 	return (0);

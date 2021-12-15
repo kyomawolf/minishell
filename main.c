@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 17:21:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:37:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	main_loop(t_data *data)
 		{
 			free_main(data);
 			printf("\n\nWARNING: LEAVING MINISHELL\n");
-			system("leaks minishell");
+			//system("leaks minishell");
 			exit(0);
 		}
 		if (data->input[0] == '\0')
@@ -71,7 +71,8 @@ void	main_loop(t_data *data)
 			continue ;
 		//ft_t_node_free(data->list);
 		data->tree = builder_main(data->list);
-		traverse_tree(data->tree, &head);
+		if (data->tree != NULL)
+			traverse_tree(data->tree, &head);
 		while (head != NULL)
 		{
 			temp = head;
