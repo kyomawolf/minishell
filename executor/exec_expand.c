@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/14 23:08:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 15:47:36 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,6 +386,8 @@ t_node	*wild_combine_2(char **sel_dir)
 
 	curr = ft_calloc(1, sizeof(t_node));
 	curr->content = ft_calloc(1, sizeof(t_token));
+	if (sel_dir[0] == NULL)
+		return (NULL);
 	((t_token *)curr->content)->string = ft_strdup(sel_dir[0]);
 	((t_token *)curr->content)->type = WORD;
 	ret = curr;
@@ -411,6 +413,8 @@ int	ft_str_array_var_expansion(char ***str_arr)
 	{
 		head_token = NULL;
 		head_token = wild_combine_2(*str_arr);
+		if (head_token == NULL)
+			return (0);
 		if (ft_t_token_variable_expansion(&head_token))
 			return (1);
 		if (ft_wildcard_expansion(&head_token))
@@ -570,16 +574,27 @@ int	ft_t_bin_var_expansion_check(t_node *head)
 }
 
 //sets *head to the beginning of the list
-void	ft_get_beginning_of_list(t_node *temp, t_node **head)
+int	ft_get_beginning_of_list(t_node *temp, t_node **head)
 {
+	int	ret;
+
 	*head = temp;
-	while ((*head)->prev != NULL)
-		*head = (*head)->prev;
+	ret = 0;
+	if (temp != NULL)
+	{
+		ret = 0;
+		while ((*head)->prev != NULL)
+		{
+			*head = (*head)->prev;
+		}
+	}
+	return (ret);
 }
 
 int	ft_t_token_variable_expansion(t_node **head_token)
 {
 	t_node	*temp;
+	int		ret;
 
 	while (*head_token != NULL)
 	{
@@ -588,8 +603,8 @@ int	ft_t_token_variable_expansion(t_node **head_token)
 		temp = *head_token;
 		*head_token = (*head_token)->next;
 	}
-	ft_get_beginning_of_list(temp, head_token);
-	return (0);
+	ret = ft_get_beginning_of_list(temp, head_token);
+	return (ret);
 }
 
 int	ft_t_bin_variable_expansion(t_node *head)

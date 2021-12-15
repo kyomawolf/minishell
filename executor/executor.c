@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/14 16:37:33 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 17:07:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void	ft_t_node_free(t_node *head);
 void	ft_print_nodes(t_node *head)
 {
 	t_node	*temp;
+	char	**temp_char;
 	int		i;
+	int		j, k;
 
 	while (head != NULL)
 	{
@@ -40,17 +42,43 @@ void	ft_print_nodes(t_node *head)
 		{
 			i = 0;
 			while (((t_bin *)head->content)->command->arguments[i] != NULL)
-				printf("%s\n", ((t_bin *)head->content)->command->arguments[i++]);
-		}
-		if ((t_bin *)head->content != NULL &&
-			((t_bin *)head->content)->io != NULL &&
-			((t_bin *)head->content)->io->heredoc_node != NULL)
-		{
-			temp = ((t_bin *)head->content)->io->heredoc_node;
-			while (temp != NULL)
 			{
-				printf("Heredoc content :%s:\n", temp->content);
-				temp = temp->next;
+				printf("%s\n", ((t_bin *)head->content)->command->arguments[i++]);
+			}
+			if ((t_bin *)head->content != NULL &&
+				((t_bin *)head->content)->io != NULL &&
+				((t_bin *)head->content)->io->heredoc_node != NULL)
+			{
+				temp = ((t_bin *)head->content)->io->heredoc_node;
+				while (temp != NULL)
+				{
+					printf("Heredoc content :%s:\n", temp->content);
+					temp = temp->next;
+				}
+			}
+			if ((t_bin *)head->content != NULL &&
+				((t_bin *)head->content)->io != NULL &&
+				((t_bin *)head->content)->io->input != NULL)
+			{
+				j = 0;
+				temp_char = ((t_bin *)head->content)->io->input;
+				while (temp_char[j] != NULL)
+				{
+					printf("io input :%s:\n", temp_char[j]);
+					j++;
+				}
+			}
+			if ((t_bin *)head->content != NULL &&
+				((t_bin *)head->content)->io != NULL &&
+				((t_bin *)head->content)->io->output != NULL)
+			{
+				k = 0;
+				temp_char = ((t_bin *)head->content)->io->output;
+				while (temp_char[k] != NULL)
+				{
+					printf("io input :%s:\n", temp_char[k]);
+					k++;
+				}
 			}
 		}
 		head = head->next;
@@ -84,5 +112,6 @@ void	traverse_tree(t_bin *tree, t_node **head)
 	traverse_tree_rec(tree, head);
 	ft_print_nodes(*head);
 	ft_t_bin_variable_expansion(*head);
+	//print_binary_tree(tree, 3);
 	ft_print_nodes(*head);
 }

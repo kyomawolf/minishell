@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/14 22:53:13 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 16:41:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,6 @@ int	ft_check_for_wc_expansion(t_node **head)
 	}
 	return (0);
 }
-
-/* //sets *head to the beginning of the list
-void	ft_get_beginning_of_list(t_node *temp, t_node **head)
-{
-	*head = temp;
-	while ((*head)->prev != NULL)
-		*head = (*head)->prev;
-} */
 
 int	ft_wildcard_expansion(t_node **head)
 {

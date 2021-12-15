@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   structs.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 00:00:13 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 12:58:08 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # define VAR_SQUOTED -2
 # define VAR_DQUOTED -3
 # define VAR_END     -4
+# define WC_QUOTED   -1
+# define WC_END      -2
 
 # include <stdlib.h>
 
