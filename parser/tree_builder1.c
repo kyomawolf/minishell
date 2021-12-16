@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:13:22 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 15:54:53 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ t_node	*jump_pars(t_node *node)
 			i--;
 		else if (i == 0)
 			return (node->prev);
+		if (node->next == NULL)
+			return (node);
 		node = node->next;
 	}
 	return (node->prev);

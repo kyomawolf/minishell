@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/13 18:13:19 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 15:42:20 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,6 @@ void	input_attributes_clear(void)
 {
 	struct termios	loc;
 
-	//signal(SIGQUIT, input_interrupt);
-	//signal(1, input_interrupt);
-	//signal(3, input_interrupt);
 	tcgetattr(1, &loc);
 	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
 	{
