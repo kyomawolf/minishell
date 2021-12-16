@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:05:18 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 01:24:39 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,9 @@ void	free_t_node_content_list(t_node *head)
 
 void	free_token(t_token *token)
 {
+	void	*temp;
+
+	temp = NULL;
 	if (token->string != NULL)
 		free(token->string);
 	token->string = NULL;

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:03:52 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 01:25:12 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_node				*ft_lexer(char *input);
 t_node				*ft_get_token_list(char *input);
 t_bin				*builder_main(t_node *list);
 void				free_char_array(char ***arr);
+void				free_t_node_content_list(t_node *head);
 
 char				*mini_getenv(t_data *data, char *var_name);
 
