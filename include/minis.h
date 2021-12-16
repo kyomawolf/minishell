@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:25:12 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 16:56:47 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,14 @@ void				free_t_node_content_list(t_node *head);
 
 char				*mini_getenv(t_data *data, char *var_name);
 
+char				**list_to_array(t_node *node);
+
 int					pipe_count_main(t_bin *tree, int i);
 
 void				*ft_s_node_create(void *content);
 void				ft_s_node_add_back(struct s_node **head, \
 										struct s_node *node);
+int					ft_s_node_iter(struct s_node *head);
 //temporay
 void				traverse_tree(t_bin *tree, t_node **head, t_data *data);
 void				traverse_tree_rec(t_bin *tree, t_node **head);
