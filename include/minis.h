@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 16:56:47 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 16:58:02 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void				ft_s_node_add_back(struct s_node **head, \
 										struct s_node *node);
 int					ft_s_node_iter(struct s_node *head);
 //temporay
-void				traverse_tree(t_bin *tree, t_node **head, t_data *data);
+void				traverse_tree(t_bin *tree, t_node **head);
 void				traverse_tree_rec(t_bin *tree, t_node **head);
 void				ft_t_node_free(t_node *head);
 void				ft_t_node_free_heredoc(t_token *token, t_node *temp);
@@ -62,6 +62,7 @@ int					ft_t_bin_variable_expansion(t_node *head, t_data *data);
 t_node				*wild_combine(char **sel_dir);
 int					ft_wildcard_expansion(t_node **head);
 int					ft_get_beginning_of_list(t_node *temp, t_node **head);
+void				executor(t_node *head, t_data *data);
 
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);

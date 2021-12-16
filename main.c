@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 15:39:52 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 16:58:20 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	main_loop(t_data *data)
 		//printf("main head %p\n", head);
 		if (data->tree != NULL)
 			traverse_tree(data->tree, &head, data);
+		executor(head, data);
 		while (head != NULL)
 		{
 			temp = head;
