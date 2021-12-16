@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 00:52:59 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/15 17:42:47 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int	check_op(t_node *head)
 			return (1);
 		if (token < OPAR && sw == 0)
 			sw = 1;
-		else if (token == CPAR || token == WORD)
+		else if (token == CPAR || token == WORD || token == HERE_DOC)
 			sw = 0;
 		else if (token < OPAR)
 			sw = 2;

@@ -6,7 +6,11 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
+<<<<<<< HEAD:wild.c
 /*   Updated: 2021/12/14 17:06:35 by jkasper          ###   ########.fr       */
+=======
+/*   Updated: 2021/12/15 22:15:42 by jkasper          ###   ########.fr       */
+>>>>>>> a455e96fde655cfb6aea0dbe7d35e879ab839fe1:parser/archive[to_be_deleted]/wild.c
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,129 +23,21 @@
 #include "./include/structs.h"
 #include <fcntl.h>
 
-char	**ft_realloc_charpp(char ***old, size_t new_size)
-{
-	char	**new;
-	int		i;
-	int		ii;
 
-	new = ft_calloc(new_size, sizeof(char *));
-	i = 0;
-	while ((*old) != NULL && (*old)[i] != NULL)
-	{
-		ii = 0;
-		new[i] = ft_calloc(ft_strlen((*old)[i]) + 1, 1);
-		while ((*old)[i][ii] != '\0')
-		{
-			new[i][ii] = (*old)[i][ii];
-			ii++;
-		}
-		new[i][ii] = '\0';
-		free((*old)[i]);
-		i++;
-	}
-	if ((*old) != NULL)
-		free(*old);
-	return (new);
-}
-
-void	free_char_array2(char ***arr)
+int	wild_comp_end(char *matcher, char *dir)
 {
 	int	i;
+	int	ii;
 
-	i = 0;
-	while ((*arr)[i] != NULL)
+	i = ft_strlen(matcher) - 1;
+	ii = ft_strlen(dir) - 1;
+	while (i >= 0)
 	{
-		free((*arr)[i]);
-		i++;
-	}
-	free(*arr);
-}
-
-/* int	wild_sub_match(char *str, char **match)
-{
-	int		i;
-	int		ii;
-	int		len;
-	char	*temp;
-
-	i = ft_char_arr_len(match) - 1;
-	len = ft_strlen(str);
-	if (match[i][0] != '*' && ft_strnstr(str, match[i], len) != NULL)
-		len -= ft_strlen(match[i]);
-	else if (match[i][0] != '*' && match[i][0] != '\0')
-		return (0);
-	i--;
-	while (i >= 0 && match[i][0] != '\0')
-	{
-		if (i == 0 && match[0][0] != '*')
-		{
-			ii = 0;
-			while (str[ii] != '\0' && match[0][ii] != '\0' \
-			&& str[ii] == match[0][ii])
-				ii++;
-			if (match[0][ii] != '\0')
-				return (0);
+		if (ii < 0 || matcher[i--] != dir[ii--])
 			return (1);
-		}
-		temp = ft_strnstr(str, match[i], len);
-		if (match[i][0] != '*' && temp == NULL)
-			return (0);
-		if (temp != NULL)
-			len -= str - temp;
-		i--;
 	}
-	return (1);
+	return (0);
 }
-
-char	**wild_get_narrows(char *string)
-{
-	int		i;
-	int		ii;
-	int		iii;
-	char	**ret;
-
-	i = 0;
-	ii = 0;
-	iii = 0;
-	ret = ft_calloc(ii + 2, sizeof(char *));
-	if (ret == NULL)
-		return (NULL);
-	ret[0] = ft_calloc(ft_strlen(string), 1);
-	if (string[i] == '*')
-	{
-		if (string[i + 1] == -2)
-		{
-			ret[ii++][0] = '*';
-			ret = ft_realloc_charpp(&ret, ii + 2);
-			ret[ii] = ft_calloc(ft_strlen(string), 1);
-		}
-		else
-			ret[ii][iii++] = string[i];
-		i += 2;
-	}
-	while (string[i] != '\0')
-	{
-		if (string[i] == '*' && string[i + 1] == -2)
-		{
-			ret = ft_realloc_charpp(&ret, ii + 2 + 2);
-			ret[++ii] = ft_calloc(ft_strlen(string), 1);
-			ret[ii + 1] = ft_calloc(ft_strlen(string), 1);
-			ret[ii++][0] = '*';
-			iii = -1;
-			i++;
-		}
-		else if (string[i] == '*' && string[i + 1] == -1)
-			ret[ii][iii] = string[i++];
-		else
-			ret[ii][iii] = string[i];
-		i++;
-		iii++;
-	}
-	ret[ii + 1] = NULL;
-	return (ret);
-}
-*/
 
 int	wild_sub_match(char *dir, char **matcher)
 {
@@ -150,6 +46,8 @@ int	wild_sub_match(char *dir, char **matcher)
 
 	i = 0;
 	ii = 0;
+	if (matcher[0][0] == -1 && matcher[1][0] == '\0')
+		return (1);
 	if (matcher[ii][0] != -1)
 	{
 		if (dir - ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) != 0)
@@ -172,8 +70,7 @@ int	wild_sub_match(char *dir, char **matcher)
 		return (1);
 	if (ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) == NULL)
 		return (0);
-	i = ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) - dir;
-	if (dir[i + ft_strlen(matcher[ii])] != '\0')
+	if (wild_comp_end(matcher[ii], dir))
 		return (0);
 	return (1);
 }
@@ -343,6 +240,7 @@ t_node	*formatted_string(char *string)
 	node->content = ft_calloc(1, sizeof(t_token));
 	((t_token *)node->content)->string = ret;
 	((t_token *)node->content)->type = WORD;
+	free(string);
 	return (node);
 }
 
@@ -355,14 +253,16 @@ t_node	*wild_main(char *string)
 	times = wild_get_seperator(string);
 	all_dir = wild_open_dir();
 	selected_dir = wild_pattern_match(all_dir, times);
-	if (selected_dir == NULL)
-		return (formatted_string(string));
 	free_char_array2(&times);
 	free_char_array2(&all_dir);
+	if (selected_dir == NULL)
+		return (formatted_string(string));
 	return (wild_combine(selected_dir));
+	for (int i = 0;times[i] != NULL; i++)
+		printf("%s\n", times[i]);
 }
-
-/* #include <string.h>
+/* 
+#include <string.h>
 
 int	main(int argc, char **argv)
 {
@@ -375,13 +275,14 @@ int	main(int argc, char **argv)
 	ii = 0;
 	if (argc != 2)
 		return (1);
-	string = malloc(strlen(argv[1]) * 2);
-	while (argv[1][ii] != 0)
+	string = calloc(strlen(argv[1]) * 2 + 1, 1);
+	while (argv[1][ii] != '\0')
 	{
 		string[i] = argv[1][ii++];
 		if (string[i++] == '*')
 			string[i++] = -2;
 	}
+	printf("%s\n", string);
 	node = wild_main(string);
 	while (node != NULL)
 	{
@@ -389,4 +290,4 @@ int	main(int argc, char **argv)
 		node = node->next;
 	}
 }
-*/
+ */

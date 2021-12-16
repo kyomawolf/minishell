@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:42:10 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:32:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/15 23:14:15 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "minis.h"
 #include "libft.h"
 #include "struct.h"
+#include <stdio.h>
 
 t_data	*new_t_data(char **envp)
 {
@@ -41,5 +42,10 @@ t_data	*new_t_data(char **envp)
 		ft_s_node_add_back(&head, ft_s_node_create(ft_strdup(envp[i++])));
 	ret->envp = head;
 	get_prompt(ret);
+	/* while (ret->envp != NULL)
+	{
+		printf("%s\n", ret->envp->content);
+		ret->envp = ret->envp->next;
+	} */
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 17:17:32 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 01:24:39 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,16 @@ void	free_char_array(char ***arr)
 	int	i;
 
 	i = 0;
-	while ((*arr)[i] != NULL)
+	if (*arr == NULL)
+		return ;
+	while (arr[0][i] != NULL)
 	{
-		free((*arr)[i]);
+		free(arr[0][i]);
+		arr[0][i] = NULL;
 		i++;
 	}
 	free(*arr);
+	*arr = NULL;
 }
 
 void	free_t_node_content_list(t_node *head)
@@ -46,6 +50,27 @@ void	free_t_node_content_list(t_node *head)
 	}
 }
 
+void	free_token(t_token *token)
+{
+	void	*temp;
+
+	temp = NULL;
+	if (token->string != NULL)
+		free(token->string);
+	token->string = NULL;
+	while (token->heredoc != NULL)
+	{
+		free (token->heredoc->content);
+		token->heredoc->content = NULL;
+		temp = token->heredoc;
+		token->heredoc = token->heredoc->next;
+		free (temp);
+		temp = NULL;
+	}
+	free(token);
+	token = NULL;
+}
+
 void	free_t_node_list(t_node *head)
 {
 	t_token	*token;
@@ -58,64 +83,13 @@ void	free_t_node_list(t_node *head)
 		token = (t_token *)head->content;
 		if (token != NULL)
 		{
-			if (token->string != NULL)
-				free(token->string);
-			token->string = NULL;
-			while (token->heredoc != NULL)
-			{
-				free (token->heredoc->content);
-				token->heredoc->content = NULL;
-				temp = token->heredoc;
-				token->heredoc = token->heredoc->next;
-				free (temp);
-				temp = NULL;
-			}
-			free(token);
-			token = NULL;
+			free_token(token);
 		}
 		temp = head;
 		head = head->next;
 		free(temp);
 		temp = NULL;
 	}
-}
-
-void	free_io(t_io *io)
-{
-	free_t_node_content_list(io->heredoc_node);
-	if (io->input != NULL)
-		free_char_array(&(io->input));
-	if (io->output != NULL)
-		free_char_array(&(io->output));
-	free(io);
-}
-
-void	free_simplecommand(t_simple_com *command)
-{
-	free_char_array(&(command->arguments));
-	free(command);
-}
-
-void	free_tree(t_bin *tree)
-{
-	int	i;
-
-	i = 0;
-	if (tree == NULL)
-		return ;
-	while (tree->child != NULL && tree->child[i] != NULL)
-	{
-		free_tree(tree->child[i]);
-		i++;
-	}
-	if (tree->child != NULL)
-		free(tree->child);
-	if (tree->command != NULL)
-		free_simplecommand(tree->command);
-	if (tree->io != NULL)
-		free_io(tree->io);
-	free(tree);
-	tree = NULL;
 }
 
 void	free_main(t_data *data)

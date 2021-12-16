@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 17:19:36 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 00:12:09 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@ void	get_prompt(t_data *data)
 
 void	main_loop(t_data *data)
 {
+	t_node *head;
+	t_node	*temp;
+
+	head = NULL;
 	while (1)
 	{
 		input_attributes_add();
@@ -56,7 +60,7 @@ void	main_loop(t_data *data)
 		{
 			free_main(data);
 			printf("\n\nWARNING: LEAVING MINISHELL\n");
-			system("leaks minishell");
+			//system("leaks minishell");
 			exit(0);
 		}
 		if (data->input[0] == '\0')
@@ -65,7 +69,18 @@ void	main_loop(t_data *data)
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
 			continue ;
+		//ft_t_node_free(data->list);
 		data->tree = builder_main(data->list);
+		//printf("main head %p\n", head);
+		if (data->tree != NULL)
+			traverse_tree(data->tree, &head, data);
+		while (head != NULL)
+		{
+			temp = head;
+			head = head->next;
+			free(temp);
+			temp = NULL;
+		}
 		//else
 		//	execution_main(data);
 		//memory_loop_main(data);

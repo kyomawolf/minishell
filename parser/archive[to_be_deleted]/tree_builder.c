@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:01:55 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 00:54:22 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 01:14:56 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 	{
 		tree->io->i_count++;
 		if (tree->io->input == NULL)
-			tree->io->input = ft_calloc(1, sizeof(char *));
+			tree->io->input = ft_calloc(2, sizeof(char *));
 		else
 			tree->io->input = ft_realloc_charpp(&tree->io->input, \
 			ft_char_arr_len(tree->io->input) + 2);
@@ -55,7 +55,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 	{
 		tree->io->o_mode = ((t_token *)node->content)->type - HERE_DOC + 1;
 		if (tree->io->output == NULL)
-			tree->io->output = ft_calloc(1, sizeof(char *));
+			tree->io->output = ft_calloc(2, sizeof(char *));
 		else
 			tree->io->output = ft_realloc_charpp(&tree->io->output, \
 			ft_char_arr_len(tree->io->output) + 2);
@@ -71,6 +71,8 @@ t_node	*add_words(t_simple_com *command, t_node *node)
 	int	i;
 
 	n_words = count_words(node);
+	if (n_words == 0)
+		return (node);
 	if (command->number_arguments == 0)
 		command->arguments = calloc(n_words + 1, sizeof(char *));
 	else

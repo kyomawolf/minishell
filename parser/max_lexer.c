@@ -91,6 +91,19 @@ void	ft_t_node_detach_and_free(t_node *to_detach)
 	to_detach = NULL;
 }
 
+void	ft_t_node_free_heredoc(t_token *token, t_node *temp)
+{
+	while (token->heredoc != NULL)
+	{
+		free (token->heredoc->content);
+		token->heredoc->content = NULL;
+		temp = token->heredoc;
+		token->heredoc = token->heredoc->next;
+		free (temp);
+		temp = NULL;
+	}
+}
+
 void	ft_t_node_free(t_node *head)
 {
 	t_token	*token;
@@ -104,17 +117,7 @@ void	ft_t_node_free(t_node *head)
 		free(token->string);
 		token->string = NULL;
 		if (token->heredoc != NULL)
-		{
-			while (token->heredoc != NULL)
-			{
-				free (token->heredoc->content);
-				token->heredoc->content = NULL;
-				temp = token->heredoc;
-				token->heredoc = token->heredoc->next;
-				free (temp);
-				temp = NULL;
-			}
-		}
+			ft_t_node_free_heredoc(token, temp);
 		free(token);
 		token = NULL;
 		temp = head;
@@ -138,7 +141,7 @@ int	ft_t_word_init(t_word *word)
 	word->status = -1;
 	word->write_head = 0;
 	word->alloc = BUFFER_SIZE;
-	word->chars = malloc(sizeof(char) * word->alloc);
+	word->chars = ft_calloc(sizeof(char), word->alloc);
 	if (word->chars == NULL)
 		return (1);
 	return (0);
@@ -200,7 +203,8 @@ void	ft_s_node_print_content(t_node *head)
 	while (head != NULL)
 	{
 		token = (t_token *)head->content;
-		printf("[%d][%c] :%s:\n", token->type, token->quote_status, token->string);
+		printf("[%d][%c]:%s:\n"\
+		, token->type, token->quote_status, token->string);
 		if (token->heredoc != NULL)
 		{
 			temp = token->heredoc;
@@ -213,7 +217,6 @@ void	ft_s_node_print_content(t_node *head)
 		head = head->next;
 	}
 }
-
 
 void	ft_t_token_add_empty_string(t_word *word, t_node **head, int *i)
 {
@@ -231,13 +234,13 @@ int	ft_change_status(char *input, int *i, t_word *word, t_node **head)
 	if (word->status == -1 && (input[*i] == '"' || input[*i] == '\''))
 	{
 		word->status = input[*i];
-		if (input[*i + 1] == word->status && word->write_head == 0 &&
-			ft_strlen(input) > (size_t)(*i + 1) && ft_strchr(" \t\n", input[*i + 2]))
+		if (input[*i + 1] == word->status && word->write_head == 0
+			&& ft_strlen(input) > (size_t)(*i + 1)
+			&& ft_strchr(" \t\n", input[*i + 2]))
 			ft_t_token_add_empty_string(word, head, i);
 		else
 		{
 			word->type = word->status;
-			//word->status = word->status;
 			(*i)++;
 		}
 		ret = 1;
@@ -252,6 +255,7 @@ int	ft_change_status(char *input, int *i, t_word *word, t_node **head)
 }
 
 //defines type of the token (operator or word)
+//&&word->w_head == 2 (at && check)
 char	ft_set_type(t_word *word)
 {
 	char	ret;
@@ -259,7 +263,7 @@ char	ft_set_type(t_word *word)
 	ret = WORD;
 	if (word->type == -1)
 	{
-		if (word->chars[0] == '&' && word->chars[1] == '&') //&& word->write_head == 2)
+		if (word->chars[0] == '&' && word->chars[1] == '&')
 			ret = AND;
 		else if (word->chars[0] == '|' && word->write_head == 1)
 			ret = PIPE;
@@ -351,59 +355,6 @@ int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 	return (ret);
 }
 
-/* //handles dquoted variable appendage
-int	ft_variable_dquoted(char *var_value, t_word *word)
-{
-	int	j;
-
-	if (word->status == '"')
-	{
-		j = 0;
-		while (var_value[j] != '\0')
-		{
-			if (var_value[j] == '*')
-			{
-				ft_skip_set(var_value, &j, "*");
-				ft_t_word_append_char(word, '"');
-				ft_t_word_append_char(word, '*');
-				ft_t_word_append_char(word, '"');
-				continue ;
-			}
-			else if (ft_t_word_append_char(word, var_value[j]))
-				return (-1);
-			j++;
-		}
-	}
-	return (0);
-} */
-
-/* //handles unquoted variable appendage
-// var_value may be splitted in several words
-int	ft_variable_unquoted(char *var_value, t_word *word, t_node **head)
-{
-	int	j;
-
-	if (word->status == -1)
-	{
-		j = 0;
-		while (var_value[j] != '\0')
-		{
-			if (ft_whitespaces(var_value[j]))
-			{
-				ft_skip_set(var_value, &j, " \t\n");
-				if (ft_append_token(word, head, 0))
-					return (-1);
-				ft_t_word_init(word);
-				continue ;
-			}
-			else if (ft_t_word_append_char(word, var_value[j]))
-				return (-1);
-			j++;
-		}
-	}
-	return (0);
-} */
-
 //checks if var_name is valid and returns string with var_name
 char	*ft_get_var_name(char *str, int i)
 {
@@ -418,17 +369,41 @@ char	*ft_get_var_name(char *str, int i)
 		var_name[1] = '\0';
 		return (var_name);
 	}
-	/* if (!ft_isalpha(str[i]) && str[i] != '_')
-		return (malloc()); // NULL */
-	while (ft_isalnum(str[i]) || str[i] == '_')//(!ft_strchr(" \t\n\"'$|&()<>", str[i]) && str[i] != '\0')
-	{
-		/* if (!ft_isalnum(str[i]) && str[i] != '_')
-			break ;//return (NULL); */
+	while (ft_isalnum(str[i]) || str[i] == '_')
 		i++;
-	}
 	var_name = ft_substr(str, i_start, i - i_start);
-	printf("[%d]var_name = :%s:\n",__LINE__, var_name);
 	return (var_name);
+}
+
+int	ft_append_variable_var_name(t_word *word, char *input, int *i)
+{
+	char	*var_name;
+	int		len;
+
+	var_name = ft_get_var_name(input, *i + 1);
+	if (var_name == NULL)
+		return (1);
+	len = ft_strlen(var_name);
+	while (len > 0)
+	{
+		ft_t_word_append_char(word, input[++(*i)]);
+		len--;
+	}
+	free(var_name);
+	var_name = NULL;
+	return (0);
+}
+
+void	ft_append_variable_prefix(t_word *word, char *input, int *i)
+{
+	ft_t_word_append_char(word, input[*i]);
+	if (word->status == -1)
+		ft_t_word_append_char(word, VAR_UQUOTED);
+	else if (word->status == '"')
+		ft_t_word_append_char(word, VAR_DQUOTED);
+	else if (word->status == '\'')
+		ft_t_word_append_char(word, VAR_SQUOTED);
+	return ;
 }
 
 // is called if variable is found: checks for
@@ -438,51 +413,22 @@ char	*ft_get_var_name(char *str, int i)
 //new: status of var is stored in char after $.
 int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 {
-	char	*var_name;
-	//char	*var_value;
 	t_node	*last_node;
-	int		len;
+	int		ret;
 
+	ret = 0;
 	last_node = ft_t_node_get_last(*head);
 	if (last_node != NULL && ((t_token *)last_node->content)->type == HERE_DOC)
-	{
 		ft_t_word_append_char(word, input[*i]);
-		return (0);
-	}
-	ft_t_word_append_char(word, input[*i]);
-	if (word->status == -1) //expandsion in executor!
-		ft_t_word_append_char(word, VAR_UQUOTED);
-	else if (word->status == '"')
-		ft_t_word_append_char(word, VAR_DQUOTED);
-	else if (word->status == '\'')
-		ft_t_word_append_char(word, VAR_SQUOTED);
-	var_name = ft_get_var_name(input, *i + 1);
-	if (var_name == NULL)
-		return (-1);
-	len = ft_strlen(var_name);
-	while (len > 0)
+	else
 	{
-		ft_t_word_append_char(word, input[++(*i)]);
-		len--;
+		ft_append_variable_prefix(word, input, i);
+		if (ft_append_variable_var_name(word, input, i))
+			ret = 1;
+		else
+			ft_t_word_append_char(word, VAR_END);
 	}
-	free(var_name);
-	var_name = NULL;
-	ft_t_word_append_char(word, VAR_END);
-		/* var_value = getenv(var_name);
-		if (var_value == NULL)
-		{
-			free(var_name);
-			var_name = NULL;
-			return (-1);
-		} */
-		/* *i += ft_strlen(var_name);
-		free(var_name);
-		var_name = NULL;
-		if (ft_variable_dquoted(var_value, word) == -1)
-			return (-1);
-		if (ft_variable_unquoted(var_value, word, head) == -1)
-			return (-1); */
-	return (0);
+	return (ret);
 }
 
 // skips set of chars, gives information if characters were skipped
@@ -504,7 +450,7 @@ int	ft_skip_chars(char *input, int *pos, char *chars)
 int	ft_is_type_redirection(t_node *node)
 {
 	t_token	*token;
-	int	ret;
+	int		ret;
 
 	ret = 0;
 	token = (t_token *)node->content;
@@ -520,25 +466,13 @@ int	ft_is_type_redirection(t_node *node)
 }
 
 //handles wildcard appandage
-int	ft_append_wildcard(char *input, int *i, t_word *word)//, t_node **head)
+int	ft_append_wildcard(char *input, int *i, t_word *word)
 {
-/* 	t_node	*last_node;
-
-	last_node = ft_t_node_get_last(*head);
-	if (ft_is_type_redirection(last_node))
-	{
-		printf("ambigious redirection\n");
-		return (-1);
-	} */
 	if (input[*i] == '*' && (word->status == '\'' || word->status == '"'))
 	{
-		/* if (ft_skip_chars(input, i, "*") == 1)
-			(*i)--; */
-		/* if (ft_t_word_append_char(word, '"') == -1)
-			return (-1); */
 		if (ft_t_word_append_char(word, '*') == -1)
 			return (-1);
-		if (ft_t_word_append_char(word, -1) == -1)
+		if (ft_t_word_append_char(word, WC_QUOTED) == -1)
 			return (-1);
 		return (1);
 	}
@@ -546,34 +480,18 @@ int	ft_append_wildcard(char *input, int *i, t_word *word)//, t_node **head)
 	{
 		if (ft_t_word_append_char(word, '*') == -1)
 			return (-1);
-		if (ft_t_word_append_char(word, -2) == -1)
+		if (ft_t_word_append_char(word, WC_END) == -1)
 			return (-1);
 	}
 	return (0);
 }
 
-//manages appendage of characters
-void	ft_append(char *input, int *i, t_word *word, t_node **head)
+//manages appendage of characters PART II
+void	ft_append_helper(char *input, int *i, t_word *word, t_node **head)
 {
 	char	c;
 
-	if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
-	{
-		ft_t_word_append_char(word, input[*i]);
-		/* if (input[*i] == '$')
-			ft_t_word_append_char(word, '\''); */
-	}
-	else if (input[*i] == '$')
-	{
-		if(ft_append_variable(input, i, word, head) == -1)
-		{
-			printf("invalid var_name\n");
-			exit(EXIT_FAILURE);
-		}
-	}
-	else if (input[*i] == '*')
-		ft_append_wildcard(input, i, word);									//, head);
-	else if (word->status == -1 && (input[*i] == '(' || input[*i] == ')'))
+	if (word->status == -1 && (input[*i] == '(' || input[*i] == ')'))
 	{
 		ft_t_word_append_char(word, input[*i]);
 		ft_terminate_token(input, i, word, head);
@@ -590,12 +508,54 @@ void	ft_append(char *input, int *i, t_word *word, t_node **head)
 		ft_t_word_append_char(word, input[*i]);
 }
 
-t_node	*ft_lexer_v2(char *input)
+//manages appendage of characters PART I
+int	ft_append(char *input, int *i, t_word *word, t_node **head)
+{
+	if (input[*i] == '\0')
+		return (0);
+	else if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
+		ft_t_word_append_char(word, input[*i]);
+	else if (input[*i] == '$')
+	{
+		if (ft_append_variable(input, i, word, head))
+		{
+			printf("invalid var_name\n");
+			return (1);
+		}
+	}
+	else if (input[*i] == '*')
+		ft_append_wildcard(input, i, word);
+	else
+		ft_append_helper(input, i, word, head);
+	return (0);
+}
+
+void	ft_get_token_list_handle_last_word(t_word *word, t_node **head, int sw)
+{
+	if (word->write_head != 0)
+		ft_append_token(word, head, 1);
+	if (word->chars != NULL)
+	{
+		free(word->chars);
+		word->chars = NULL;
+	}
+	if (word->status == '\'' || word->status == '"' || sw == 1)
+	{
+		ft_t_node_free(*head);
+		if (sw == 0)
+			printf("missing quote\n");
+	}
+	return ;
+}
+
+t_node	*ft_get_token_list(char *input)
 {
 	int		i;
+	int		sw;
 	t_word	word;
 	t_node	*head;
 
+	sw = 0;
 	head = NULL;
 	ft_t_word_init(&word);
 	i = 0;
@@ -606,22 +566,14 @@ t_node	*ft_lexer_v2(char *input)
 			continue ;
 		if (ft_change_status(input, &i, &word, &head))
 			continue ;
-		ft_append(input, &i, &word, &head);
+		if (ft_append(input, &i, &word, &head))
+		{
+			sw = 1;
+			break ;
+		}
 		i++;
 	}
-	if (word.write_head != 0)
-		ft_append_token(&word, &head, 1);
-	if (word.chars != NULL)
-	{
-		free(word.chars);
-		word.chars = NULL;
-	}
-	if (word.status == '\'' || word.status == '"')
-	{
-		ft_t_node_free(head);
-		printf("missing quote\n");
-		exit(EXIT_FAILURE);
-	}
+	ft_get_token_list_handle_last_word(&word, &head, sw);
 	return (head);
 }
 
@@ -645,9 +597,22 @@ int	ft_operator_is_valid(t_node *head)
 	return (ret);
 }
 
+void	ft_lexer_handle_heredoc_input_helper(t_token *token,
+			t_node *head, char *line)
+{
+	if (line != NULL)
+	{
+		free(line);
+		line = NULL;
+	}
+	if (head != NULL)
+		token->heredoc = head;
+	return ;
+}
+
 // reads stdin, saves input in list until line is equal to delimiter string
 // saves list of input in token member heredoc
-int	ft_handle_heredoc_input(t_token *token, t_token *delimiter)
+int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 {
 	char	*line;
 	size_t	len;
@@ -670,20 +635,17 @@ int	ft_handle_heredoc_input(t_token *token, t_token *delimiter)
 			ft_t_node_add_back(&head, node);
 		}
 	}
-	if (line != NULL)
-	{
-		free(line);
-		line = NULL;
-	}
-	if (head != NULL)
-		token->heredoc = head;
+	ft_lexer_handle_heredoc_input_helper(token, head, line);
 	return (0);
 }
 
-//searches list for token with type heredoc. If next list elements content is of type word
-// the function ft_handle_heredoc_input is called. The quoted status of the "delimiter" token
-// is copied to the here_doc token and the delimiter token is removed from the list.
-int	ft_heredoc(t_node *head)
+//searches list for token with type heredoc.
+// If next list elements content is of type word
+// the function ft_lexer_handle_heredoc_input is called.
+// The quoted status of the "delimiter" token
+// is copied to the here_doc token
+// and the delimiter token is removed from the list.
+int	ft_lexer_heredoc(t_node *head)
 {
 	t_token	*token;
 	t_token	*delimiter;
@@ -693,12 +655,14 @@ int	ft_heredoc(t_node *head)
 		token = ((t_token *)head->content);
 		if (token->type == HERE_DOC)
 		{
+			if ((t_token *)((t_node *)head->next) == NULL)
+				return (1);
 			delimiter = ((t_token *)((t_node *)head->next)->content);
 			if (delimiter->type != WORD)
 				return (1);
 			else
 			{
-				ft_handle_heredoc_input(token, delimiter);
+				ft_lexer_handle_heredoc_input(token, delimiter);
 				token->quote_status = delimiter->quote_status;
 				ft_t_node_detach_and_free(head->next);
 			}
@@ -708,12 +672,36 @@ int	ft_heredoc(t_node *head)
 	return (0);
 }
 
+t_node	*ft_lexer(char *input)
+{
+	t_node	*head;
+
+	head = ft_get_token_list(input);
+	if (ft_operator_is_valid(head))
+	{
+		printf("invalid token\n");
+		ft_t_node_free(head);
+		return (NULL);
+	}
+	else
+	{
+		if (ft_lexer_heredoc(head))
+		{
+			printf("syntax error near unexpected token\n");
+			ft_t_node_free(head);
+			return (NULL);
+		}
+		ft_s_node_print_content(head);
+	}
+	return (head);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //								PARSER										  //
 
-int	ft_is_type_control_op(t_node *head)
+/* int	ft_is_type_control_op(t_node *head)
 {
 	int		ret;
 	t_token	*token;
@@ -735,7 +723,8 @@ int	ft_is_type_operator(t_node *head)
 	return (ret);
 }
 
-// if controll operator is last token: reads stdin for input, lexes and adds to list
+//if controll operator is last token:
+//  reads stdin for input, lexes and adds to list
 int	ft_ask_for_cmd(t_node *head)
 {
 	char 	*input;
@@ -747,7 +736,7 @@ int	ft_ask_for_cmd(t_node *head)
 	input = readline(">");
 	if (input != NULL)
 	{
-		head_append = ft_lexer_v2(input);
+		head_append = ft_get_token_list(input);
 		ft_t_node_add_back(&head, head_append);
 		free(input);
 		input = NULL;
@@ -788,94 +777,4 @@ int	ft_parser(t_node *head)
 		last = current;
 	}
 	return (0);
-}
-
-t_node	*ft_lexer(char *input)
-{
-	t_node	*head;
-	int		ret;
-
-	ret = 1;
-	head = ft_lexer_v2(input);
-	//ft_s_node_print_content(head);
-	if (ft_operator_is_valid(head))
-	{
-		printf("invalid token\n");
-		ft_t_node_free(head);
-		return (NULL);
-	}
-	else
-	{
-		ft_heredoc(head);
-		ret = 0;
-		/* if (ft_parser(head))
-		{
-			printf("parser error\n");
-			ft_t_node_free(head);
-			return (NULL);
-		} */
-		if (ft_var_expansion(&head))
-		{
-			printf("invalid var_name\n");
-			ft_t_node_free(head);
-			return (NULL);
-		}
-		if (ft_wildcard_expansion(&head))
-		{
-			printf("Error while wc expansion\n");
-			ft_t_node_free(head);
-			return (NULL);
-		}
-		ft_s_node_print_content(head);
-	}
-	//ft_t_node_free(head);
-	//system("leaks a.out");
-	return (head);
-}
-
-/* int	main(int argc, char **argv)
-{
-	t_node	*head;
-	int		ret;
-
-	ret = 1;
-	if (argc == 2)
-	{
-		head = ft_lexer_v2(argv);
-		if (ft_operator_is_valid(head))
-			printf("invalid token\n");
-		else
-		{
-			ft_heredoc(head);
-			ret = 0;
-			if (ft_parser(head))
-			{
-				ret = 1;
-				printf("parser error\n");
-			}
-			if (ft_var_expansion(&head))
-			{
-				printf("invalid var_name\n");
-				return (NULL);
-			}
-			if (ft_wildcard_expansion(&head))
-			{
-				printf("Error while wc expansion\n");
-				return (1);
-			}
-			ft_s_node_print_content(head);
-		}
-		return (head);
-		ft_t_node_free(head);
-		//system("leaks a.out");
-	}
-	return (NULL);
-}
-*/
-
-//todos
-/*
-** single $ sign is not handled correct
-** if t_node->prev is redirection operator: error if wc expandsion results in more than one t_token *
-** build tree, handle parentheses
-*/
+} */
