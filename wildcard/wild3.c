@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:53:31 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 22:22:50 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 00:49:59 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	**part_2(char *string, int ii, int iii, char **ret)
 		else
 			ret[ii][iii] = string[i];
 		iii++;
-		if (string[i++ - 1] == '\0')
+		if (string[i - 1] == '\0')
 			break ;
 	}
 	return (ret);
