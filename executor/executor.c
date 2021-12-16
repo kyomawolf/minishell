@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/16 00:44:21 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/16 15:30:57 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	ft_print_nodes(t_node *head)
 
 	while (head != NULL)
 	{
+		printf("new list element:\n");
 		if (((t_bin *)head->content) == NULL)
 			printf("next\n");
 		else if (((t_bin *)head->content)->command == NULL)
@@ -97,12 +98,8 @@ void	traverse_tree_rec(t_bin *tree, t_node **head)
 	{
 		if (tree->command != NULL && tree->command->arguments != NULL)
 		{
-			//printf("head %p cont op %d darf nicht pipe %d sein\n", head, tree->control_op, PIPE);
 			if (*head != NULL && tree->control_op != PIPE)
-			{
-				//printf("test\n");
 				ft_t_node_add_back(head, ft_t_node_create(NULL));
-			}
 			ft_t_node_add_back(head, ft_t_node_create(tree));
 		}
 		return ;
@@ -110,17 +107,77 @@ void	traverse_tree_rec(t_bin *tree, t_node **head)
 	i = 0;
 	while (tree->child[i] != NULL)
 	{
-		//printf("head %p\n", head);
-		//printf("*head %p\n", *head);
 		traverse_tree_rec(tree->child[i], head);
 		i++;
 	}
 }
 // expansion for whole list -> change to elements until content next
-void	traverse_tree(t_bin *tree, t_node **head, t_data *data)
+void	traverse_tree(t_bin *tree, t_node **head)
 {
 	traverse_tree_rec(tree, head);
-	//ft_print_nodes(*head);
-	ft_t_bin_variable_expansion(*head, data);
-	//ft_print_nodes(*head);
+}
+
+void	ft_free_pipeline(t_node *pipeline)
+{
+	t_node	*temp;
+
+	while (pipeline != NULL)
+	{
+		temp = pipeline;
+		pipeline = pipeline->next;
+		free(temp);
+		temp = NULL;
+	}
+}
+
+t_node	*create_pipeline(t_node *start, t_node *end)
+{
+	t_node	*pipeline;
+
+	pipeline = NULL;
+	while (start != end)
+	{
+		ft_t_node_add_back(&pipeline,ft_t_node_create(start->content));
+		start = start->next;
+	}
+	return (pipeline);
+}
+
+void	executor(t_node *head, t_data *data)
+{
+	t_node	*start;
+	t_node	*end;
+	t_node	*pipeline;
+	t_node	*temp;
+	int		i;
+
+	start = head;
+	while (head != NULL && head->content != NULL)
+	{
+		ft_t_bin_variable_expansion(head, data);
+		head = head->next;
+	}
+	end = head;
+	pipeline = create_pipeline(start, end);
+	temp = pipeline;
+	while (pipeline != NULL)
+	{
+		i = 0;
+		while (((t_bin *)pipeline->content)->command->arguments[i] != NULL)
+		{
+			if (i == 0)
+				printf("Command: \n");
+			else if (i == 1)
+				printf("Arguments: \n");
+			printf("%s\n", ((t_bin *)pipeline->content)->command->arguments[i++]);
+		}
+		pipeline = pipeline->next;
+	}
+	ft_free_pipeline(temp);
+	printf("finished pipeline\n");
+	if (head != NULL)
+	{
+		head = head->next;
+		executor(head, data);
+	}
 }

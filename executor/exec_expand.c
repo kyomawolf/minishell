@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/16 00:43:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/16 15:32:40 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -598,29 +598,13 @@ int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 	return (ret);
 }
 
-void	ft_print_nodes(t_node *head);
-
 int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 {
-	/* while (head != NULL)
-	{
-		if (ft_t_bin_var_expansion_check(head, data))
-			return (1);
-		head = head->next;
-	} */
 	while (head != NULL && head->content != NULL)
 	{
 		if (ft_t_bin_var_expansion_check(head, data))
 			return (1);
-		ft_print_nodes(head);
 		head = head->next;
 	}
-	if (head != NULL && head->content == NULL)
-	{
-		printf("skip to next list element\n");
-		head = head->next;
-	}
-	if (head != NULL)
-		ft_t_bin_variable_expansion(head, data);
 	return (0);
 }
