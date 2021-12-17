@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 02:05:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:17:38 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ typedef struct s_data
 	t_node				*envp;
 	t_bin				*tree;
 	t_node				*list;
+	t_node				**opendes;
 }	t_data;
 
 #endif /*STRUCTS_H*/

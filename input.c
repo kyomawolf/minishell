@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 22:00:23 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:17:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,28 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <unistd.h>
 #include <signal.h>
 #include <termios.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include <stdlib.h>
 
 void	input_interrupt(int sig)
 {
-	if (sig == 11)
+	if (sig == SIGSEGV)
 	{
 		printf("SEGMENTATION FAULT\n");
 		input_attributes_clear();
 		exit(11);
 	}
+	//maybe include pipecontrol
+	//if (sig == SIGPIPE)
+	//{
+	//	printf("PIPE FAULT\n");
+	//	input_attributes_clear();
+	//	//close_pipe(data, 1);
+	//	return ;
+	//}
 	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
@@ -54,6 +62,7 @@ void	input_attributes_add(void)
 	signal(6, input_interrupt);
 	signal(7, input_interrupt);
 	signal(11, input_interrupt);
+	signal(13, input_interrupt);
 	tcgetattr(1, &loc);
 	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
 	{
@@ -66,9 +75,6 @@ void	input_attributes_clear(void)
 {
 	struct termios	loc;
 
-	//signal(SIGQUIT, input_interrupt);
-	//signal(1, input_interrupt);
-	//signal(3, input_interrupt);
 	tcgetattr(1, &loc);
 	if ((loc.c_lflag & (0x1 << 6)) != ECHOCTL) // changed to != according to shackbei/eozben
 	{

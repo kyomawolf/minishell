@@ -6,7 +6,11 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 19:28:13 by jkasper           #+#    #+#             */
+<<<<<<< HEAD:wild.c
+/*   Updated: 2021/12/14 17:06:35 by jkasper          ###   ########.fr       */
+=======
 /*   Updated: 2021/12/15 22:15:42 by jkasper          ###   ########.fr       */
+>>>>>>> a455e96fde655cfb6aea0dbe7d35e879ab839fe1:parser/archive[to_be_deleted]/wild.c
 /*                                                                            */
 /* ************************************************************************** */
 
