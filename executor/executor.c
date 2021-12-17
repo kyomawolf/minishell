@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 03:55:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:12:30 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,19 +78,21 @@ t_node	*create_pipeline(t_node *start, t_node *end)
 void	change_env_exit_status(t_data *data, int es)
 {
 	char	*status;
+	t_node	*temp;
 
-	while (data->envp != NULL)
+	temp = data->envp;
+	while (temp != NULL)
 	{
-		if (ft_strnstr(data->envp->content, "?=\0", 3))
+		if (ft_strnstr(temp->content, "?=\0", ft_strlen(temp->content)))
 		{
-			free (data->envp->content);
+			free (temp->content);
 			status = ft_itoa(es);
-			data->envp->content = ft_strjoin("?=", status);
+			temp->content = ft_strjoin("?=", status);
 			free (status);
 			status = NULL;
 			break ;
 		}
-		data->envp = data->envp->next;
+		temp = temp->next;
 	}
 }
 
@@ -114,7 +116,6 @@ void	executor(t_node *head, t_data *data, int es)
 		es = ft_execute(pipeline, data);
 	ft_free_pipeline(pipeline);
 	change_env_exit_status(data, es);
-	//printf("finished pipeline\n");
 	if (head != NULL)
 	{
 		head = head->next;

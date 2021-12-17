@@ -1,8 +1,7 @@
 
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Werror -Wextra
-#-fsanitize=address -fno-omit-frame-pointer -static-libsan
+FLAGS = -Wall -Werror -Wextra -fsanitize=address -fno-omit-frame-pointer -static-libsan
 
 SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
@@ -25,7 +24,7 @@ OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(patsubst %.c,%.o,$(SRC)))
 
 $(NAME) : lib/libft.a $(OBJ)
-	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
+	@gcc $(FLAGS) -O0 -g $(INC) $^ $(LIB) -o $@
 
 	@echo "compiled!"
 

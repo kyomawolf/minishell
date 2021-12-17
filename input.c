@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 02:17:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:34:02 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	input_attributes_add(void)
 	signal(5, input_interrupt);
 	signal(6, input_interrupt);
 	signal(7, input_interrupt);
-	signal(11, input_interrupt);
+	//signal(11, input_interrupt);
 	signal(13, input_interrupt);
 	tcgetattr(1, &loc);
 	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
@@ -76,7 +76,7 @@ void	input_attributes_clear(void)
 	struct termios	loc;
 
 	tcgetattr(1, &loc);
-	if ((loc.c_lflag & (0x1 << 6)) != ECHOCTL) // changed to != according to shackbei/eozben
+	if ((loc.c_lflag & (0x1 << 6)) != ECHOCTL)
 	{
 		loc.c_lflag += ECHOCTL;
 		tcsetattr(1, TCSANOW, &loc);

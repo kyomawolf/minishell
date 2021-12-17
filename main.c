@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 02:17:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:32:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,10 @@ void	get_prompt(t_data *data)
 	temp[ii++] = '>';
 	temp[ii++] = ' ';
 	temp[ii] = '\0';
-	if (data->prompt != NULL)
-		free(data->prompt);
+	//if (data->prompt != NULL)
+		//free(data->prompt);
 	data->prompt = ft_strjoin("minishell@", temp);
-	free(temp);
+	//free(temp);
 }
 
 void	main_loop(t_data *data)

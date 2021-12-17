@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 21:07:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 04:15:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:25:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ char	*path_check_access(char **all_p, char **args)
 		{
 			ret = ft_strdup(all_p[i]);
 			free_char_array(&all_p);
-			printf("path: %s\n", ret);
 			return (ret);
 		}
 		i++;

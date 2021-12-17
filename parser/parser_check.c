@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 17:42:47 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/17 16:24:31 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int	check_input(t_node *head)
 
 	err = 0;
 	err += check_pars(head);
-	if (!err)
+/* 	if (!err)
 		write(1, "passed parenthesis\n", 19);
 	err += check_io(head);
 	if (!err)
@@ -127,6 +127,6 @@ int	check_input(t_node *head)
 		write(1, "passed operators\n", 17);
 	err += check_wordpar(head);
 	if (!err)
-		write(1, "OK\n", 3);
+		write(1, "OK\n", 3); */
 	return (err);
 }

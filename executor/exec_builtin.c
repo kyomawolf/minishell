@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:53:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 15:42:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ t_e_builtin	get_builtin_code(char *cmd_name)
 		builtin = UNSET;
 	else if (!ft_strncmp(cmd_name, "env\0", 4))
 		builtin = ENV;
-	else if (!ft_strncmp(cmd_name, "exit\0", 5))
-		builtin = EXIT;
+	/* else if (!ft_strncmp(cmd_name, "exit\0", 5))
+		builtin = EXIT; */
 	else
 		builtin = NONE;
 	return (builtin);
