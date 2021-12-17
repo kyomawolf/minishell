@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:10:09 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:53:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,22 @@ t_e_builtin	get_builtin_code(char *cmd_name)
 	return (builtin);
 }
 
+char	ft_tolower2(unsigned int i, char c)
+{
+	(void)i;
+	return(ft_tolower(c));
+}
+
 void	builtin_check(char **cmd_arr, t_data *data)
 {
 	char		*cmd_name;
 	int			exit_status;
 	t_e_builtin	builtin;
 
-	cmd_name = cmd_arr[0];
-	builtin = get_builtin_code(ft_tolower(cmd_name));
+	cmd_name = ft_strmapi(cmd_arr[0], ft_tolower2);
+	builtin = get_builtin_code(cmd_name);
+	free(cmd_arr[0]);
+	cmd_arr[0] = cmd_name;
 	if (builtin != NONE)
 	{
 		exit_status = run_builtin(builtin, cmd_arr, data);
@@ -60,33 +68,36 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 {
 	int	exit_status;
 
+	exit_status = 0;
+	(void)data;
+	(void)cmd_arr;
 	if (builtin == ECHO)
 	{
-		exit_status = ft_echo();
+		//exit_status = ft_echo();
 	}
 	else if (builtin == CD)
 	{
-		exit_status = ft_cd();
+		//exit_status = ft_cd();
 	}
 	else if (builtin == PWD)
 	{
-		exit_status = ft_pwd();
+		//exit_status = ft_pwd();
 	}
 	else if (builtin == EXPORT)
 	{
-		exit_status = ft_export();
+		//exit_status = ft_export();
 	}
 	else if (builtin == UNSET)
 	{
-		exit_status = ft_unset();
+		//exit_status = ft_unset();
 	}
 	else if (builtin == ENV)
 	{
-		exit_status = ft_env();
+		//exit_status = ft_env();
 	}
 	else if (builtin == EXIT)
 	{
-		exit_status = ft_exit();
+		//exit_status = ft_exit();
 	}
 	return (exit_status);
 }

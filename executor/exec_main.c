@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:07:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:03:50 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 int	ft_execute(t_node *head, t_data *data)
 {
@@ -50,7 +51,7 @@ int	ft_execute(t_node *head, t_data *data)
 			return (-1);
 		if (pid[i] == 0)
 			ft_child_process(head, data, &exec_data);
-		ft_parent_close_used_pipes(head, data, &exec_data);
+		ft_parent_close_used_pipes(&exec_data);
 		exec_data.cmd_count++;
 		head = head->next;
 		i++;

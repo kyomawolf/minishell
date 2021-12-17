@@ -13,7 +13,9 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder1.c \
 	  executor/exec_expand_wildcard.c executor/pipe_count.c llist.c \
 	  executor/executor.c executor/exec_expand.c global_utils.c \
 	  wildcard/wild1.c wildcard/wild2.c wildcard/wild3.c parser/tree_builder2.c \
-	  parser/tree_builder3.c
+	  parser/tree_builder3.c \
+	  executor/exec_builtin.c executor/exec_child.c executor/exec_io.c \
+	  executor/exec_main.c executor/exec_parent.c executor/exec_path.c
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 

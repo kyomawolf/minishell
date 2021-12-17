@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:12:31 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:04:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int	ft_open_pipes(t_exec *exec_data)
 	}
 	close(exec_data->pipes[0][0]);
 	close(exec_data->pipes[0][1]);
+	return (0);
 }
 
 void	ft_parent_close_used_pipes(t_exec *exec_data)

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:17:27 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:25:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,7 @@ void	ft_set_variable_name_and_value(char ***var, t_data *data)
 	char	*var_value_copy;
 
 	var_value_copy = NULL;
-	if (var[0][0][0] == '$') && var[0][0][1] == '\0')
+	if (var[0][0][0] == '$' && var[0][0][1] == '\0')
 		var_value_copy = ft_strdup(var[0][0]);
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:10:47 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:13:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:58:00 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head)
 	}// else read from stdin
 	//
 	//ORD if IO is true
-	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->output != NULL))
+	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->output != NULL)
 	{
 		i = 0;
 		while (((t_bin *)head->content)->io->output[i] != NULL)
@@ -74,7 +74,7 @@ static void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head)
 	{
 		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);
 		//added close
-		close(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);
+		close(exec_data->pipes[exec_data->cmd_count + 1][1]);
 	}//first cmd, but not last
 	else if (exec_data->cmd_count == 0 && exec_data->num_cmds != 1)
 	{
@@ -103,7 +103,7 @@ static void	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 {
 	ft_close_unused_pipes(exec_data);
 	if (exec_data->here_doc == 1)
-		ft_exec_here_doc(exec_data);
+		ft_exec_here_doc(exec_data, head);
 	else
 		ft_adjust_pipe_helper(exec_data, head);
 }
@@ -115,10 +115,8 @@ void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	ft_adjust_pipes(exec_data, head);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	builtin_check(cmd_arr, data);
-	else
-	{
-		//path to executable
-		execve(cmd_arr[0], cmd_arr, list_to_arr(data->envp));
-		//free and exit in case of failure
-	}
+	//path to executable
+	execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
+	//free and exit in case of failure
+
 }

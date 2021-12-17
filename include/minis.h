@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 02:17:33 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:02:58 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int					ft_t_bin_variable_expansion(t_node *head, t_data *data);
 t_node				*wild_combine(char **sel_dir);
 int					ft_wildcard_expansion(t_node **head);
 int					ft_get_beginning_of_list(t_node *temp, t_node **head);
-void				executor(t_node *head, t_data *data);
+void				executor(t_node *head, t_data *data, int es);
 int					ft_execute(t_node *head, t_data *data);
 void				ft_t_exec_init(t_exec *exec_data, t_node *head);
 int					ft_open_pipes(t_exec *exec_data);
@@ -70,6 +70,8 @@ void				ft_parent_close_used_pipes(t_exec *exec_data);
 int					ft_parent_waitpid(t_exec *exec_data, pid_t *pid);
 void				ft_exec_here_doc(t_exec *exec_data, t_node *head);
 void				builtin_check(char **cmd_arr, t_data *data);
+int					run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data);
+void				ft_child_process(t_node *head, t_data *data, t_exec *exec_data);
 
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);

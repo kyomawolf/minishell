@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:13:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:01:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 {
 	int		pipe_here_doc[2];
-	char	*line;
 	int		i;
 	t_node	*here_doc;
 	t_node	*temp;
+	int		fd;
 
 	here_doc = ((t_bin *)head->content)->io->heredoc_node;
 	pipe(pipe_here_doc);
@@ -72,9 +72,11 @@ void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 			}
 			close (fd);
 			i++;
-	}// if no ORD && not last cmd: set stdout to writeend of next pipe
+		}
+	}
 	else if (exec_data->cmd_count != exec_data->num_cmds - 1)
 	{
+		// if no ORD && not last cmd: set stdout to writeend of next pipe
 		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);//dup2(exec_data->pipes[1][1], STDOUT_FILENO);
 		close(exec_data->pipes[exec_data->cmd_count + 1][1]);//exec_data->pipes[1][1]);
 	}
