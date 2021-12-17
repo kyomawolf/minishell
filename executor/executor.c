@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 03:19:55 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:55:00 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,74 +21,6 @@ void	*ft_t_node_create(void *content);
 void	*ft_t_node_get_last(void *head);
 void	ft_t_node_add_back(t_node **head, t_node *node);
 void	ft_t_node_free(t_node *head);
-
-//only for printing
-/* void	ft_print_nodes(t_node *head)
-{
-	t_node	*temp;
-	char	**temp_char;
-	int		i;
-	int		j, k;
-
-	while (head != NULL)
-	{
-		printf("new list element:\n");
-		if (((t_bin *)head->content) == NULL)
-			printf("next\n");
-		else if (((t_bin *)head->content)->command == NULL)
-			printf("command null\n");
-		else if (((t_bin *)head->content)->command->arguments == NULL)
-			printf("arguments null \n");
-		else
-		{
-			i = 0;
-			while (((t_bin *)head->content)->command->arguments[i] != NULL)
-			{
-				if (i == 0)
-					printf("Command: \n");
-				else if (i == 1)
-					printf("Arguments: \n");
-				printf("%s\n", ((t_bin *)head->content)->command->arguments[i++]);
-			}
-			if ((t_bin *)head->content != NULL &&
-				((t_bin *)head->content)->io != NULL &&
-				((t_bin *)head->content)->io->heredoc_node != NULL)
-			{
-				temp = ((t_bin *)head->content)->io->heredoc_node;
-				while (temp != NULL)
-				{
-					printf("Heredoc content :%s:\n", temp->content);
-					temp = temp->next;
-				}
-			}
-			if ((t_bin *)head->content != NULL &&
-				((t_bin *)head->content)->io != NULL &&
-				((t_bin *)head->content)->io->input != NULL)
-			{
-				j = 0;
-				temp_char = ((t_bin *)head->content)->io->input;
-				while (temp_char[j] != NULL)
-				{
-					printf("io input :%s:\n", temp_char[j]);
-					j++;
-				}
-			}
-			if ((t_bin *)head->content != NULL &&
-				((t_bin *)head->content)->io != NULL &&
-				((t_bin *)head->content)->io->output != NULL)
-			{
-				k = 0;
-				temp_char = ((t_bin *)head->content)->io->output;
-				while (temp_char[k] != NULL)
-				{
-					printf("io input :%s:\n", temp_char[k]);
-					k++;
-				}
-			}
-		}
-		head = head->next;
-	}
-} */
 
 void	traverse_tree_rec(t_bin *tree, t_node **head)
 {
@@ -167,8 +99,6 @@ void	executor(t_node *head, t_data *data, int es)
 	t_node	*start;
 	t_node	*end;
 	t_node	*pipeline;
-	//int		i;
-	//t_node	*temp;
 
 	start = head;
 	while (head != NULL && head->content != NULL)
@@ -179,49 +109,83 @@ void	executor(t_node *head, t_data *data, int es)
 	}
 	end = head;
 	pipeline = create_pipeline(start, end);
-	//temp = pipeline;
-	/* while (pipeline != NULL)
-	{
-		//debug only. delete
-		i = 0;
-		while (((t_bin *)pipeline->content)->io != NULL && ((t_bin *)pipeline->content)->io->input != NULL && ((t_bin *)pipeline->content)->io->input[i] != NULL)
-		{
-			printf("Input redirection %s\n", ((t_bin *)pipeline->content)->io->input[i]);
-			i++;
-		}
-		i = 0;
-		while (((t_bin *)pipeline->content)->io != NULL && ((t_bin *)pipeline->content)->io->output != NULL && ((t_bin *)pipeline->content)->io->output[i] != NULL)
-		{
-			printf("output redirection %s\n", ((t_bin *)pipeline->content)->io->output[i]);
-			i++;
-		}
-		i = 0;
-		while (((t_bin *)pipeline->content)->io != NULL && ((t_bin *)pipeline->content)->io->heredoc_node != NULL)
-		{
-			printf("output redirection %s\n", ((t_bin *)pipeline->content)->io->heredoc_node->content);
-			((t_bin *)pipeline->content)->io->heredoc_node = ((t_bin *)pipeline->content)->io->heredoc_node->next;
-		}
-		//fin delete
-		i = 0;
-		while (((t_bin *)pipeline->content)->command->arguments[i] != NULL)
-		{
-			if (i == 0)
-				printf("Command: \n");
-			else if (i == 1)
-				printf("Arguments: \n");
-			printf("%s\n", ((t_bin *)pipeline->content)->command->arguments[i++]);
-		}
-		pipeline = pipeline->next;
-	} */
 	if ((es != 0 && ((t_bin *)pipeline->content)->control_op == OR)
 		|| (es == 0 && ((t_bin *)pipeline->content)->control_op == AND))
 		es = ft_execute(pipeline, data);
 	ft_free_pipeline(pipeline);
 	change_env_exit_status(data, es);
-	printf("finished pipeline\n");
+	//printf("finished pipeline\n");
 	if (head != NULL)
 	{
 		head = head->next;
 		executor(head, data, es);
 	}
 }
+
+//only for printing
+/* void	ft_print_nodes(t_node *head)
+{
+	t_node	*temp;
+	char	**temp_char;
+	int		i;
+	int		j, k;
+
+	while (head != NULL)
+	{
+		printf("new list element:\n");
+		if (((t_bin *)head->content) == NULL)
+			printf("next\n");
+		else if (((t_bin *)head->content)->command == NULL)
+			printf("command null\n");
+		else if (((t_bin *)head->content)->command->arguments == NULL)
+			printf("arguments null \n");
+		else
+		{
+			i = 0;
+			while (((t_bin *)head->content)->command->arguments[i] != NULL)
+			{
+				if (i == 0)
+					printf("Command: \n");
+				else if (i == 1)
+					printf("Arguments: \n");
+				printf("%s\n", ((t_bin *)head->content)->command->arguments[i++]);
+			}
+			if ((t_bin *)head->content != NULL &&
+				((t_bin *)head->content)->io != NULL &&
+				((t_bin *)head->content)->io->heredoc_node != NULL)
+			{
+				temp = ((t_bin *)head->content)->io->heredoc_node;
+				while (temp != NULL)
+				{
+					printf("Heredoc content :%s:\n", temp->content);
+					temp = temp->next;
+				}
+			}
+			if ((t_bin *)head->content != NULL &&
+				((t_bin *)head->content)->io != NULL &&
+				((t_bin *)head->content)->io->input != NULL)
+			{
+				j = 0;
+				temp_char = ((t_bin *)head->content)->io->input;
+				while (temp_char[j] != NULL)
+				{
+					printf("io input :%s:\n", temp_char[j]);
+					j++;
+				}
+			}
+			if ((t_bin *)head->content != NULL &&
+				((t_bin *)head->content)->io != NULL &&
+				((t_bin *)head->content)->io->output != NULL)
+			{
+				k = 0;
+				temp_char = ((t_bin *)head->content)->io->output;
+				while (temp_char[k] != NULL)
+				{
+					printf("io input :%s:\n", temp_char[k]);
+					k++;
+				}
+			}
+		}
+		head = head->next;
+	}
+} */

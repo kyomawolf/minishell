@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:10:47 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 03:49:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 04:16:09 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ static void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head)
 		dup2(exec_data->pipes[exec_data->cmd_count][0], STDIN_FILENO);
 		//added close
 		close(exec_data->pipes[exec_data->cmd_count][0]);
-	}// else read from stdin
-	//
+	}
+	// else read from stdin
 	//ORD if IO is true
 	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->output != NULL)
 	{

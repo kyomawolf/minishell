@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 21:07:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 03:46:39 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 04:15:07 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,11 @@ char	*path_check_access(char **all_p, char **args)
 		all_p[i] = ft_strjoin(temp, args[0]);
 		free (temp);
 		temp = NULL;
-		if (access(all_p[i], F_OK) && access(all_p[i], X_OK))
+		if (!access(all_p[i], F_OK) && !access(all_p[i], X_OK))
 		{
 			ret = ft_strdup(all_p[i]);
 			free_char_array(&all_p);
+			printf("path: %s\n", ret);
 			return (ret);
 		}
 		i++;
@@ -109,6 +110,5 @@ int	path_main(t_data *data, char **args)
 	if (to_app == NULL)
 		return (-1);
 	path_replace(args, to_app);
-	printf("path main %s\n", args[0]);
 	return (0);
 }
