@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 22:44:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:05:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,26 @@ typedef enum e_op
 	PIPE,
 	OPAR,
 	CPAR,
-	HERE_DOC,
+	HERE_DOC,	//				legacy 1
 	IRD,		//Input ReDirect no sw
-	ORD_APP,	//APP append
-	ORD_TRC,	//truncate
+	ORD_APP,	//APP append 	leg 3
+	ORD_TRC,	//truncate		leg 4
 	QUOTE,
 	DQUOTE,
 	WORD
 }	t_e_op;
+
+typedef enum e_builtin
+{
+	ECHO,
+	CD,
+	PWD,
+	EXPORT,
+	UNSET,
+	ENV,
+	EXIT,
+	NONE
+}	t_e_builtin;
 
 typedef struct s_node
 {
@@ -53,6 +65,7 @@ typedef struct s_io
 	int		quoted_status;
 	int		i_count;
 	char	**input;
+	char	*infile;
 	int		o_mode;
 	char	**output;
 }	t_io;
@@ -101,6 +114,14 @@ typedef struct s_expand
 	t_node	*list;
 	t_word	*word;
 }	t_expand;
+
+typedef struct s_exec
+{
+	int		num_cmds;
+	int		cmd_count;
+	int		**pipes;
+	int		here_doc;
+}	t_exec;
 
 typedef struct s_data
 {

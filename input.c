@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/11 01:19:00 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 22:00:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	input_attributes_clear(void)
 	//signal(1, input_interrupt);
 	//signal(3, input_interrupt);
 	tcgetattr(1, &loc);
-	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)
+	if ((loc.c_lflag & (0x1 << 6)) != ECHOCTL) // changed to != according to shackbei/eozben
 	{
 		loc.c_lflag += ECHOCTL;
 		tcsetattr(1, TCSANOW, &loc);

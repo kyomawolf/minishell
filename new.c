@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:42:10 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 23:14:15 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 01:00:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_data	*new_t_data(char **envp)
 	i = 1;
 	while (envp[i] != NULL)
 		ft_s_node_add_back(&head, ft_s_node_create(ft_strdup(envp[i++])));
+	ft_s_node_add_back(&head, ft_s_node_create(ft_strdup("?=0")));
 	ret->envp = head;
 	get_prompt(ret);
 	/* while (ret->envp != NULL)

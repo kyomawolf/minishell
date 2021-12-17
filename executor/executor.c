@@ -6,16 +6,16 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/16 15:30:57 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 02:07:01 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "struct.h"
+#include "minis.h"
+#include "libft.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "minis.h"
-#include "libft.h"
-#include "struct.h"
 
 void	*ft_t_node_create(void *content);
 void	*ft_t_node_get_last(void *head);
@@ -143,25 +143,66 @@ t_node	*create_pipeline(t_node *start, t_node *end)
 	return (pipeline);
 }
 
-void	executor(t_node *head, t_data *data)
+void	change_env_exit_status(t_data *data, int es)
+{
+	char	*status;
+
+	while (data->envp != NULL)
+	{
+		if (ft_strnstr(data->envp->content, "?=\0", 3))
+		{
+			free (data->envp->content);
+			status = ft_itoa(es);
+			data->envp->content = ft_strjoin("?=", status);
+			free (status);
+			status = NULL;
+			break ;
+		}
+		data->envp = data->envp->next;
+	}
+}
+
+void	executor(t_node *head, t_data *data, int es)
 {
 	t_node	*start;
 	t_node	*end;
 	t_node	*pipeline;
-	t_node	*temp;
 	int		i;
+	int		es;
+	//t_node	*temp;
 
 	start = head;
 	while (head != NULL && head->content != NULL)
 	{
-		ft_t_bin_variable_expansion(head, data);
+		if (ft_t_bin_variable_expansion(head, data))
+			return ;
 		head = head->next;
 	}
 	end = head;
 	pipeline = create_pipeline(start, end);
-	temp = pipeline;
-	while (pipeline != NULL)
+	//temp = pipeline;
+	/* while (pipeline != NULL)
 	{
+		//debug only. delete
+		i = 0;
+		while (((t_bin *)pipeline->content)->io != NULL && ((t_bin *)pipeline->content)->io->input != NULL && ((t_bin *)pipeline->content)->io->input[i] != NULL)
+		{
+			printf("Input redirection %s\n", ((t_bin *)pipeline->content)->io->input[i]);
+			i++;
+		}
+		i = 0;
+		while (((t_bin *)pipeline->content)->io != NULL && ((t_bin *)pipeline->content)->io->output != NULL && ((t_bin *)pipeline->content)->io->output[i] != NULL)
+		{
+			printf("output redirection %s\n", ((t_bin *)pipeline->content)->io->output[i]);
+			i++;
+		}
+		i = 0;
+		while (((t_bin *)pipeline->content)->io != NULL && ((t_bin *)pipeline->content)->io->heredoc_node != NULL)
+		{
+			printf("output redirection %s\n", ((t_bin *)pipeline->content)->io->heredoc_node->content);
+			((t_bin *)pipeline->content)->io->heredoc_node = ((t_bin *)pipeline->content)->io->heredoc_node->next;
+		}
+		//fin delete
 		i = 0;
 		while (((t_bin *)pipeline->content)->command->arguments[i] != NULL)
 		{
@@ -172,12 +213,16 @@ void	executor(t_node *head, t_data *data)
 			printf("%s\n", ((t_bin *)pipeline->content)->command->arguments[i++]);
 		}
 		pipeline = pipeline->next;
-	}
-	ft_free_pipeline(temp);
+	} */
+	if ((es != 0 && ((t_bin *)pipeline->content)->control_op == OR)
+		|| es == 0 && ((t_bin *)pipeline->content)->control_op == AND)
+		es = ft_execute(pipeline, data);
+	ft_free_pipeline(pipeline);
+	change_env_exit_status(data, es);
 	printf("finished pipeline\n");
 	if (head != NULL)
 	{
 		head = head->next;
-		executor(head, data);
+		executor(head, data, es);
 	}
 }

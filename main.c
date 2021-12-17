@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 13:08:52 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 00:22:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	main_loop(t_data *data)
 		data->tree = builder_main(data->list);
 		//printf("main head %p\n", head);
 		if (data->tree != NULL)
-			traverse_tree(data->tree, &head, data);
-		executor(head, data);
+			traverse_tree(data->tree, &head);
+		executor(head, data, 0);
 		while (head != NULL)
 		{
 			temp = head;

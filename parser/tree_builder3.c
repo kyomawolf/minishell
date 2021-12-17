@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:19:43 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/16 20:40:54 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,18 @@
 
 void	add_io_i(t_bin *tree, t_node *node)
 {
+	int	idx;
+
 	tree->io->i_count++;
 	if (tree->io->input == NULL)
 		tree->io->input = ft_calloc(2, sizeof(char *));
 	else
 		tree->io->input = ft_realloc_charpp(&tree->io->input, \
 		ft_char_arr_len(tree->io->input) + 2);
-	tree->io->input[ft_char_arr_len(tree->io->input)] = \
+	idx = ft_char_arr_len(tree->io->input);
+	tree->io->input[idx] = \
 	ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
+	tree->io->infile = tree->io->input[idx];
 }
 
 t_node	*add_io(t_bin *tree, t_node *node)
@@ -41,6 +45,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		tree->io->heredoc_node = ((t_token *)node->content)->heredoc;
 		((t_token *)node->content)->heredoc = NULL;
 		tree->io->quoted_status = ((t_token *)node->content)->quote_status;
+		tree->io->infile = NULL;
 		return ((t_node *)node->next);
 	}
 	else
