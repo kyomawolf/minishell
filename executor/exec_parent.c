@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parent.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 03:04:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 17:05:41 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,15 @@ void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 int	ft_open_pipes(t_exec *exec_data)
 {
 	int	i;
-	int	*pipe_x;
 
-	exec_data->pipes = (int **)malloc(sizeof(int *) * exec_data->num_cmds + 1);
+	exec_data->pipes = (int **)malloc(sizeof(int *) * (exec_data->num_cmds + 1));
 	if (exec_data->pipes == NULL)
 		return (1);
 	i = 0;
 	while (i < exec_data->num_cmds)
 	{
-		pipe_x = (int *)malloc(sizeof(int) * 2);
-		exec_data->pipes[i] = pipe_x;
-		if (pipe_x == NULL)
+		exec_data->pipes[i] = malloc(sizeof(int) * 2);
+		if (exec_data->pipes[i] == NULL)
 			return (1);
 		i++;
 	}

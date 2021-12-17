@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 16:44:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 16:53:45 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 			ft_char_arr_len(tree->io->output) + 2);
 		tree->io->output[ft_char_arr_len(tree->io->output)] = \
 		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
+		printf("%s\n", tree->io->output[0]);
 	}
 	return (((t_node *)node->next)->next);
 }

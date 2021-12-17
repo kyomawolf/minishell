@@ -34,7 +34,7 @@ debug : fclean lib/libft.a $(OBJ) $(SET)
 	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
 $(OBJ_DIR)%.o: %.c
-	@gcc $(FLAGS) $(INC) -O0 -c $< -o $@
+	@gcc $(FLAGS) $(INC) -O0 -g -c $< -o $@
 
 re : fclean all
 
