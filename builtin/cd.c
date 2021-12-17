@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 23:11:37 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/17 23:55:50 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,15 @@ void	cd_change_pwd(t_data *data)
 	}
 }
 
-int	cd_main(char **argv, t_data *data)
+int	cd_main(char **argv, t_data *data)//does not work with relative path, needs rework
 {
 	if (!ft_strncmp(argv[1], "-\0", 2))
 	{
 		chdir(mini_getenv(data, "OLDPWD"));
-		cd_change_pwd(data);
 	}
 	else if (argv[1] == NULL)
 	{
 		chdir(mini_getenv(data, "HOME"));
-		cd_change_pwd(data);
 	}
 	else if (chdir(argv[1]) == -1)
 	{
@@ -55,6 +53,7 @@ int	cd_main(char **argv, t_data *data)
 		write(1, "\n", 1);
 		return (42);
 	}
+	cd_change_pwd(data);
 	data->currdir = mini_getenv(data, "PWD");
 	get_prompt(data);
 	return (0);

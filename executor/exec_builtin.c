@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 15:42:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 23:59:18 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,11 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	(void)cmd_arr;
 	if (builtin == ECHO)
 	{
-		//exit_status = ft_echo();
+		exit_status = echo_main(cmd_arr);
 	}
 	else if (builtin == CD)
 	{
-		//exit_status = ft_cd();
+		exit_status = cd_main(cmd_arr, data);
 	}
 	else if (builtin == PWD)
 	{
@@ -85,15 +85,15 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	}
 	else if (builtin == EXPORT)
 	{
-		//exit_status = ft_export();
+		exit_status = export_main(cmd_arr, data);
 	}
 	else if (builtin == UNSET)
 	{
-		//exit_status = ft_unset();
+		exit_status = unset_main(cmd_arr, data);
 	}
 	else if (builtin == ENV)
 	{
-		//exit_status = ft_env();
+		exit_status = env_main(data);
 	}
 	else if (builtin == EXIT)
 	{

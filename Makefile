@@ -17,7 +17,7 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder1.c \
 	  parser/tree_builder3.c \
 	  executor/exec_builtin.c executor/exec_child.c executor/exec_io.c \
 	  executor/exec_main.c executor/exec_parent.c executor/exec_path.c \
-	  builtin/cd.c builtin/export.c builtin/echo.c builtin/unset.c 
+	  builtin/cd.c builtin/export.c builtin/echo.c builtin/unset.c builtin/env.c 
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 

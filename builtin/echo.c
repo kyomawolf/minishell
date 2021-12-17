@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:47:07 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 23:13:18 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/17 23:44:21 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	echo_main(char **argv)
 	i = 1;
 	if (ft_char_arr_len(argv) > 1 && ft_strlen(argv[1]) == 2)
 	{
-		if (argv[1][0] == '-' && argv[1][1] == 'n' && argv[0][2] == '\0')
+		if (argv[i][0] == '-' && argv[i++][1] == 'n' && argv[1][2] == '\0')
 			nl = 0;
 	}
 	else
@@ -36,7 +36,7 @@ int	echo_main(char **argv)
 	{
 		ft_putstr_fd(argv[i], 1);
 		i++;
-		if (i <= ft_char_arr_len(argv))
+		if (i <= ft_char_arr_len(argv) - 1)
 			ft_putchar_fd(' ', 1);
 	}
 	if (nl)
