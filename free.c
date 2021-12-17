@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:24:39 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/17 21:02:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	free_t_node_content_list(t_node *head)
 		if (head->content != NULL)
 		{
 			free(head->content);
+			head->content = NULL;
 		}
 		temp = head;
 		head = head->next;
@@ -84,6 +85,7 @@ void	free_t_node_list(t_node *head)
 		if (token != NULL)
 		{
 			free_token(token);
+			token = NULL;
 		}
 		temp = head;
 		head = head->next;
@@ -95,11 +97,21 @@ void	free_t_node_list(t_node *head)
 void	free_main(t_data *data)
 {
 	if (data->input != NULL)
+	{
 		free(data->input);
+		data->input = NULL;
+	}
 	if (data->prompt != NULL)
+	{
 		free(data->prompt);
+		data->prompt = NULL;
+	}
 	if (data->input != NULL)
+	{
 		free(data->currdir);
+		data->currdir = NULL;
+	}
 	free_t_node_content_list(data->envp);
 	free(data);
+	data = NULL;
 }

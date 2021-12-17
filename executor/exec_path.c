@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 21:07:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 16:25:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 19:23:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,38 +65,6 @@ char	*path_check_access(char **all_p, char **args)
 	return (NULL);
 }
 
-int	path_replace(char **args, char *to_app)
-{
-	/* char	*temp;
-	int		i;
-	int		ii; */
-
-	free (args[0]);
-	args[0] = to_app;
-	return (0);
-	/* temp = ft_calloc(ft_strlen(args[0] + ft_strlen(to_app)) + 1, 1);
-	if (temp == NULL)
-		return (1);
-	i = 0;
-	ii = 0;
-	while (to_app[i] != '\0' || args[0][ii] != '\0')
-	{
-		if (to_app[i] != '\0')
-		{
-			temp[i] = to_app[i];
-			i++;
-		}
-		else if (args[0][ii] != '\0')
-		{
-			to_app[i + ii] = args[0][ii];
-			ii++;
-		}
-	}
-	free(args[0]);
-	args[0] = temp;
-	return (0); */
-}
-
 int	path_main(t_data *data, char **args)
 {
 	char	**all_p;
@@ -108,6 +76,7 @@ int	path_main(t_data *data, char **args)
 	to_app = path_check_access(all_p, args);
 	if (to_app == NULL)
 		return (-1);
-	path_replace(args, to_app);
+	free (args[0]);
+	args[0] = to_app;
 	return (0);
 }

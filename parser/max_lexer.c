@@ -530,6 +530,7 @@ int	ft_append(char *input, int *i, t_word *word, t_node **head)
 	return (0);
 }
 
+//
 void	ft_get_token_list_handle_last_word(t_word *word, t_node **head, int sw)
 {
 	if (word->write_head != 0)
@@ -687,11 +688,11 @@ t_node	*ft_lexer(char *input)
 	{
 		if (ft_lexer_heredoc(head))
 		{
-			printf("syntax error near unexpected token\n");
+			printf("syntax error near unexpected token: \\n\n");
 			ft_t_node_free(head);
 			return (NULL);
 		}
-		//ft_s_node_print_content(head);
+	//ft_s_node_print_content(head);
 	}
 	return (head);
 }

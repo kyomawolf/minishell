@@ -1,7 +1,9 @@
 
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Werror -Wextra -fsanitize=address -fno-omit-frame-pointer -static-libsan
+FLAGS = -Wall -Werror -Wextra
+
+#-fsanitize=address -fno-omit-frame-pointer -static-libsan
 
 SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
@@ -24,7 +26,7 @@ OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(patsubst %.c,%.o,$(SRC)))
 
 $(NAME) : lib/libft.a $(OBJ)
-	@gcc $(FLAGS) -O0 -g $(INC) $^ $(LIB) -o $@
+	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
 
 	@echo "compiled!"
 
@@ -34,7 +36,7 @@ debug : fclean lib/libft.a $(OBJ) $(SET)
 	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
 $(OBJ_DIR)%.o: %.c
-	@gcc $(FLAGS) $(INC) -O0 -g -c $< -o $@
+	@gcc $(FLAGS) $(INC) -O0 -c $< -o $@
 
 re : fclean all
 
@@ -57,7 +59,7 @@ clean :
 
 fclean :
 	make fclean -silent -C lib/libft/
-	rm -f *.out *.o *.~ $(NAME) ./parser/*.o ./executor/*.o
+	rm -f $(OBJ)
 	rm -f ./lib/*.a ./include/libft.h
 	@echo "fully cleaned!"
 

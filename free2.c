@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:02:27 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 01:04:05 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/17 20:17:19 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	free_io(t_io *io)
 	if (io->output != NULL)
 		free_char_array(&(io->output));
 	free(io);
+	io = NULL;
 }
 
 void	free_simplecommand(t_simple_com *command)
@@ -35,6 +36,7 @@ void	free_simplecommand(t_simple_com *command)
 	if (command->arguments != NULL)
 		free_char_array(&(command->arguments));
 	free(command);
+	command = NULL;
 }
 
 void	free_tree(t_bin *tree)

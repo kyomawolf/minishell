@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 16:27:26 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 20:44:00 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_bin	*b_tree_init(t_node **node, int depth)
 	else
 		root->control_op = add_last_operator(*node);
 	root->child_amount = count_children(*node);
-	//printf("children: %i\n", root->child_amount);
 	root->child = ft_calloc(root->child_amount + 1, sizeof(t_bin *));
 	while (1)
 	{
