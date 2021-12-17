@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 03:02:58 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:12:11 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,8 @@ void				ft_exec_here_doc(t_exec *exec_data, t_node *head);
 void				builtin_check(char **cmd_arr, t_data *data);
 int					run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data);
 void				ft_child_process(t_node *head, t_data *data, t_exec *exec_data);
+int					path_main(t_data *data, char **args);
+
 
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);

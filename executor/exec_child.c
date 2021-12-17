@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:10:47 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 02:58:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 03:49:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,10 @@ void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 {
 	char	**cmd_arr;
 
-	ft_adjust_pipes(exec_data, head);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
+	ft_adjust_pipes(exec_data, head);
 	builtin_check(cmd_arr, data);
-	//path to executable
+	path_main(data, cmd_arr);
 	execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
 	//free and exit in case of failure
-
 }
