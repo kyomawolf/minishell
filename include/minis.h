@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 03:12:11 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 23:06:36 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,12 @@ int					run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data);
 void				ft_child_process(t_node *head, t_data *data, t_exec *exec_data);
 int					path_main(t_data *data, char **args);
 
+//builtins
 
+int					echo_main(char **argv);
+int					export_main(char **argv, t_data *data);
+int					cd_main(char **argv, t_data *data);
+int					unset_main(char **argv, t_data *data);
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);
 char				**wild_get_seperator(char *string);
