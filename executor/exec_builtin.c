@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 03:14:10 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 10:55:23 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ t_e_builtin	get_builtin_code(char *cmd_name)
 		builtin = UNSET;
 	else if (!ft_strncmp(cmd_name, "env\0", 4))
 		builtin = ENV;
-	/* else if (!ft_strncmp(cmd_name, "exit\0", 5))
-		builtin = EXIT; */
+	else if (!ft_strncmp(cmd_name, "exit\0", 5))
+		builtin = EXIT;
 	else
 		builtin = NONE;
 	return (builtin);
@@ -125,7 +125,7 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	}
 	else if (builtin == EXIT)
 	{
-		//exit_status = ft_exit();
+		exit_status = exit_main(cmd_arr, data);
 	}
 	return (exit_status);
 }

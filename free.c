@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 21:02:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 11:24:31 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	free_main(t_data *data)
 		free(data->prompt);
 		data->prompt = NULL;
 	}
-	if (data->input != NULL)
+	if (data->currdir != NULL)
 	{
 		free(data->currdir);
 		data->currdir = NULL;

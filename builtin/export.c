@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 17:21:48 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 00:11:37 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 10:43:04 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	export_checkoverwrite(t_node *envp, char *new)
 	{
 		if (!ft_strncmp((char *)envp->content, new, len))
 		{
-			free(envp->content);
+			if (envp->content != NULL)
+				free(envp->content);
 			envp->content = new;
 			return (42);
 		}

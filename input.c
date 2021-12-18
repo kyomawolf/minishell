@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 16:34:02 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 13:10:51 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
+#include "libft.h"
 #include "struct.h"
 #include <stdio.h>
 #include <readline/readline.h>
@@ -23,6 +24,9 @@
 
 void	input_interrupt(int sig)
 {
+	struct termios	loc;
+
+	tcgetattr(1, &loc);
 	if (sig == SIGSEGV)
 	{
 		printf("SEGMENTATION FAULT\n");
@@ -61,7 +65,7 @@ void	input_attributes_add(void)
 	signal(5, input_interrupt);
 	signal(6, input_interrupt);
 	signal(7, input_interrupt);
-	//signal(11, input_interrupt);
+	signal(11, input_interrupt);
 	signal(13, input_interrupt);
 	tcgetattr(1, &loc);
 	if ((loc.c_lflag & (0x1 << 6)) == ECHOCTL)

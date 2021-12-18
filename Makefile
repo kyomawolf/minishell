@@ -17,7 +17,8 @@ SRC = main.c input.c new.c parser/b_tree.c parser/tree_builder1.c \
 	  parser/tree_builder3.c \
 	  executor/exec_builtin.c executor/exec_child.c executor/exec_io.c \
 	  executor/exec_main.c executor/exec_parent.c executor/exec_path.c \
-	  builtin/cd.c builtin/export.c builtin/echo.c builtin/unset.c builtin/env.c 
+	  builtin/cd.c builtin/export.c builtin/echo.c builtin/unset.c builtin/env.c \
+	  builtin/exit.c
 
 #./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 
@@ -27,7 +28,7 @@ OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(patsubst %.c,%.o,$(SRC)))
 
 $(NAME) : lib/libft.a $(OBJ)
-	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
+	@gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
 	@echo "compiled!"
 
@@ -37,7 +38,7 @@ debug : fclean lib/libft.a $(OBJ) $(SET)
 	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
 $(OBJ_DIR)%.o: %.c
-	@gcc $(FLAGS) $(INC) -O0 -c $< -o $@
+	@gcc $(FLAGS) $(INC) -g -O0 -c $< -o $@
 
 re : fclean all
 

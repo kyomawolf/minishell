@@ -6,13 +6,14 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 16:45:22 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 16:52:21 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 11:51:28 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "structs.h"
 #include "libft.h"
+#include <stdio.h>
 
 //void	*ft_s_node_insert(t_node **head, t_node *new, int index, t_node **point)
 //{
@@ -52,6 +53,7 @@ void	*ft_s_node_create(void *content)
 	struct s_node	*node;
 
 	node = (struct s_node *)malloc(sizeof(struct s_node));
+	printf("NODE_ALLOC2-P:\t%p-%p\n", node, node + sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->next = NULL;

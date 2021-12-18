@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 00:08:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 15:22:17 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ t_node	*create_pipeline(t_node *start, t_node *end)
 	t_node	*pipeline;
 
 	pipeline = NULL;
+	printf("%p\n", start);
 	while (start != end)
 	{
-		ft_t_node_add_back(&pipeline,ft_t_node_create(start->content));
+		ft_t_node_add_back(&pipeline, ft_t_node_create(start->content));
 		start = start->next;
 	}
 	return (pipeline);

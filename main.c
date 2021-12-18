@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 22:53:27 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 15:25:45 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <signal.h>
 #include "minis.h"
 #include "libft.h"
 #include "struct.h"
@@ -56,7 +57,7 @@ void	main_loop(t_data *data)
 		input_attributes_add();
 		input_readline(data);
 		input_attributes_clear();
-		if (data->input == NULL || !ft_strncmp(data->input, "exit\0", 5))
+		if (data->input == NULL)
 		{
 			free_main(data);
 			printf("\n\nWARNING: LEAVING MINISHELL\n");
@@ -65,7 +66,6 @@ void	main_loop(t_data *data)
 		}
 		if (data->input[0] == '\0')
 			continue ;
-		//filter no newline from history
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
 			continue ;
@@ -76,6 +76,7 @@ void	main_loop(t_data *data)
 		while (head != NULL)
 		{
 			temp = head;
+			if (head->content != NULL)
 			head = head->next;
 			free(temp);
 			temp = NULL;

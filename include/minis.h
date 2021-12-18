@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 03:14:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 10:53:41 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int					export_main(char **argv, t_data *data);
 int					cd_main(char **argv, t_data *data);
 int					unset_main(char **argv, t_data *data);
 int					env_main(t_data *data);
+int					exit_main(char **argv, t_data *data);
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);
 char				**wild_get_seperator(char *string);
