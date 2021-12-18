@@ -28,7 +28,7 @@ OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(patsubst %.c,%.o,$(SRC)))
 
 $(NAME) : lib/libft.a $(OBJ)
-	@gcc $(FLAGS) -O0 $(INC) $^ $(LIB) -o $@
+	@gcc $(FLAGS) -O3 $(INC) $^ $(LIB) -o $@
 
 	@echo "compiled!"
 
@@ -38,7 +38,7 @@ debug : fclean lib/libft.a $(OBJ) $(SET)
 	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
 
 $(OBJ_DIR)%.o: %.c
-	@gcc $(FLAGS) $(INC) -O0 -c $< -o $@
+	@gcc $(FLAGS) $(INC) -O3 -c $< -o $@
 
 re : fclean all
 
