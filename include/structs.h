@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 02:17:38 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 00:19:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,14 @@ typedef enum e_op
 
 typedef enum e_builtin
 {
+	NONE,
 	ECHO,
 	CD,
 	PWD,
 	EXPORT,
 	UNSET,
 	ENV,
-	EXIT,
-	NONE
+	EXIT
 }	t_e_builtin;
 
 typedef struct s_node

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:10:47 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 20:02:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 03:05:30 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head)
+void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head)
 {
 	int	fd;
 	int	i;
@@ -90,7 +90,7 @@ void	ft_close_unused_pipes(t_exec *exec_data)
 	int	i;
 
 	i = 1;
-	while (exec_data->pipes[i])
+	while (exec_data->pipes != NULL && exec_data->pipes[i])
 	{
 		if (i != exec_data->cmd_count)
 			close(exec_data->pipes[i][0]);
@@ -100,9 +100,21 @@ void	ft_close_unused_pipes(t_exec *exec_data)
 	}
 }
 
-static void	ft_adjust_pipes(t_exec *exec_data, t_node *head)
+void	ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data)
+{
+	t_bin	*cmd;
+
+	cmd = (t_bin *)head->content;
+	if (cmd->io != NULL && cmd->io->infile == NULL && cmd->io->heredoc_node != NULL)
+		exec_data->here_doc = 1;
+	else
+		exec_data->here_doc = 0;
+}
+
+void	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 {
 	ft_close_unused_pipes(exec_data);
+	ft_t_exec_heredoc_check(head, exec_data);
 	if (exec_data->here_doc == 1)
 		ft_exec_here_doc(exec_data, head);
 	else
@@ -116,11 +128,10 @@ void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	ft_adjust_pipes(exec_data, head);
-	builtin_check(cmd_arr, data);
+	builtin_check_child(cmd_arr, data);
 	path_main(data, cmd_arr);
 	ret = execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
 	perror(cmd_arr[0]);
-	strerror(errno);
+	free_main(data);
 	exit(ret);
-	//free and exit in case of failure
 }

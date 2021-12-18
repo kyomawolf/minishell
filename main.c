@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 20:25:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/17 22:53:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,6 @@ int	main(int argc, char **argv, char **envp)
 	data = NULL;
 	data = new_t_data(envp);
 	(void) argv;
-	/* if (argc == 2)
-	{
-		data->list = ft_lexer(argv[1]);
-		data->tree = builder_main(data->list);
-		return (0);
-	} */
 	if (data == NULL)
 		return (0);
 	main_print_entry();

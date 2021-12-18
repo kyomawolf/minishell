@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 15:42:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 03:02:13 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	ft_tolower2(unsigned int i, char c)
 	return(ft_tolower(c));
 }
 
-void	builtin_check(char **cmd_arr, t_data *data)
+void	builtin_check_child(char **cmd_arr, t_data *data)
 {
 	char		*cmd_name;
 	int			exit_status;
@@ -62,6 +62,34 @@ void	builtin_check(char **cmd_arr, t_data *data)
 		//free everything ?
 		exit(exit_status);
 	}
+}
+
+t_e_builtin	builtin_check(t_node *head)
+{
+	char		**cmd_arr;
+	char		*cmd_name;
+	int			ret;
+	t_e_builtin	builtin_code;
+
+	cmd_arr = ((t_bin *)head->content)->command->arguments;
+	ret = 0;
+	cmd_name = ft_strmapi(cmd_arr[0], ft_tolower2);
+	builtin_code = get_builtin_code(cmd_name);
+	free(cmd_arr[0]);
+	cmd_arr[0] = cmd_name;
+	return (builtin_code);
+}
+
+int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, t_exec *exec_data)
+{
+	char	**cmd_arr;
+	int		es;
+
+	ft_t_exec_heredoc_check(head, exec_data);
+	cmd_arr = ((t_bin *)head->content)->command->arguments;
+	ft_adjust_pipes(exec_data, head);
+	es = run_builtin(builtin, cmd_arr, data);
+	return (es);
 }
 
 int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)

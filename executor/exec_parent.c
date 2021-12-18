@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parent.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 17:05:41 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 03:08:05 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,31 +27,68 @@ void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 	exec_data->here_doc = 0;
 }
 
-int	ft_open_pipes(t_exec *exec_data)
+void	ft_exec_data_free_pipes(t_exec *exec_data)
 {
 	int	i;
 
-	exec_data->pipes = (int **)malloc(sizeof(int *) * (exec_data->num_cmds + 1));
-	if (exec_data->pipes == NULL)
-		return (1);
+	i = 0;
+	while (exec_data->pipes != NULL && exec_data->pipes[i] != NULL)
+	{
+		free (exec_data->pipes[i]);
+		exec_data->pipes[i] = NULL;
+		i++;
+	}
+	free (exec_data->pipes);
+	exec_data->pipes = NULL;
+}
+
+int	ft_create_pipe_fd(t_exec *exec_data)
+{
+	int	i;
+
 	i = 0;
 	while (i < exec_data->num_cmds)
 	{
 		exec_data->pipes[i] = malloc(sizeof(int) * 2);
 		if (exec_data->pipes[i] == NULL)
+		{
+			ft_exec_data_free_pipes(exec_data);
 			return (1);
+		}
 		i++;
 	}
 	exec_data->pipes[i] = NULL;
+	return (0);
+}
+
+void	ft_init_pipe_fd(t_exec *exec_data)
+{
+	int	i;
+
 	i = 0;
 	while (exec_data->pipes[i])
-	{
-		pipe(exec_data->pipes[i]);
-		i++;
-	}
+		pipe(exec_data->pipes[i++]);
 	close(exec_data->pipes[0][0]);
 	close(exec_data->pipes[0][1]);
-	return (0);
+}
+
+int	ft_open_pipes(t_exec *exec_data, pid_t *pid)
+{
+	int	ret;
+
+	ret = 1;
+	exec_data->pipes = malloc(sizeof(int *) * (exec_data->num_cmds + 1));
+	if (exec_data->pipes != NULL && !ft_create_pipe_fd(exec_data))
+	{
+		ret = 0;
+		ft_init_pipe_fd(exec_data);
+	}
+	else
+	{
+		free(pid);
+		pid = NULL;
+	}
+	return (ret);
 }
 
 void	ft_parent_close_used_pipes(t_exec *exec_data)
@@ -76,15 +113,6 @@ int	ft_parent_waitpid(t_exec *exec_data, pid_t *pid)
 		es = WEXITSTATUS(status);
 	free(pid);
 	pid = NULL;
-	i = 0;
-	while (exec_data->pipes != NULL && exec_data->pipes[i] != NULL)
-	{
-		free (exec_data->pipes[i]);
-		exec_data->pipes[i] = NULL;
-		i++;
-	}
-	free (exec_data->pipes);
-	exec_data->pipes = NULL;
+	ft_exec_data_free_pipes(exec_data);
 	return (es);
 }
-
