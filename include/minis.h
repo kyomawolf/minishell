@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 03:09:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 03:14:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,13 @@ void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head);
 void	ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
 
 
+//builtins
 
+int					echo_main(char **argv);
+int					export_main(char **argv, t_data *data);
+int					cd_main(char **argv, t_data *data);
+int					unset_main(char **argv, t_data *data);
+int					env_main(t_data *data);
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);
 char				**wild_get_seperator(char *string);

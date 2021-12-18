@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 03:02:13 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 03:14:10 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,11 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	(void)cmd_arr;
 	if (builtin == ECHO)
 	{
-		//exit_status = ft_echo();
+		exit_status = echo_main(cmd_arr);
 	}
 	else if (builtin == CD)
 	{
-		//exit_status = ft_cd();
+		exit_status = cd_main(cmd_arr, data);
 	}
 	else if (builtin == PWD)
 	{
@@ -113,15 +113,15 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	}
 	else if (builtin == EXPORT)
 	{
-		//exit_status = ft_export();
+		exit_status = export_main(cmd_arr, data);
 	}
 	else if (builtin == UNSET)
 	{
-		//exit_status = ft_unset();
+		exit_status = unset_main(cmd_arr, data);
 	}
 	else if (builtin == ENV)
 	{
-		//exit_status = ft_env();
+		exit_status = env_main(data);
 	}
 	else if (builtin == EXIT)
 	{
