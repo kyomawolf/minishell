@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 16:50:01 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 17:00:40 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	}
 	else if (builtin == PWD)
 	{
-		//exit_status = ft_pwd();
+		exit_status = pwd_main(data);
 	}
 	else if (builtin == EXPORT)
 	{

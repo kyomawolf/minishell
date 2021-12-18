@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 10:48:39 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 16:55:53 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "libft.h"
 #include "struct.h"
 #include <unistd.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 void	cd_change_pwd(t_data *data)
@@ -44,13 +45,12 @@ int	cd_main(char **argv, t_data *data)//does not work with relative path, needs 
 	}
 	else if (!ft_strncmp(argv[1], "-\0", 2))
 	{
+		printf("%s\n", mini_getenv(data, "OLDPWD"));
 		chdir(mini_getenv(data, "OLDPWD"));
 	}
 	else if (chdir(argv[1]) == -1)
 	{
-		ft_putstr_fd("No such file or directory: ", 1);
-		ft_putstr_fd(argv[1], 1);
-		write(1, "\n", 1);
+		printf("No such file or directory: %s\n", argv[1]);
 		return (42);
 	}
 	cd_change_pwd(data);
