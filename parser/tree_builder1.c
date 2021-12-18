@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 11:41:28 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 16:12:07 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,9 @@ t_bin	*builder_main(t_node *head)
 	t_bin	*tree;
 	t_node	*cpy;
 
-	if (check_input(head))
+	if (check_input(head) > 0)
 	{
-		write(1, "\nERROR\n", 7);
+		free_t_node_list(head);
 		return (NULL);
 	}
 	cpy = head;

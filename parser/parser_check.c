@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 16:24:31 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 16:11:25 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,17 +116,14 @@ int	check_input(t_node *head)
 	int	err;
 
 	err = 0;
-	err += check_pars(head);
-/* 	if (!err)
-		write(1, "passed parenthesis\n", 19);
-	err += check_io(head);
-	if (!err)
-		write(1, "passed redirections\n", 20);
-	err += check_op(head);
-	if (!err)
-		write(1, "passed operators\n", 17);
-	err += check_wordpar(head);
-	if (!err)
-		write(1, "OK\n", 3); */
-	return (err);
+	if (check_pars(head))
+		return (printf("syntax error near unexpected token parenthesis\n"));
+	if (check_io(head))
+		return (printf("syntax error near unexpected token input/output \
+		redirection\n"));
+	if (check_op(head))
+		return (printf("syntax error near unexpected token operator\n"));
+	if (check_wordpar(head))
+		return (printf("syntax error near unexpected token parenthesis\n"));
+	return (0);
 }

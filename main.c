@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 15:25:45 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 16:07:52 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,13 @@ void	main_loop(t_data *data)
 			continue ;
 		data->tree = builder_main(data->list);
 		if (data->tree != NULL)
+		{
 			traverse_tree_rec(data->tree, &head);
-		executor(head, data, 0);
+			executor(head, data, 0);
+		}
 		while (head != NULL)
 		{
 			temp = head;
-			if (head->content != NULL)
 			head = head->next;
 			free(temp);
 			temp = NULL;
@@ -85,6 +86,7 @@ void	main_loop(t_data *data)
 		//	execution_main(data);
 		//memory_loop_main(data);
 		free_tree(data->tree);
+		data->tree = NULL;
 		get_prompt(data);
 	}
 }
