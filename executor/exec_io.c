@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 03:01:39 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 15:54:11 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,18 @@
 
 void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 {
-	int		pipe_here_doc[2];
+	int		pipe_fd[2];
 	int		i;
 	t_node	*here_doc;
 	t_node	*temp;
 	int		fd;
 
 	here_doc = ((t_bin *)head->content)->io->heredoc_node;
-	pipe(pipe_here_doc);
+	pipe(pipe_fd);
 	while (here_doc != NULL)
 	{
-		write(pipe_here_doc[1], here_doc->content, ft_strlen(here_doc->content));
-		write(pipe_here_doc[1], "\n", 1);
+		write(pipe_fd[1], here_doc->content, ft_strlen(here_doc->content));
+		write(pipe_fd[1], "\n", 1);
 		temp = here_doc;
 		here_doc = here_doc->next;
 		free(temp->content);
@@ -42,9 +42,9 @@ void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 		free(temp);
 		temp = NULL;
 	}
-	close(pipe_here_doc[1]);
-	dup2(pipe_here_doc[0], STDIN_FILENO);
-	close(pipe_here_doc[0]);
+	close(pipe_fd[1]);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close(pipe_fd[0]);
 	//if ORD given: create files and set ORD to last file
 	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->output != NULL)
 	{

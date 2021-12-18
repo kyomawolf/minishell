@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 03:14:10 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 15:43:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 t_e_builtin	get_builtin_code(char *cmd_name)
 {
@@ -71,6 +72,8 @@ t_e_builtin	builtin_check(t_node *head)
 	int			ret;
 	t_e_builtin	builtin_code;
 
+	if (((t_bin *)head->content)->command->arguments == NULL)
+		return (NONE);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	ret = 0;
 	cmd_name = ft_strmapi(cmd_arr[0], ft_tolower2);
@@ -97,8 +100,6 @@ int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	int	exit_status;
 
 	exit_status = 0;
-	(void)data;
-	(void)cmd_arr;
 	if (builtin == ECHO)
 	{
 		exit_status = echo_main(cmd_arr);

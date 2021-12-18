@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:31:46 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/10 16:49:39 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 16:21:42 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	print_binary_tree(t_bin *prin, int dep)
 			else
 			{
 				print_chars(dep, '\t');
-				if (prin->child[i]->command == NULL)
+				if (prin->child[i]->command->arguments == NULL)
 					printf("NULL\n");
 				else
 					print_command(prin->child[i]->command);

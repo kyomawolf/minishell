@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/17 17:19:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 15:39:03 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -552,13 +552,13 @@ int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 		return (0);
 	else
 	{
-		ft_str_array_var_expansion(&(tree->command->arguments), data);
+		if (tree->command->arguments != NULL)
+			ft_str_array_var_expansion(&(tree->command->arguments), data);
 		if (tree->io != NULL)
 		{
 			ft_t_io_heredoc_var_expansion(tree->io, data);
 			ft_str_array_var_expansion(&(tree->io->input), data);
 			ft_str_array_var_expansion(&(tree->io->output), data);
-
 		}
 	}
 	return (0);
