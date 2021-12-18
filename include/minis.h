@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:58:33 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 17:20:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	ft_adjust_pipes(t_exec *exec_data, t_node *head);
 void	ft_close_unused_pipes(t_exec *exec_data);
 void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head);
 void	ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
+void	*ft_s_node_get_last(void *head);
 
 
 //builtins

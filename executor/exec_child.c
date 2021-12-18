@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:10:47 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 15:40:11 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/18 18:30:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ void	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 {
 	char	**cmd_arr;
-	int		ret;
 
 	ft_adjust_pipes(exec_data, head);
 	if (((t_bin *)head->content)->command->arguments == NULL)
@@ -132,8 +131,10 @@ void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	builtin_check_child(cmd_arr, data);
 	path_main(data, cmd_arr);
-	ret = execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
-	perror(cmd_arr[0]);
+	execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd_arr[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 	free_main(data);
-	exit(ret);
+	exit(127);
 }
