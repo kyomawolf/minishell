@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:12:07 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 16:50:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	count_children(t_node *node)
 			break ;
 		if (token < OPAR)
 			sw = 1;
-		if (token == OPAR || (token == WORD && sw == 1))
+		if (token == OPAR || ((token == WORD || token == HERE_DOC) && sw == 1))
 		{
 			if (token == OPAR)
 				node = jump_pars(node);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 15:50:44 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 16:50:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	traverse_tree_rec(t_bin *tree, t_node **head)
 
 	if (tree->child == NULL)
 	{
-		if (tree->command != NULL && tree->command->arguments != NULL)
+		if (tree->io != NULL \
+			|| (tree->command != NULL && tree->command->arguments != NULL))
 		{
 			if (*head != NULL && tree->control_op != PIPE)
 				ft_t_node_add_back(head, ft_t_node_create(NULL));
@@ -90,23 +91,6 @@ void	change_env_exit_status(t_data *data, int es)
 		temp = temp->next;
 	}
 }
-
-/* void	ft_print_tree_io(t_bin *tree)
-{
-	int	i;
-
-	if (tree == NULL || tree->io == NULL || tree->io->output == NULL)
-	{
-		printf("empty\n");
-		return ;
-	}
-	i = 0;
-	while (tree->io->output[i])
-	{
-		printf("output[%d] :%s:\n", i, tree->io->output[i]);
-		i++;
-	}
-} */
 
 void	executor(t_node *head, t_data *data, int es)
 {
