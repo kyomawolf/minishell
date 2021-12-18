@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 22:45:31 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 23:15:49 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 03:35:01 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "structs.h"
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 int	unset_main(char **argv, t_data *data)
 {
@@ -26,7 +27,7 @@ int	unset_main(char **argv, t_data *data)
 	while (argv[++i] != NULL)
 	{
 		envp_cp = data->envp;
-		len = ft_strchr(argv[i], '=') - argv[i] + 1;
+		len = ft_strlen(argv[i]);
 		while (envp_cp != NULL && len > 0)
 		{
 			if (!ft_strncmp((char *)envp_cp->content, argv[i], len))
