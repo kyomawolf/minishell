@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:07:52 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 17:04:57 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	main_print_entry(void)
 	}     {  )\n   |`-.._____..-'|\n   |             ;--.\n   |           \
  (__  \\\n   |             | )  )\n   |             |/  /\n   |        \
      /  /                    \n   |            (  /\n   \\          \
- 	 y'\n    `-.._____..-'		 -Minishell v.0.01- \n");
+ 	 y'\n    `-.._____..-'		 -Minishell v.1.05- \n");
 }
 
 int	main(int argc, char **argv, char **envp)
