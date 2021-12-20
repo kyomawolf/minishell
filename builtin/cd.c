@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:55:53 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/20 14:57:36 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,22 +37,34 @@ void	cd_change_pwd(t_data *data)
 	}
 }
 
-int	cd_main(char **argv, t_data *data)//does not work with relative path, needs rework
+int	cd_execute(char	*path)
 {
+	if (access(path, X_OK))
+	{
+		printf("cd: permission denied.\n");
+		return (-2);
+	}
+	return (chdir(path));
+}
+
+int	cd_main(char **argv, t_data *data)
+{
+	int	err;
+
+	err = 0;
 	if (argv[1] == NULL)
-	{
-		chdir(mini_getenv(data, "HOME"));
-	}
+		err = cd_execute(mini_getenv(data, "HOME"));
 	else if (!ft_strncmp(argv[1], "-\0", 2))
+		err = cd_execute(mini_getenv(data, "OLDPWD"));
+	else
+		err = cd_execute(argv[1]);
+	if (err == -1)
 	{
-		printf("%s\n", mini_getenv(data, "OLDPWD"));
-		chdir(mini_getenv(data, "OLDPWD"));
+		printf("cd: no such file or directory: %s\n", argv[1]);
+		return (1);
 	}
-	else if (chdir(argv[1]) == -1)
-	{
-		printf("No such file or directory: %s\n", argv[1]);
-		return (42);
-	}
+	else if (err == -2)
+		return (1);
 	cd_change_pwd(data);
 	data->currdir = ft_strdup(mini_getenv(data, "PWD"));
 	get_prompt(data);
