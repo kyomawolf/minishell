@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 00:19:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/20 15:05:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_expand
 	int		i;
 	t_node	*list;
 	t_word	*word;
+	int		quote_status;
 }	t_expand;
 
 typedef struct s_exec
