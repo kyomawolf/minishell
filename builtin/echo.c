@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:47:07 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 23:44:21 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/20 21:34:22 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ int	echo_main(char **argv)
 	else
 	{
 		ft_putstr_fd(argv[i++], 1);
-		ft_putchar_fd(' ', 1);
+		if (i <= ft_char_arr_len(argv) - 1)
+			ft_putchar_fd(' ', 1);
 	}
 	while (i <= ft_char_arr_len(argv))
 	{

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:50:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/20 16:18:52 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ t_bin	*builder_main(t_node *head)
 	}
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
-	//print_binary_tree(tree, 3);
+	print_binary_tree(tree, 3);
 	free_t_node_list(head);
 	return (tree);
 }
