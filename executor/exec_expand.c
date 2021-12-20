@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 15:39:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/20 15:19:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 char	*ft_t_word_get_str(t_word *word);
 void	*ft_t_token_create(void *content);
 void	*ft_t_node_create(void *content);
+void	ft_t_node_detach_and_free(t_node *to_detach);
+void	free_t_node_content_list(t_node *head);
 int		ft_append_token_helper(char *str, t_node **head, int type, int status);
 void	*ft_t_node_get_last(void *head);
 void	ft_t_node_add_back(t_node **head, t_node *node);
@@ -101,8 +103,7 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 
 // appends chars to word in case of an unquoted variable
 //  creates new word and token if necessary
-void	ft_handle_unquoted_var(t_word *word, t_node **list, \
-			char **var)
+void	ft_handle_unquoted_var(t_word *word, t_node **list, char **var)
 {
 	int	j;
 
@@ -144,6 +145,7 @@ void	ft_handle_dquoted_var(t_word *word, char **var)
 			ft_t_word_append_char(word, var[1][j]);
 		j++;
 	}
+	ft_t_word_append_char(word, var[1][j]); // added
 }
 
 // frees char array
@@ -181,6 +183,8 @@ void	ft_set_variable_name_and_value(char ***var, t_data *data)
 	else
 	{
 		var[0][1] = mini_getenv(data, var[0][0]);
+		if (var[0][1] == NULL)
+			var[0][1] = "\0";
 		var_value_copy = ft_strdup(var[0][1]);
 	}
 	if (var_value_copy == NULL)
@@ -213,22 +217,21 @@ char	**ft_get_variable_name_and_value(t_node **head, int *i, t_data *data)
 int	ft_handle_var_expansion(t_node **head, t_expand *exp_data, t_data *data)
 {
 	t_token	*token;
-	char	quoted_status;
 	char	**var;
 	int		len;
 
 	token = (t_token *)(*head)->content;
-	quoted_status = token->string[exp_data->i + 1];
-	if (quoted_status == VAR_SQUOTED)
+	exp_data->quote_status = token->string[exp_data->i + 1];
+	if (exp_data->quote_status == VAR_SQUOTED)
 		ft_handle_squoted_var(*head, exp_data->word, &(exp_data->i));
 	else
 	{
 		var = ft_get_variable_name_and_value(head, &(exp_data->i), data);
 		if (var == NULL)
 			return (1);
-		if (quoted_status == VAR_UQUOTED)
+		if (exp_data->quote_status == VAR_UQUOTED)
 			ft_handle_unquoted_var(exp_data->word, &(exp_data->list), var);
-		else if (quoted_status == VAR_DQUOTED)
+		else if (exp_data->quote_status == VAR_DQUOTED)
 			ft_handle_dquoted_var(exp_data->word, var);
 		if (!ft_strncmp(var[0], "$", 2))
 			(exp_data->i) = (exp_data->i) - 1;
@@ -264,50 +267,69 @@ void	ft_t_expand_init(t_expand *exp_data)
 }
 
 // initializes the variable expansion
-t_node	*ft_init_var_expansion(t_node **head, t_data *data)
+t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 {
 	t_token	*token;
 	char	*temp;
-	t_expand	exp_data;
+	//t_expand	exp_data;
 
-	ft_t_expand_init(&exp_data);
+	//ft_t_expand_init(&exp_data);
 	token = (t_token *)(*head)->content;
 	temp = token->string;
-	while (temp[exp_data.i] != '\0')
+	while (temp[exp_data->i] != '\0')
 	{
-		if (temp[exp_data.i] == '$')
+		if (temp[exp_data->i] == '$')
 		{
-			if (ft_handle_var_expansion(head, &exp_data, data))
+			if (ft_handle_var_expansion(head, exp_data, data))
 				return (NULL);
-			exp_data.i++;
-			if (temp[exp_data.i] == '\0')
+			exp_data->i++;
+			if (temp[exp_data->i] == '\0')
+			{
+				ft_t_word_append_char(exp_data->word, temp[exp_data->i]);//needed ?
 				break ;
+			}
 			continue ;
 		}
-		ft_t_word_append_char(exp_data.word, temp[exp_data.i++]);
+		ft_t_word_append_char(exp_data->word, temp[exp_data->i++]);
 	}
-	ft_terminate_word(exp_data.word, &exp_data.list);
-	return (exp_data.list);
+	ft_terminate_word(exp_data->word, &exp_data->list);
+	return (exp_data->list);
 }
 
 // exchanges token with information about var_expansion with expaned tokens
-void	ft_exchange_tokens(t_node **head, t_node *list)
+int	ft_exchange_tokens(t_node **head, t_node *list, t_expand *exp_data)
 {
 	t_node	*last_in_list;
+	t_node	*temp;
 
-	if ((*head)->prev != NULL)
-		((t_node *)(*head)->prev)->next = list;
-	last_in_list = ft_t_node_get_last(list);
-	if ((*head)->next != NULL)
-		((t_node *)(*head)->next)->prev = last_in_list;
-	list->prev = (*head)->prev;
-	last_in_list->next = (*head)->next;
-	free(((t_token *)(*head)->content)->string);
-	((t_token *)(*head)->content)->string = NULL;
-	free((t_token *)(*head)->content);
-	(*head)->content = NULL;
-	free(*head);
-	*head = last_in_list;
+	if (((t_token *)list->content)->string[0] == '\0' && exp_data->quote_status == VAR_UQUOTED)
+	{
+		temp = *head;
+		*head = (*head)->next;
+		ft_t_node_detach_and_free(temp);
+		free (((t_token *)list->content)->string);
+		((t_token *)list->content)->string = NULL;
+		free (((t_token *)list->content));
+		list->content = NULL;
+		return (1);
+	}
+	else
+	{
+		if ((*head)->prev != NULL)
+			((t_node *)(*head)->prev)->next = list;
+		last_in_list = ft_t_node_get_last(list);
+		if ((*head)->next != NULL)
+			((t_node *)(*head)->next)->prev = last_in_list;
+		list->prev = (*head)->prev;
+		last_in_list->next = (*head)->next;
+		free(((t_token *)(*head)->content)->string);
+		((t_token *)(*head)->content)->string = NULL;
+		free((t_token *)(*head)->content);
+		(*head)->content = NULL;
+		free(*head);
+		*head = last_in_list;
+	}
+	return (0);
 }
 
 //loops through string and searches for char $.
@@ -317,15 +339,17 @@ int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 {
 	t_token	*token;
 	t_node	*list;
+	t_expand	exp_data;
 
+	ft_t_expand_init(&exp_data);
 	token = (t_token *)(*head)->content;
 	if (token->type == WORD && ft_strchr(token->string, '$'))
 	{
-		list = ft_init_var_expansion(head, data);
+		list = ft_init_var_expansion(head, data, &exp_data);
 		if (list == NULL)
+			return (-1);
+		if (ft_exchange_tokens(head, list, &exp_data))
 			return (1);
-		ft_exchange_tokens(head, list);
-
 	}
 	return (0);
 }
@@ -589,7 +613,10 @@ int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 
 	while (*head_token != NULL)
 	{
-		if (ft_t_token_var_expansion_check(head_token, data))
+		ret = ft_t_token_var_expansion_check(head_token, data);
+		if (ret == 1)
+			continue ;
+		else if (ret == -1)
 			return (1);
 		temp = *head_token;
 		*head_token = (*head_token)->next;

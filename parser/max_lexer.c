@@ -203,9 +203,10 @@ void	ft_s_node_print_content(t_node *head)
 	while (head != NULL)
 	{
 		token = (t_token *)head->content;
-		printf("[%d][%c]:%s:\n"\
-		, token->type, token->quote_status, token->string);
-		if (token->heredoc != NULL)
+		if (token->string != NULL)
+			printf("[%d][%c]:%s:\n"\
+			, token->type, token->quote_status, token->string);
+		if (token->heredoc != NULL && token->heredoc->content != NULL)
 		{
 			temp = token->heredoc;
 			while (temp != NULL)
