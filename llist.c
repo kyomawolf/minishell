@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   llist.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 16:45:22 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 11:51:28 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/18 18:34:40 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	*ft_s_node_create(void *content)
 	struct s_node	*node;
 
 	node = (struct s_node *)malloc(sizeof(struct s_node));
-	printf("NODE_ALLOC2-P:\t%p-%p\n", node, node + sizeof(t_node));
+	//printf("NODE_ALLOC2-P:\t%p-%p\n", node, node + sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->next = NULL;

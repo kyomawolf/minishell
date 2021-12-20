@@ -63,6 +63,7 @@ fclean :
 	make fclean -silent -C lib/libft/
 	rm -f $(OBJ)
 	rm -f ./lib/*.a ./include/libft.h
+	rm -f ./minishell
 	@echo "fully cleaned!"
 
 help :
