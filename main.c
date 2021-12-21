@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 17:04:57 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/21 22:23:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "minis.h"
 #include "libft.h"
 #include "struct.h"
+#include "lexer.h"
 
 void	get_prompt(t_data *data)
 {
@@ -40,15 +41,15 @@ void	get_prompt(t_data *data)
 	temp[ii++] = '>';
 	temp[ii++] = ' ';
 	temp[ii] = '\0';
-	if (data->prompt != NULL) // was commented
-		free(data->prompt); // was commented
+	if (data->prompt != NULL)
+		free(data->prompt);
 	data->prompt = ft_strjoin("minishell@", temp);
-	free(temp); // was commented
+	free(temp);
 }
 
 void	main_loop(t_data *data)
 {
-	t_node *head;
+	t_node	*head;
 	t_node	*temp;
 
 	head = NULL;

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:31:46 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:21:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 22:22:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_command(t_simple_com *com)
 	else
 	{
 		while (com->arguments[i] != NULL)
-		printf(" %s ", com->arguments[i++]);
+			printf(" %s ", com->arguments[i++]);
 	}
 	printf("\n");
 }

@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_io.c                                          :+:      :+:    :+:   */
+/*   exec_io2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 15:54:11 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 21:53:30 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "structs.h"
 #include "libft.h"
-#include <sys/wait.h>
-#include <string.h>
-#include <errno.h>
-#include <stdio.h>
+#include "exec.h"
 #include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
+static void	ft_exec_here_doc_helper(t_node *head)
 {
 	int		pipe_fd[2];
-	int		i;
 	t_node	*here_doc;
 	t_node	*temp;
-	int		fd;
 
 	here_doc = ((t_bin *)head->content)->io->heredoc_node;
 	pipe(pipe_fd);
@@ -45,40 +40,20 @@ void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
 	close(pipe_fd[0]);
+}
+
+void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
+{
+	ft_exec_here_doc_helper(head);
 	//if ORD given: create files and set ORD to last file
-	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->output != NULL)
-	{
-		i = 0;
-		while (((t_bin *)head->content)->io->output[i] != NULL)
-		{
-			//open/create files in accordance to the given mode (trunc/append)
-			if (((t_bin *)head->content)->io->o_mode == 4)//mode is TRUNC)
-			{
-				fd = open(((t_bin *)head->content)->io->output[i], O_WRONLY | O_CREAT | O_TRUNC, 0777);
-				//guard if fd == -1
-			}
-			else if (((t_bin *)head->content)->io->o_mode == 3) //if mode is APPEND
-			{
-				fd = open(((t_bin *)head->content)->io->output[i], O_WRONLY | O_CREAT | O_APPEND, 0777);
-				//guard
-			}
-			/* if (fd == -1)
-				free and exit */
-			//close "unused files"
-			if (((t_bin *)head->content)->io->output[i + 1] == NULL)
-			{
-			//redirect stdout to outfile (last file in output[])
-				dup2(fd, STDOUT_FILENO);
-			}
-			close (fd);
-			i++;
-		}
-	}
+	if (((t_bin *)head->content)->io != NULL \
+		&& ((t_bin *)head->content)->io->output != NULL)
+		ft_set_outout_redirection_helper(head);
 	else if (exec_data->cmd_count != exec_data->num_cmds - 1)
 	{
 		// if no ORD && not last cmd: set stdout to writeend of next pipe
-		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);//dup2(exec_data->pipes[1][1], STDOUT_FILENO);
-		close(exec_data->pipes[exec_data->cmd_count + 1][1]);//exec_data->pipes[1][1]);
+		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);
+		close(exec_data->pipes[exec_data->cmd_count + 1][1]);
 	}
 	else if (exec_data->cmd_count == 0 && exec_data->num_cmds != 1)
 	{
@@ -86,4 +61,16 @@ void	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 		close(exec_data->pipes[1][1]);
 	}
 	//else redirect output to stdout
+}
+
+void	ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data)
+{
+	t_bin	*cmd;
+
+	cmd = (t_bin *)head->content;
+	if (cmd->io != NULL && cmd->io->infile == NULL \
+		&& cmd->io->heredoc_node != NULL)
+		exec_data->here_doc = 1;
+	else
+		exec_data->here_doc = 0;
 }

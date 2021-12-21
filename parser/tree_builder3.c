@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/17 19:06:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 22:36:49 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,18 @@ void	add_io_i(t_bin *tree, t_node *node)
 	tree->io->infile = tree->io->input[idx];
 }
 
+void	add_io_helper(t_bin *tree, t_node *node)
+{
+	tree->io->o_mode = ((t_token *)node->content)->type - HERE_DOC + 1;
+	if (tree->io->output == NULL)
+		tree->io->output = ft_calloc(2, sizeof(char *));
+	else
+		tree->io->output = ft_realloc_charpp(&tree->io->output, \
+		ft_char_arr_len(tree->io->output) + 2);
+	tree->io->output[ft_char_arr_len(tree->io->output)] = \
+	ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
+}
+
 t_node	*add_io(t_bin *tree, t_node *node)
 {
 	if (tree->io == NULL)
@@ -49,16 +61,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		return ((t_node *)node->next);
 	}
 	else
-	{
-		tree->io->o_mode = ((t_token *)node->content)->type - HERE_DOC + 1;
-		if (tree->io->output == NULL)
-			tree->io->output = ft_calloc(2, sizeof(char *));
-		else
-			tree->io->output = ft_realloc_charpp(&tree->io->output, \
-			ft_char_arr_len(tree->io->output) + 2);
-		tree->io->output[ft_char_arr_len(tree->io->output)] = \
-		ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
-	}
+		add_io_helper(tree, node);
 	return (((t_node *)node->next)->next);
 }
 

@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   exec_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 17:00:40 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/21 22:01:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "structs.h"
+#include "exec.h"
 #include "libft.h"
-#include <errno.h>
+#include <errno.h> //?
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdio.h>
+#include <unistd.h> //?
+#include <stdio.h> //?
 
-t_e_builtin	get_builtin_code(char *cmd_name)
+static t_e_builtin	get_builtin_code(char *cmd_name)
 {
 	t_e_builtin	builtin;
 
@@ -41,10 +42,26 @@ t_e_builtin	get_builtin_code(char *cmd_name)
 	return (builtin);
 }
 
-char	ft_tolower2(unsigned int i, char c)
+static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 {
-	(void)i;
-	return(ft_tolower(c));
+	int	exit_status;
+
+	exit_status = 0;
+	if (builtin == ECHO)
+		exit_status = echo_main(cmd_arr);
+	else if (builtin == CD)
+		exit_status = cd_main(cmd_arr, data);
+	else if (builtin == PWD)
+		exit_status = pwd_main(data);
+	else if (builtin == EXPORT)
+		exit_status = export_main(cmd_arr, data);
+	else if (builtin == UNSET)
+		exit_status = unset_main(cmd_arr, data);
+	else if (builtin == ENV)
+		exit_status = env_main(data);
+	else if (builtin == EXIT)
+		exit_status = exit_main(cmd_arr, data);
+	return (exit_status);
 }
 
 void	builtin_check_child(char **cmd_arr, t_data *data)
@@ -83,7 +100,8 @@ t_e_builtin	builtin_check(t_node *head)
 	return (builtin_code);
 }
 
-int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, t_exec *exec_data)
+int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, \
+		t_exec *exec_data)
 {
 	char	**cmd_arr;
 	int		es;
@@ -93,40 +111,4 @@ int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, t_exec
 	ft_adjust_pipes(exec_data, head);
 	es = run_builtin(builtin, cmd_arr, data);
 	return (es);
-}
-
-int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
-{
-	int	exit_status;
-
-	exit_status = 0;
-	if (builtin == ECHO)
-	{
-		exit_status = echo_main(cmd_arr);
-	}
-	else if (builtin == CD)
-	{
-		exit_status = cd_main(cmd_arr, data);
-	}
-	else if (builtin == PWD)
-	{
-		exit_status = pwd_main(data);
-	}
-	else if (builtin == EXPORT)
-	{
-		exit_status = export_main(cmd_arr, data);
-	}
-	else if (builtin == UNSET)
-	{
-		exit_status = unset_main(cmd_arr, data);
-	}
-	else if (builtin == ENV)
-	{
-		exit_status = env_main(data);
-	}
-	else if (builtin == EXIT)
-	{
-		exit_status = exit_main(cmd_arr, data);
-	}
-	return (exit_status);
 }

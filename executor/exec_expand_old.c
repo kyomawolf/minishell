@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/20 15:19:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 20:48:02 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		ft_t_word_append_char(t_word *word, char c);
 int		ft_t_token_variable_expansion(t_node **head, t_data *data);
 void	ft_s_node_print_content(t_node *head);
 
-// terminates word, and creates token and node element to store the token
+/* // terminates word, and creates token and node element to store the token
 int	ft_terminate_word_and_add_to_list(t_node **list, t_word **word)
 {
 	char	*str;
@@ -43,9 +43,9 @@ int	ft_terminate_word_and_add_to_list(t_node **list, t_word **word)
 		return (1);
 	ft_t_word_init(*word);
 	return (0);
-}
+} */
 
-char	*ft_get_var_name_special_cases(char *str, int i)
+/* char	*ft_get_var_name_special_cases(char *str, int i)
 {
 	char	*var_name;
 
@@ -146,9 +146,9 @@ void	ft_handle_dquoted_var(t_word *word, char **var)
 		j++;
 	}
 	ft_t_word_append_char(word, var[1][j]); // added
-}
+} */
 
-// frees char array
+/* // frees char array
 void	ft_free_char_array(char **arr)
 {
 	int	i;
@@ -162,10 +162,10 @@ void	ft_free_char_array(char **arr)
 	}
 	free(arr);
 	arr = NULL;
-}
+} */
 
 // guards against failed var_name in var_value conversion
-void	ft_get_variable_name_guard(char **var)
+/* void	ft_get_variable_name_guard(char **var)
 {
 	free(var[0]);
 	var[0] = NULL;
@@ -240,9 +240,9 @@ int	ft_handle_var_expansion(t_node **head, t_expand *exp_data, t_data *data)
 		ft_free_char_array(var);
 	}
 	return (0);
-}
+} */
 
-// terminates a word. Addes token to the token list
+/* // terminates a word. Addes token to the token list
 void	ft_terminate_word(t_word *word, t_node **list)
 {
 	if (word->write_head != 0)
@@ -330,9 +330,9 @@ int	ft_exchange_tokens(t_node **head, t_node *list, t_expand *exp_data)
 		*head = last_in_list;
 	}
 	return (0);
-}
+} */
 
-//loops through string and searches for char $.
+/* //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
 //  and calls function to exchange the old token with the new ones.
 int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
@@ -352,11 +352,11 @@ int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 			return (1);
 	}
 	return (0);
-}
+} */
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int	ft_t_node_size(t_node *head)
+/* int	ft_t_node_size(t_node *head)
 {
 	int	len;
 
@@ -367,9 +367,9 @@ int	ft_t_node_size(t_node *head)
 		len++;
 	}
 	return (len);
-}
+} */
 
-void	ft_exchange_str_arr(char ***str_arr, t_node *head)
+/* void	ft_exchange_str_arr(char ***str_arr, t_node *head)
 {
 	int		len;
 	int		i;
@@ -436,12 +436,12 @@ int	ft_str_array_var_expansion(char ***str_arr, t_data *data)
 		ft_exchange_str_arr(str_arr, head_token);
 	}
 	return (0);
-}
+} */
 
 //Heredoc variable expansion : Beginning
 // no wildcard expansion in heredoc
 
-char	*ft_heredoc_get_var_name_special_cases(char *str, int i)
+/* char	*ft_heredoc_get_var_name_special_cases(char *str, int i)
 {
 	char	*var_name;
 
@@ -514,9 +514,9 @@ int	ft_heredoc_handle_var_expansion(t_node *node, t_word *word, int *i, t_data *
 		(*i)++;
 	ft_free_char_array(var);
 	return (0);
-}
+} */
 
-int	ft_heredoc_var_expansion_init(t_node **node, t_data *data)
+/* int	ft_heredoc_var_expansion_init(t_node **node, t_data *data)
 {
 	t_word	word;
 	int		i;
@@ -564,10 +564,10 @@ void	ft_t_io_heredoc_var_expansion(t_io *io, t_data *data)
 			ft_heredoc_var_expansion_check(&(io->heredoc_node), data);
 		}
 	}
-}
+} */
 //Heredoc variable expansion : End
 
-int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
+/* int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 {
 	t_bin	*tree;
 
@@ -586,9 +586,9 @@ int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 		}
 	}
 	return (0);
-}
+} */
 
-//sets *head to the beginning of the list
+/* //sets *head to the beginning of the list
 int	ft_get_beginning_of_list(t_node *temp, t_node **head)
 {
 	int	ret;
@@ -604,9 +604,9 @@ int	ft_get_beginning_of_list(t_node *temp, t_node **head)
 		}
 	}
 	return (ret);
-}
+} */
 
-int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
+/* int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 {
 	t_node	*temp;
 	int		ret;
@@ -634,4 +634,4 @@ int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 		head = head->next;
 	}
 	return (0);
-}
+} */

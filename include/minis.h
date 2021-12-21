@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 17:20:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 22:43:03 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,24 +64,23 @@ int					ft_wildcard_expansion(t_node **head);
 int					ft_get_beginning_of_list(t_node *temp, t_node **head);
 void				executor(t_node *head, t_data *data, int es);
 int					ft_execute(t_node *head, t_data *data);
-void				ft_t_exec_init(t_exec *exec_data, t_node *head);
+
 int					ft_open_pipes(t_exec *exec_data, pid_t *pid);
-void				ft_parent_close_used_pipes(t_exec *exec_data);
+
 int					ft_parent_waitpid(t_exec *exec_data, pid_t *pid);
 void				ft_exec_here_doc(t_exec *exec_data, t_node *head);
 t_e_builtin			builtin_check(t_node *head);
 void				builtin_check_child(char **cmd_arr, t_data *data);
-int					run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data);
-void				ft_child_process(t_node *head, t_data *data, t_exec *exec_data);
-int					path_main(t_data *data, char **args);
-int					ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, t_exec *exec_data);
-void				ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
-void	ft_adjust_pipes(t_exec *exec_data, t_node *head);
-void	ft_close_unused_pipes(t_exec *exec_data);
-void	ft_adjust_pipe_helper(t_exec *exec_data, t_node *head);
-void	ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
-void	*ft_s_node_get_last(void *head);
 
+int					path_main(t_data *data, char **args);
+int					ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
+										t_data *data, t_exec *exec_data);
+void				ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
+void				ft_adjust_pipes(t_exec *exec_data, t_node *head);
+void				ft_close_unused_pipes(t_exec *exec_data);
+void				ft_adjust_pipe_helper(t_exec *exec_data, t_node *head);
+void				ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
+void				*ft_s_node_get_last(void *head);
 
 //builtins
 
@@ -97,4 +96,4 @@ char				**wild_pattern_match(char **all_dir, char **matcher);
 char				**wild_get_seperator(char *string);
 char				**ft_realloc_charpp(char ***old, size_t new_size);
 void				free_char_array2(char ***arr);
-#endif
+#endif /* MINIS_H */

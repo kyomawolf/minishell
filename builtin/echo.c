@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 16:47:07 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/20 21:34:22 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 22:28:08 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,17 @@
 #include <unistd.h>
 #include "minis.h"
 #include "libft.h"
+
+void	echo_helper(char **argv, int *i)
+{
+	while (*i <= ft_char_arr_len(argv))
+	{
+		ft_putstr_fd(argv[*i], 1);
+		(*i)++;
+		if (*i <= ft_char_arr_len(argv) - 1)
+			ft_putchar_fd(' ', 1);
+	}
+}
 
 int	echo_main(char **argv)
 {
@@ -33,13 +44,7 @@ int	echo_main(char **argv)
 		if (i <= ft_char_arr_len(argv) - 1)
 			ft_putchar_fd(' ', 1);
 	}
-	while (i <= ft_char_arr_len(argv))
-	{
-		ft_putstr_fd(argv[i], 1);
-		i++;
-		if (i <= ft_char_arr_len(argv) - 1)
-			ft_putchar_fd(' ', 1);
-	}
+	echo_helper(argv, &i);
 	if (nl)
 		ft_putchar_fd('\n', 1);
 	return (0);

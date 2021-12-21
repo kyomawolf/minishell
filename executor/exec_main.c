@@ -3,82 +3,77 @@
 /*                                                        :::      ::::::::   */
 /*   exec_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/18 15:22:39 by jkasper          ###   ########.fr       */
+/*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
+/*   Updated: 2021/12/21 21:04:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "struct.h"
 #include "minis.h"
-#include "structs.h"
-#include <sys/wait.h>
-#include <string.h>
-#include <errno.h>
-#include <stdio.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include "libft.h"
+#include "lexer.h"
+#include "exec.h"
+#include <stdlib.h>
 
-void	wait_child(int sig)
+static void	change_env_exit_status(t_data *data, int es)
 {
-	(void) sig;
-	return ;
+	char	*status;
+	t_node	*temp;
+
+	temp = data->envp;
+	while (temp != NULL)
+	{
+		if (ft_strnstr(temp->content, "?=\0", ft_strlen(temp->content)))
+		{
+			free (temp->content);
+			status = ft_itoa(es);
+			temp->content = ft_strjoin("?=", status);
+			free (status);
+			status = NULL;
+			break ;
+		}
+		temp = temp->next;
+	}
 }
 
-int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data, pid_t *pid)
+int	executor_rec(t_node *head, t_data *data, int es, t_node *start)
 {
-	int	i;
+	int	last_depth;
 
-	i = 0;
-	while (exec_data->cmd_count < exec_data->num_cmds)
+	if (head != NULL)
 	{
-		pid[i] = fork();
-		if (pid[i] < 0)
-			return (-1);
-		if (pid[i] == 0)
+		if (start == head)
+			head = head->next;
+		last_depth = ((t_bin *)((t_node *)head->prev)->content)->depth;
+		if (head == NULL)
+			return (1);
+		if (((t_bin *)head->content)->control_op == OR && es == 0)
 		{
-			ft_child_process(head, data, exec_data);
+			while (head != NULL && ((t_bin *)head->content)->depth > last_depth)
+				head = head->next;
 		}
-		ft_parent_close_used_pipes(exec_data);
-		exec_data->cmd_count++;
-		head = head->next;
-		i++;
+		executor(head, data, es);
 	}
+	(void)last_depth;
 	return (0);
 }
 
-int	ft_execute(t_node *head, t_data *data)
+void	executor(t_node *head, t_data *data, int es)
 {
-	pid_t		*pid;
-	int			exit_status;
-	t_exec		exec_data;
-	t_e_builtin	builtin_code;
+	t_node	*start;
+	t_node	*pipeline;
 
-	ft_t_exec_init(&exec_data, head);
-	builtin_code = builtin_check(head);
-	if (exec_data.num_cmds == 1 && builtin_code != NONE)
-		return (ft_builtin_exec_init(builtin_code, head, data, &exec_data));
-	else
-	{
-		pid = (pid_t *)malloc(sizeof(pid_t) * exec_data.num_cmds);
-		if (pid == NULL)
-			return (-1);
-		if (ft_open_pipes(&exec_data, pid))
-			return (-1);
-		if (ft_execution_init(head, &exec_data, data, pid))
-			return (-1);
-		signal(SIGQUIT, wait_child);
-		signal(0, wait_child);
-		signal(1, wait_child);
-		signal(2, wait_child);
-		signal(3, wait_child);
-		signal(4, wait_child);
-		signal(5, wait_child);
-		signal(6, wait_child);
-		signal(7, wait_child);
-		signal(11, wait_child);
-		signal(13, wait_child);
-		exit_status = ft_parent_waitpid(&exec_data, pid);
-	}
-	return (exit_status);
+	start = head;
+	pipeline = create_execution_pipeline(&head, data);
+	if (pipeline == NULL)
+		return ;
+	if ((es != 0 && ((t_bin *)pipeline->content)->control_op == OR)
+		|| (es == 0 && ((t_bin *)pipeline->content)->control_op == AND))
+		es = ft_execute(pipeline, data);
+	ft_free_pipeline(pipeline);
+	change_env_exit_status(data, es);
+	if (executor_rec(head, data, es, start))
+		return ;
 }

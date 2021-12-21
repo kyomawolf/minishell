@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/20 16:18:52 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 22:32:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ int	count_children(t_node *node)
 	return (count);
 }
 
+//print_binary_tree(tree, 3);
 t_bin	*builder_main(t_node *head)
 {
 	t_bin	*tree;
@@ -101,7 +102,6 @@ t_bin	*builder_main(t_node *head)
 	}
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
-	print_binary_tree(tree, 3);
 	free_t_node_list(head);
 	return (tree);
 }

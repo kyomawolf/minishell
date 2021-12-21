@@ -6,15 +6,13 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/15 18:14:18 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/21 19:52:19 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "structs.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <readline/readline.h>
-#include "../include/structs.h"
-#include "../lib/libft/libft.h"
 
 t_node	*wild_main(char *string);
 void	ft_exchange_tokens(t_node **head, t_node *list);
@@ -22,7 +20,7 @@ void	ft_get_beginning_of_list(t_node *temp, t_node **head);
 int		ft_t_node_size(t_node *head);
 void	ft_t_node_free(t_node *head);
 
-int	ft_check_ambigious_redirection(t_node *head, t_node *list)
+static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 {
 	t_token	*prev_token;
 
@@ -43,7 +41,7 @@ int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 	return (0);
 }
 
-int	ft_check_for_wc_expansion(t_node **head)
+static int	ft_check_for_wc_expansion(t_node **head)
 {
 	t_token	*token;
 	t_node	*list;
