@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:54:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 22:07:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 01:18:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,13 @@ t_node	*create_execution_pipeline(t_node **head, t_data *data)
 {
 	t_node	*start;
 	t_node	*end;
+	t_node	*temp;
 
 	start = *head;
 	while (*head != NULL)
 	{
-		if (ft_t_bin_variable_expansion(*head, data))
+		temp = *head;
+		if (ft_t_bin_variable_expansion(temp, data))
 			return (NULL);
 		if ((*head)->next == NULL || ((t_bin *)((t_node *)(*head)->next) \
 			->content)->control_op != PIPE)

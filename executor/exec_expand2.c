@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:05:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 20:08:40 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 02:04:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	ft_exchange_str_arr(char ***str_arr, t_node *head)
 	t_node	*temp;
 
 	len = ft_t_node_size(head);
+	ft_free_char_array(*str_arr);
 	*str_arr = ft_calloc(len + 1, sizeof(char *));
 	i = 0;
 	while (head != NULL)
@@ -78,6 +79,7 @@ int	ft_str_array_var_expansion(char ***str_arr, t_data *data)
 			return (0);
 		if (ft_t_token_variable_expansion(&head_token, data))
 			return (1);
+		//system("leaks -quiet minishell");
 		if (ft_wildcard_expansion(&head_token))
 			return (1);
 		ft_exchange_str_arr(str_arr, head_token);

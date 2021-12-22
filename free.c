@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 11:24:31 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/22 00:54:56 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ void	free_token(t_token *token)
 	token->string = NULL;
 	while (token->heredoc != NULL)
 	{
-		free (token->heredoc->content);
+		if (token->heredoc->content != NULL)
+			free (token->heredoc->content);
 		token->heredoc->content = NULL;
 		temp = token->heredoc;
 		token->heredoc = token->heredoc->next;
@@ -112,6 +113,7 @@ void	free_main(t_data *data)
 		data->currdir = NULL;
 	}
 	free_t_node_content_list(data->envp);
+	//free_t_node_list(data->envp);
 	free(data);
 	data = NULL;
 }

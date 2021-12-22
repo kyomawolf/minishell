@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 13:10:51 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/22 02:39:09 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,11 @@ void	input_attributes_clear(void)
 void	input_readline(t_data *data)
 {
 	input_attributes_add();
+	if (data->input != NULL)
+	{
+		free(data->input);
+		data->input = NULL;
+	}
 	data->input = readline(data->prompt);
 	if (data->input != NULL && data->input[0] != '\0')
 		add_history(data->input);

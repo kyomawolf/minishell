@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 22:01:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 00:45:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static t_e_builtin	get_builtin_code(char *cmd_name)
 	return (builtin);
 }
 
-static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
+static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data, t_node *head)
 {
 	int	exit_status;
 
@@ -60,11 +60,11 @@ static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data)
 	else if (builtin == ENV)
 		exit_status = env_main(data);
 	else if (builtin == EXIT)
-		exit_status = exit_main(cmd_arr, data);
+		exit_status = exit_main(cmd_arr, data, head);
 	return (exit_status);
 }
 
-void	builtin_check_child(char **cmd_arr, t_data *data)
+void	builtin_check_child(char **cmd_arr, t_data *data, t_node *head)
 {
 	char		*cmd_name;
 	int			exit_status;
@@ -76,7 +76,7 @@ void	builtin_check_child(char **cmd_arr, t_data *data)
 	cmd_arr[0] = cmd_name;
 	if (builtin != NONE)
 	{
-		exit_status = run_builtin(builtin, cmd_arr, data);
+		exit_status = run_builtin(builtin, cmd_arr, data, head);
 		//free everything ?
 		exit(exit_status);
 	}
@@ -109,6 +109,6 @@ int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, \
 	ft_t_exec_heredoc_check(head, exec_data);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	ft_adjust_pipes(exec_data, head);
-	es = run_builtin(builtin, cmd_arr, data);
+	es = run_builtin(builtin, cmd_arr, data, head);
 	return (es);
 }

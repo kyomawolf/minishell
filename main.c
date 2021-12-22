@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/21 22:23:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 02:35:02 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	get_prompt(t_data *data)
 		free(data->prompt);
 	data->prompt = ft_strjoin("minishell@", temp);
 	free(temp);
+	temp = NULL;
 }
 
 void	main_loop(t_data *data)
@@ -67,6 +68,7 @@ void	main_loop(t_data *data)
 		}
 		if (data->input[0] == '\0')
 			continue ;
+		system("leaks -quiet minishell");
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
 			continue ;
@@ -83,9 +85,6 @@ void	main_loop(t_data *data)
 			free(temp);
 			temp = NULL;
 		}
-		//else
-		//	execution_main(data);
-		//memory_loop_main(data);
 		free_tree(data->tree);
 		data->tree = NULL;
 		get_prompt(data);
@@ -118,5 +117,4 @@ int	main(int argc, char **argv, char **envp)
 		return (0);
 	main_print_entry();
 	main_loop(data);
-	//memory_main(data);
 }

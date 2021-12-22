@@ -6,13 +6,14 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 22:02:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 03:10:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "structs.h"
 #include "exec.h"
 #include "libft.h"
+#include <stdio.h>
 
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
@@ -30,9 +31,27 @@ static int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 		list = ft_init_var_expansion(head, data, &exp_data);
 		if (list == NULL)
 			return (-1);
-		if (ft_exchange_tokens(head, list, &exp_data))
+		if (ft_exchange_tokens(head, &exp_data))
 			return (1);
 	}
+	if (exp_data.word != NULL)
+	{
+		if (exp_data.word->chars != NULL)
+		{
+			printf("[%s]exp_data.word %p\n", __FILE__, exp_data.word);
+			printf("[%s]exp_data.word->chars %p\n",__FILE__, exp_data.word->chars);
+			free (exp_data.word->chars);
+			exp_data.word->chars = NULL;
+		}
+		printf("test2\n");
+		free(exp_data.word);
+		exp_data.word = NULL;
+	}
+	printf("test3\n");
+	/* if (exp_data.list != NULL)
+	{
+		//possibly still allocated!
+	} */
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/21 22:43:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 00:47:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int					ft_open_pipes(t_exec *exec_data, pid_t *pid);
 int					ft_parent_waitpid(t_exec *exec_data, pid_t *pid);
 void				ft_exec_here_doc(t_exec *exec_data, t_node *head);
 t_e_builtin			builtin_check(t_node *head);
-void				builtin_check_child(char **cmd_arr, t_data *data);
+void				builtin_check_child(char **cmd_arr, t_data *data, t_node *head);
 
 int					path_main(t_data *data, char **args);
 int					ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
@@ -89,7 +89,7 @@ int					export_main(char **argv, t_data *data);
 int					cd_main(char **argv, t_data *data);
 int					unset_main(char **argv, t_data *data);
 int					env_main(t_data *data);
-int					exit_main(char **argv, t_data *data);
+int					exit_main(char **argv, t_data *data, t_node *head);
 int					pwd_main(t_data *data);
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);

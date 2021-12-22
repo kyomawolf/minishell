@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 22:08:24 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 03:16:07 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void		wait_child(int sig);
 void		ft_signals(void);
 
 //exec_builtin.c
-void		builtin_check_child(char **cmd_arr, t_data *data);
+void		builtin_check_child(char **cmd_arr, t_data *data, t_node *head);
 t_e_builtin	builtin_check(t_node *head);
 int			ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
 				t_data *data, t_exec *exec_data);
@@ -49,7 +49,7 @@ int			ft_t_token_variable_expansion(t_node **head_token, t_data *data);
 int			ft_str_array_var_expansion(char ***str_arr, t_data *data);
 
 //exec_expand3.c
-int			ft_exchange_tokens(t_node **head, t_node *list, t_expand *exp_data);
+int			ft_exchange_tokens(t_node **head, t_expand *exp_data);
 t_node		*ft_init_var_expansion(t_node **head, t_data *data, \
 									t_expand *exp_data);
 void		ft_t_expand_init(t_expand *exp_data);

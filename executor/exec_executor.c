@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 21:43:19 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 00:45:17 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	if (((t_bin *)head->content)->command->arguments == NULL)
 		exit(EXIT_SUCCESS);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
-	builtin_check_child(cmd_arr, data);
+	builtin_check_child(cmd_arr, data, head);
 	path_main(data, cmd_arr);
 	execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
 	ft_putstr_fd("minishell: ", 2);
