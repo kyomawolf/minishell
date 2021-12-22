@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 03:10:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 04:03:49 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,11 @@ static int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 			free (exp_data.word->chars);
 			exp_data.word->chars = NULL;
 		}
-		printf("test2\n");
+		printf("[%s][%d]test2\n", __FILE__, __LINE__);
 		free(exp_data.word);
 		exp_data.word = NULL;
 	}
-	printf("test3\n");
+	printf("[%s][%d]test3\n", __FILE__, __LINE__);
 	/* if (exp_data.list != NULL)
 	{
 		//possibly still allocated!

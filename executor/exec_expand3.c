@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 03:48:24 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 04:11:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 		ft_t_word_append_char(exp_data->word, temp[exp_data->i++]);
 	}
 	ft_terminate_word(exp_data->word, &exp_data->list);
-	printf("[%s]exp_data->word %p\n", __FILE__, exp_data->word);
-	printf("[%s]exp_data->word->chars %p\n", __FILE__, exp_data->word->chars);
+	printf("[%s][%d]exp_data->word %p\n", __FILE__, __LINE__, exp_data->word);
+	printf("[%s][%d]exp_data->word->chars %p\n", __FILE__, __LINE__, exp_data->word->chars);
 	return (exp_data->list);
 }
 
@@ -73,10 +73,9 @@ static void	ft_exchange_tokens_helper(t_node **head, t_node *list, t_expand *exp
 {
 	t_node	*last_in_list;
 
-	printf("%s\n", ((t_token *)(*head)->content)->string);
-	printf("%s\n", ((t_token *)list->content)->string);
-	printf("list content %p\n", ((t_token *)list->content)->string);
-	printf("list %p\n", list);
+	printf("[%s][%d]%s\n", __FILE__, __LINE__, ((t_token *)(*head)->content)->string);
+	printf("[%s][%d]%s %p\n", __FILE__, __LINE__, ((t_token *)list->content)->string, ((t_token *)list->content)->string);
+	printf("[%d]list %p\n",__LINE__, list);
 	if ((*head)->prev != NULL)
 		((t_node *)(*head)->prev)->next = list;
 	last_in_list = ft_t_node_get_last(list);
