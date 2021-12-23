@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:57:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 18:27:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 23:06:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@
 //frees readline output if necessary and sets token->heredoc with input from
 // heredoc
 static void	ft_lexer_handle_heredoc_input_helper(t_token *token,
-			t_node *head, char *line)
+			t_node *head, char **line)
 {
-	if (line != NULL)
+	if (*line != NULL)
 	{
-		free(line);
-		line = NULL;
+		free(*line);
+		*line = NULL;
 	}
 	if (head != NULL)
 		token->heredoc = head;
@@ -57,7 +57,7 @@ static int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 			ft_t_node_add_back(&head, node);
 		}
 	}
-	ft_lexer_handle_heredoc_input_helper(token, head, line);
+	ft_lexer_handle_heredoc_input_helper(token, head, &line);
 	return (0);
 }
 

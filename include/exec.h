@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 03:16:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 15:59:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ void		ft_get_variable_name_guard(char **var);
 
 //exec_expand5.c
 void		ft_handle_dquoted_var(t_word *word, char **var);
-void		ft_handle_unquoted_var(t_word *word, t_node **list, char **var);
+void		ft_handle_unquoted_var(t_expand *exp_data, char **var);
+//void		ft_handle_unquoted_var(t_word *word, t_node **list, char **var);
 void		ft_handle_squoted_var(t_node *head, t_word *word, int *i);
 char		*ft_expander_get_var_name(char *str, int i);
 char		*ft_get_var_name_special_cases(char *str, int i);
@@ -76,7 +77,8 @@ int			ft_heredoc_handle_var_expansion(t_node *node, t_word *word, \
 
 //exec_expand_utils.c
 int			ft_get_beginning_of_list(t_node *temp, t_node **head);
-int			ft_terminate_word_and_add_to_list(t_node **list, t_word **word);
+int			ft_terminate_word_and_add_to_list(t_expand *exp_data);
+//int			ft_terminate_word_and_add_to_list(t_node **list, t_word **word);
 void		ft_free_char_array(char **arr);
 
 //exec_main.c
@@ -84,7 +86,7 @@ void		executor(t_node *head, t_data *data, int es);
 
 // exec_pipeline
 t_node		*create_execution_pipeline(t_node **head, t_data *data);
-void		ft_free_pipeline(t_node *pipeline);
+void		ft_free_pipeline(t_node **pipeline);
 void		traverse_tree_rec(t_bin *tree, t_node **head);
 
 // exec_parent

@@ -6,19 +6,16 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 19:52:19 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:36:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minis.h"
 #include "structs.h"
+#include "exec.h"
+#include "lexer.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-t_node	*wild_main(char *string);
-void	ft_exchange_tokens(t_node **head, t_node *list);
-void	ft_get_beginning_of_list(t_node *temp, t_node **head);
-int		ft_t_node_size(t_node *head);
-void	ft_t_node_free(t_node *head);
 
 static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 {
@@ -44,7 +41,7 @@ static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 static int	ft_check_for_wc_expansion(t_node **head)
 {
 	t_token	*token;
-	t_node	*list;
+	t_expand exp_data;
 	int		i;
 
 	token = (t_token *)(*head)->content;
@@ -55,12 +52,12 @@ static int	ft_check_for_wc_expansion(t_node **head)
 		{
 			if (token->string[i] == '*')
 			{
-				list = wild_main(token->string);
-				if (list == NULL)
+				exp_data.list = wild_main(token->string);
+				if (exp_data.list == NULL)
 					return (1);
-				if (ft_check_ambigious_redirection(*head, list))
+				if (ft_check_ambigious_redirection(*head, exp_data.list))
 					return (1);
-				ft_exchange_tokens(head, list);
+				ft_exchange_tokens(head, &exp_data);
 				break ;
 			}
 			i++;

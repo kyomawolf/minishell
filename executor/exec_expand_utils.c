@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:04:22 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 21:46:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:34:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ int	ft_get_beginning_of_list(t_node *temp, t_node **head)
 }
 
 // terminates word, and creates token and node element to store the token
-int	ft_terminate_word_and_add_to_list(t_node **list, t_word **word)
+int	ft_terminate_word_and_add_to_list(t_expand *exp_data)
 {
 	char	*str;
 
-	str = ft_t_word_get_str(*word);
+	str = ft_t_word_get_str(exp_data->word);
 	if (str == NULL)
 		return (1);
-	if (ft_append_token_helper(str, list, WORD, -1))
+	if (ft_append_token_helper(str, &(exp_data->list), WORD, -1))
 		return (1);
-	ft_t_word_init(*word);
+	ft_t_word_init(exp_data->word);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/22 02:35:02 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 12:21:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,12 @@ void	get_prompt(t_data *data)
 	temp[ii++] = ' ';
 	temp[ii] = '\0';
 	if (data->prompt != NULL)
+	{
+		printf("[%s][%d]data->prompt %p\n", __FILE__, __LINE__, data->prompt);
 		free(data->prompt);
+	}
 	data->prompt = ft_strjoin("minishell@", temp);
+	printf("[%s][%d]temp %p\n", __FILE__, __LINE__, temp);
 	free(temp);
 	temp = NULL;
 }
@@ -68,16 +72,22 @@ void	main_loop(t_data *data)
 		}
 		if (data->input[0] == '\0')
 			continue ;
-		system("leaks -quiet minishell");
 		data->list = ft_lexer(data->input);
 		if (data->list == NULL)
 			continue ;
+		printf("after lexer\n");
+		system("leaks -quiet minishell");
 		data->tree = builder_main(data->list);
+		printf("after builder\n");
+		system("leaks -quiet minishell");
+		free_t_node_list2(&(data->list));
 		if (data->tree != NULL)
 		{
 			traverse_tree_rec(data->tree, &head);
 			executor(head, data, 0);
 		}
+		printf("after executor\n");
+		system("leaks -quiet minishell");
 		while (head != NULL)
 		{
 			temp = head;
@@ -85,8 +95,12 @@ void	main_loop(t_data *data)
 			free(temp);
 			temp = NULL;
 		}
+		printf("after head freed\n");
+		system("leaks -quiet minishell");
 		free_tree(data->tree);
 		data->tree = NULL;
+		printf("after tree freed\n");
+		system("leaks -quiet minishell");
 		get_prompt(data);
 	}
 }

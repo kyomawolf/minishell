@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:27:21 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 21:49:32 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 15:58:52 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	ft_handle_var_expansion(t_node **head, t_expand *exp_data, t_data *data)
 		if (var == NULL)
 			return (1);
 		if (exp_data->quote_status == VAR_UQUOTED)
-			ft_handle_unquoted_var(exp_data->word, &(exp_data->list), var);
+			ft_handle_unquoted_var(exp_data, var);
 		else if (exp_data->quote_status == VAR_DQUOTED)
 			ft_handle_dquoted_var(exp_data->word, var);
 		if (!ft_strncmp(var[0], "$", 2))

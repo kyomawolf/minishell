@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:54:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 01:18:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:35:47 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,14 +40,14 @@ void	traverse_tree_rec(t_bin *tree, t_node **head)
 	depth--;
 }
 
-void	ft_free_pipeline(t_node *pipeline)
+void	ft_free_pipeline(t_node **pipeline)
 {
 	t_node	*temp;
 
-	while (pipeline != NULL)
+	while (*pipeline != NULL)
 	{
-		temp = pipeline;
-		pipeline = pipeline->next;
+		temp = *pipeline;
+		*pipeline = (*pipeline)->next;
 		free(temp);
 		temp = NULL;
 	}

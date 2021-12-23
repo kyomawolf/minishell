@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:48:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 17:55:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 20:03:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 #include "libft.h"
 #include <stdlib.h>
 
-//checks if var_name is valid and returns string with var_name
+//checks if var_name is valid and returns allocated string with var_name
 static char	*ft_get_var_name(char *str, int i)
 {
 	int		i_start;

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:33:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 22:03:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:00:33 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 
 // appends chars to word in case of an unquoted variable
 //  creates new word and token if necessary
-void	ft_handle_unquoted_var(t_word *word, t_node **list, char **var)
+void	ft_handle_unquoted_var(t_expand *exp_data, char **var)
 {
 	int	j;
 
@@ -83,16 +83,16 @@ void	ft_handle_unquoted_var(t_word *word, t_node **list, char **var)
 		if (ft_whitespaces(var[1][j]))
 		{
 			ft_skip_set(var[1], &j, " \t\n");
-			if (word->write_head != 0)
+			if (exp_data->word->write_head != 0)
 			{
-				ft_terminate_word_and_add_to_list(list, &word);
+				ft_terminate_word_and_add_to_list(exp_data);
 			}
 			continue ;
 		}
-		ft_t_word_append_char(word, var[1][j]);
+		ft_t_word_append_char(exp_data->word, var[1][j]);
 		if (var[1][j] == '*')
 		{
-			ft_t_word_append_char(word, -2);
+			ft_t_word_append_char(exp_data->word, -2);
 		}
 		j++;
 	}

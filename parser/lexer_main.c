@@ -6,10 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 18:33:52 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 22:30:46 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minis.h"
 #include "structs.h"
 #include "lexer.h"
 #include "libft.h"
@@ -42,19 +43,19 @@ t_node	*ft_lexer(char *input)
 	head = ft_get_token_list(input);
 	if (ft_operator_is_valid(head))
 	{
-		printf("invalid token\n");
-		ft_t_node_free(head);
+		ft_putstr_fd("Error: invalid operator token.\n", 2);
+		free_t_node_list2(&head);
 		return (NULL);
 	}
 	else
 	{
 		if (ft_lexer_heredoc(head))
 		{
-			printf("syntax error near unexpected token: \\n\n");
-			ft_t_node_free(head);
+			ft_putstr_fd("Error: syntax error near unexpected token: \\n\n", 2);
+			free_t_node_list2(&head);
 			return (NULL);
 		}
 	}
+	//ft_s_node_print_content(head);
 	return (head);
 }
-	//ft_s_node_print_content(head);

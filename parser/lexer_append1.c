@@ -6,14 +6,13 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:46:20 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 18:25:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 22:52:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "structs.h"
 #include "lexer.h"
 #include "libft.h"
-#include <stdio.h>
 
 //handles wildcard appandage
 static int	ft_append_wildcard(char *input, int *i, t_word *word)
@@ -69,7 +68,7 @@ int	ft_append(char *input, int *i, t_word *word, t_node **head)
 	{
 		if (ft_append_variable(input, i, word, head))
 		{
-			printf("invalid var_name\n");
+			ft_putstr_fd("Error: invalid variable name\n", 2);
 			return (1);
 		}
 	}

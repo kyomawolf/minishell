@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 04:11:27 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:34:13 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,19 @@
 #include "lexer.h"
 #include "libft.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 // terminates a word. Addes token to the token list
-static void	ft_terminate_word(t_word *word, t_node **list)
+static void	ft_terminate_word(t_expand *exp_data)
 {
-	if (word->write_head != 0)
-		ft_terminate_word_and_add_to_list(list, &word);
-	if (word->chars != NULL)
+	if (exp_data->word->write_head != 0)
+		ft_terminate_word_and_add_to_list(exp_data);
+	if (exp_data->word->chars != NULL)
 	{
-		free(word->chars);
-		word->chars = NULL;
+		free(exp_data->word->chars);
+		exp_data->word->chars = NULL;
 	}
-	free(word);
-	word = NULL;
+	free(exp_data->word);
+	exp_data->word = NULL;
 }
 
 void	ft_t_expand_init(t_expand *exp_data)
@@ -56,16 +55,14 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 			exp_data->i++;
 			if (temp[exp_data->i] == '\0')
 			{
-				//ft_t_word_append_char(exp_data->word, temp[exp_data->i]);//need?
+				ft_t_word_append_char(exp_data->word, temp[exp_data->i]);//need?
 				break ;
 			}
 			continue ;
 		}
 		ft_t_word_append_char(exp_data->word, temp[exp_data->i++]);
 	}
-	ft_terminate_word(exp_data->word, &exp_data->list);
-	printf("[%s][%d]exp_data->word %p\n", __FILE__, __LINE__, exp_data->word);
-	printf("[%s][%d]exp_data->word->chars %p\n", __FILE__, __LINE__, exp_data->word->chars);
+	ft_terminate_word(exp_data);
 	return (exp_data->list);
 }
 
@@ -73,9 +70,6 @@ static void	ft_exchange_tokens_helper(t_node **head, t_node *list, t_expand *exp
 {
 	t_node	*last_in_list;
 
-	printf("[%s][%d]%s\n", __FILE__, __LINE__, ((t_token *)(*head)->content)->string);
-	printf("[%s][%d]%s %p\n", __FILE__, __LINE__, ((t_token *)list->content)->string, ((t_token *)list->content)->string);
-	printf("[%d]list %p\n",__LINE__, list);
 	if ((*head)->prev != NULL)
 		((t_node *)(*head)->prev)->next = list;
 	last_in_list = ft_t_node_get_last(list);
@@ -83,15 +77,13 @@ static void	ft_exchange_tokens_helper(t_node **head, t_node *list, t_expand *exp
 		((t_node *)(*head)->next)->prev = last_in_list;
 	list->prev = (*head)->prev;
 	last_in_list->next = (*head)->next;
-	printf("[%s][%d]exp_data.word->chars %p\n",__FILE__, __LINE__, exp_data->word->chars);
-	printf("%s\n", ((t_token *)(*head)->content)->string);
 	free(((t_token *)(*head)->content)->string);
 	((t_token *)(*head)->content)->string = NULL;
-	printf("[%s][%d]exp_data.word->chars %p\n",__FILE__, __LINE__, exp_data->word->chars);
 	free((t_token *)(*head)->content);
 	(*head)->content = NULL;
 	free(*head);
 	*head = last_in_list;
+	(void)exp_data;
 }
 
 // exchanges token with information about var_expansion with expaned tokens

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:49:54 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 18:30:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 22:12:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	ft_t_token_add_empty_string(t_word *word, t_node **head, int *i)
 // terminates_token on unquoted metacharacter, inits appendage of token
 int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 {
-	int		ret;
+	int	ret;
 
 	ret = 0;
 	if (word->status == -1 && word->write_head != 0)

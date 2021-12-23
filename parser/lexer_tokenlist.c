@@ -6,10 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:54:58 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 18:35:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/22 22:35:24 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minis.h"
 #include "structs.h"
 #include "lexer.h"
 #include "libft.h"
@@ -56,7 +57,7 @@ static void	ft_token_list_handle_last_word(t_word *word, t_node **head, int sw)
 	}
 	if (word->status == '\'' || word->status == '"' || sw == 1)
 	{
-		ft_t_node_free(*head);
+		free_t_node_list2(head);
 		if (sw == 0)
 			printf("missing quote\n");
 	}

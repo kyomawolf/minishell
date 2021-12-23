@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:05:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 02:04:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:32:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	ft_str_array_var_expansion(char ***str_arr, t_data *data)
 			return (0);
 		if (ft_t_token_variable_expansion(&head_token, data))
 			return (1);
-		//system("leaks -quiet minishell");
 		if (ft_wildcard_expansion(&head_token))
 			return (1);
 		ft_exchange_str_arr(str_arr, head_token);

@@ -6,14 +6,13 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 04:03:49 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 16:32:10 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "structs.h"
 #include "exec.h"
 #include "libft.h"
-#include <stdio.h>
 
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
@@ -38,20 +37,12 @@ static int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 	{
 		if (exp_data.word->chars != NULL)
 		{
-			printf("[%s]exp_data.word %p\n", __FILE__, exp_data.word);
-			printf("[%s]exp_data.word->chars %p\n",__FILE__, exp_data.word->chars);
 			free (exp_data.word->chars);
 			exp_data.word->chars = NULL;
 		}
-		printf("[%s][%d]test2\n", __FILE__, __LINE__);
 		free(exp_data.word);
 		exp_data.word = NULL;
 	}
-	printf("[%s][%d]test3\n", __FILE__, __LINE__);
-	/* if (exp_data.list != NULL)
-	{
-		//possibly still allocated!
-	} */
 	return (0);
 }
 
