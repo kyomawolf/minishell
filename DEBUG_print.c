@@ -6,11 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 18:31:46 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/21 22:22:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:55:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include <stdio.h>
 
 void	print_chars(int amount, char c)

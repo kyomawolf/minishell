@@ -6,11 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:52:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 19:56:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:47:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include <stdlib.h>
 
 //creates and initializes t_token *

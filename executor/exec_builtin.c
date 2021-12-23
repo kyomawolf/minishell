@@ -6,12 +6,12 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 00:45:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:49:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 #include "exec.h"
 #include "libft.h"
 #include <errno.h> //?
@@ -86,13 +86,11 @@ t_e_builtin	builtin_check(t_node *head)
 {
 	char		**cmd_arr;
 	char		*cmd_name;
-	int			ret;
 	t_e_builtin	builtin_code;
 
 	if (((t_bin *)head->content)->command->arguments == NULL)
 		return (NONE);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
-	ret = 0;
 	cmd_name = ft_strmapi(cmd_arr[0], ft_tolower2);
 	builtin_code = get_builtin_code(cmd_name);
 	free(cmd_arr[0]);
@@ -105,10 +103,26 @@ int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, \
 {
 	char	**cmd_arr;
 	int		es;
+	int		fd_stdin;
+	int		fd_stdout;
 
+	printf("[%s][%d]builtin infile :%s:\n", __FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
 	ft_t_exec_heredoc_check(head, exec_data);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
-	ft_adjust_pipes(exec_data, head);
+	fd_stdin = dup(STDIN_FILENO);
+	fd_stdout = dup(STDOUT_FILENO);
+	if (ft_adjust_pipes(exec_data, head))
+	{
+		dup2(fd_stdin, STDIN_FILENO);
+		close (fd_stdin);
+		dup2(fd_stdout, STDOUT_FILENO);
+		close (fd_stdout);
+		return (1);
+	}
 	es = run_builtin(builtin, cmd_arr, data, head);
+	dup2(fd_stdin, STDIN_FILENO);
+	close (fd_stdin);
+	dup2(fd_stdout, STDOUT_FILENO);
+	close (fd_stdout);
 	return (es);
 }

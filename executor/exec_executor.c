@@ -6,17 +6,18 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/22 00:45:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:49:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 #include "libft.h"
 #include "exec.h"
 #include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 
 static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 {
@@ -80,6 +81,7 @@ int	ft_execute(t_node *head, t_data *data)
 	t_exec		exec_data;
 	t_e_builtin	builtin_code;
 
+	printf("[%s][%d] execute infile :%s:\n", __FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
 	ft_t_exec_init(&exec_data, head);
 	builtin_code = builtin_check(head);
 	if (exec_data.num_cmds == 1 && builtin_code != NONE)

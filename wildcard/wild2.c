@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:49:00 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/15 22:17:59 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 22:54:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include "libft.h"
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 
 int	wild_comp_end(char *matcher, char *dir)
 {

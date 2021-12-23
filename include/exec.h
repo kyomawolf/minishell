@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 15:59:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 20:13:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ int			ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
 //exec_child.c
 
 //exec_io1.c
-void		ft_adjust_pipes(t_exec *exec_data, t_node *head);
-void		ft_set_outout_redirection_helper(t_node *head);
+int			ft_adjust_pipes(t_exec *exec_data, t_node *head);
+int			ft_set_outout_redirection_helper(t_node *head);
 
 //exec_io2.c
 void		ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
-void		ft_exec_here_doc(t_exec *exec_data, t_node *head);
+int			ft_exec_here_doc(t_exec *exec_data, t_node *head);
 
 //exec_executor.c
 int			ft_execute(t_node *head, t_data *data);

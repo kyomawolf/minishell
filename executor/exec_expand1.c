@@ -6,13 +6,14 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 16:32:10 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 00:03:38 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include "exec.h"
 #include "libft.h"
+#include <stdio.h>
 
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
@@ -56,11 +57,19 @@ static int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 	else
 	{
 		if (tree->command->arguments != NULL)
+		{
+			//printf("[%s][%d] before str arr var exp argument %s\n",__FILE__, __LINE__, ((t_bin *)head->content)->command->arguments[0]);
 			ft_str_array_var_expansion(&(tree->command->arguments), data);
+			//printf("[%s][%d] after str arr var exp argument %s\n",__FILE__, __LINE__, ((t_bin *)head->content)->command->arguments[0]);
+
+		}
 		if (tree->io != NULL)
 		{
 			ft_t_io_heredoc_var_expansion(tree->io, data);
+			//printf("[%s][%d]before tbin var exp check infile :%s:\n",__FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
 			ft_str_array_var_expansion(&(tree->io->input), data);
+			//printf("[%s][%d]after tbin var exp check head infile :%s:\n",__FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
+			//printf("[%s][%d]after tbin var exp check tree infile :%s:\n",__FILE__, __LINE__, tree->io->infile);
 			ft_str_array_var_expansion(&(tree->io->output), data);
 		}
 	}
@@ -72,6 +81,7 @@ int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 	t_node	*temp;
 	int		ret;
 
+	temp = *head_token;
 	while (*head_token != NULL)
 	{
 		ret = ft_t_token_var_expansion_check(head_token, data);

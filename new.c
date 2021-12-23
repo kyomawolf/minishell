@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   new.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:42:10 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 15:25:38 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 23:06:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ t_data	*new_t_data(char **envp)
 	t_node	*head;
 	int		i;
 
-	ret = malloc(sizeof(t_data));
+	ret = ft_calloc(1, sizeof(t_data));
 	if (ret == NULL)
 		return (NULL);
-	head = ft_s_node_create(ft_strdup(envp[0]));
+	head = ft_s_node_create(ft_strdup(envp[0]));//tO fReE
 	if (head == NULL)
 		return (NULL);
 	ret->currdir = NULL;

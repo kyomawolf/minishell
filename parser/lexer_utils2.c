@@ -6,11 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:53:53 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 17:28:34 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:47:21 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include <stdlib.h>
 
 //detaches t_node and frees the content of t_token (string) and token itself

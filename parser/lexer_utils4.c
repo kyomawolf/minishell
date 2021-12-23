@@ -6,11 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:59:58 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 17:12:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:48:19 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include "libft.h"
 #include <stdio.h>
 
@@ -32,7 +32,7 @@ void	ft_s_node_print_content(t_node *head)
 			temp = token->heredoc;
 			while (temp != NULL)
 			{
-				printf(":%s:\n", temp->content);
+				printf(":%s:\n",(char *)temp->content);
 				temp = temp->next;
 			}
 		}

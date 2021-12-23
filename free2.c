@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free2.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:02:27 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 15:55:07 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 23:26:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ void	free_io(t_io *io)
 		free_char_array(&(io->input));
 	if (io->output != NULL)
 		free_char_array(&(io->output));
+	if (io->infile != NULL)
+	{
+		free(io->infile);
+		io->infile = NULL;
+	}
 	free(io);
 	io = NULL;
 }

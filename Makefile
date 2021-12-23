@@ -1,7 +1,7 @@
 
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Wextra #-Werror
 
 #-fsanitize=address -fno-omit-frame-pointer -static-libsan
 

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_count.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 16:51:06 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/06 17:39:42 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 22:50:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "libft.h"
-#include "structs.h"
+#include "struct.h"
 #include <stdlib.h>
 #include <stdio.h>
 

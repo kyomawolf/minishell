@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/22 04:41:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 23:12:40 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ void	input_interrupt(int sig)
 	//}
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
+		//write(1, "\n", 1);
+		printf("\n");
 		rl_replace_line("", 0);
 	}
 	rl_on_new_line();

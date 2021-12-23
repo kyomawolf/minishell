@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:47:48 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 00:50:58 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 22:54:24 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include "libft.h"
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 
 char	**wild_open_dir(void)
 {

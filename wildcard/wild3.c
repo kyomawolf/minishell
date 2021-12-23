@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wild3.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:53:31 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/16 00:49:59 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 22:54:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 #include "libft.h"
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 
 char	**inner_part_2(char *string, int ii, char **ret, int iii)
 {

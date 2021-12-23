@@ -6,12 +6,12 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 16:36:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:51:30 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 #include "exec.h"
 #include "lexer.h"
 #include <stdlib.h>
@@ -70,6 +70,7 @@ int	ft_wildcard_expansion(t_node **head)
 {
 	t_node	*temp;
 
+	temp = *head;
 	while (*head != NULL)
 	{
 		if (ft_check_for_wc_expansion(head))

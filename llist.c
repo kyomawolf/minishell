@@ -6,12 +6,12 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 16:45:22 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 18:34:40 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:55:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
-#include "structs.h"
+#include "struct.h"
 #include "libft.h"
 #include <stdio.h>
 

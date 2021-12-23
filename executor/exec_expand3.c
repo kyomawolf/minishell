@@ -6,11 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 16:34:13 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 00:14:47 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include "exec.h"
 #include "lexer.h"
 #include "libft.h"
@@ -91,7 +91,12 @@ int	ft_exchange_tokens(t_node **head, t_expand *exp_data) //t_node *list
 {
 	t_node	*temp;
 
-	if (((t_token *)exp_data->list->content)->string[0] == '\0' \
+	printf("test\n");
+	printf("%p\n", exp_data);
+	printf("%p\n", exp_data->list);
+	printf("%p\n", exp_data->list->content);
+	printf(":%s:\n", ((t_token *)exp_data->list->content)->string);
+	if (head != NULL && (*head) != NULL && ((t_token *)exp_data->list->content)->string[0] == '\0' \
 		&& exp_data->quote_status == VAR_UQUOTED)
 	{
 		temp = *head;

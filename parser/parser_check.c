@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parser_check.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:11:25 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/23 22:45:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include "minis.h"
 #include <stdio.h>
 #include <unistd.h>
@@ -113,9 +113,6 @@ int	check_op(t_node *head)
 
 int	check_input(t_node *head)
 {
-	int	err;
-
-	err = 0;
 	if (check_pars(head))
 		return (printf("syntax error near unexpected token parenthesis\n"));
 	if (check_io(head))

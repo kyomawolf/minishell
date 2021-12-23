@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_expand.c                                      :+:      :+:    :+:   */
+/*   exec_expand_old.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 17:29:40 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 20:48:02 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:49:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <readline/readline.h>
-#include "../include/structs.h"
+#include "../include/struct.h"
 #include "../lib/libft/libft.h"
 #include "../include/minis.h"
 

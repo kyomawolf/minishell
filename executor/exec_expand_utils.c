@@ -6,11 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:04:22 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 16:34:39 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:49:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "struct.h"
 #include "exec.h"
 #include "lexer.h"
 

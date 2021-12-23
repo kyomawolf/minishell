@@ -6,14 +6,14 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/22 21:14:52 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/23 22:44:53 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIS_H
 # define MINIS_H
 
-# include "structs.h"
+# include "struct.h"
 //mainfunction of parser-part -> see parser.h for details regarding the parser
 int					par_main(t_data *data);
 //free-functions
@@ -68,7 +68,7 @@ int					ft_execute(t_node *head, t_data *data);
 int					ft_open_pipes(t_exec *exec_data, pid_t *pid);
 
 int					ft_parent_waitpid(t_exec *exec_data, pid_t *pid);
-void				ft_exec_here_doc(t_exec *exec_data, t_node *head);
+//void				ft_exec_here_doc(t_exec *exec_data, t_node *head);
 t_e_builtin			builtin_check(t_node *head);
 void				builtin_check_child(char **cmd_arr, t_data *data, t_node *head);
 
@@ -76,7 +76,7 @@ int					path_main(t_data *data, char **args);
 int					ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
 										t_data *data, t_exec *exec_data);
 void				ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
-void				ft_adjust_pipes(t_exec *exec_data, t_node *head);
+//int				ft_adjust_pipes(t_exec *exec_data, t_node *head);
 void				ft_close_unused_pipes(t_exec *exec_data);
 void				ft_adjust_pipe_helper(t_exec *exec_data, t_node *head);
 void				ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
