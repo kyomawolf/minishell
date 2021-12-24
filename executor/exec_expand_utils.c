@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:04:22 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:49:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 02:29:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,9 @@ int	ft_terminate_word_and_add_to_list(t_expand *exp_data)
 	if (str == NULL)
 		return (1);
 	if (ft_append_token_helper(str, &(exp_data->list), WORD, -1))
+	{
 		return (1);
+	}
 	ft_t_word_init(exp_data->word);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:49:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 01:00:07 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ int	ft_builtin_exec_init(t_e_builtin builtin, t_node *head, t_data *data, \
 	int		fd_stdin;
 	int		fd_stdout;
 
-	printf("[%s][%d]builtin infile :%s:\n", __FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
 	ft_t_exec_heredoc_check(head, exec_data);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	fd_stdin = dup(STDIN_FILENO);

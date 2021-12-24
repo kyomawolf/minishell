@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 23:35:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 01:21:38 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	main_loop(t_data *data)
 		if (data->tree != NULL)
 		{
 			traverse_tree_rec(data->tree, &head);
-			printf("head add %p\n", head);
 			executor(head, data, 0);
 		}
 		//printf("after executor\n");

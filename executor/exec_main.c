@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 00:00:41 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 01:20:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,11 @@ int	executor_rec(t_node *head, t_data *data, int es, t_node *start)
 
 	if (head != NULL)
 	{
-		printf("leol\n");
 		if (start == head)
 			head = head->next;
-		last_depth = ((t_bin *)((t_node *)head->prev)->content)->depth;
 		if (head == NULL)
 			return (1);
+		last_depth = ((t_bin *)((t_node *)head->prev)->content)->depth;
 		if (((t_bin *)head->content)->control_op == OR && es == 0)
 		{
 			while (head != NULL && ((t_bin *)head->content)->depth > last_depth)
@@ -67,11 +66,8 @@ void	executor(t_node *head, t_data *data, int es)
 	t_node	*start;
 	t_node	*pipeline;
 
-	//printf("head infile %s\n", ((t_bin *)head->content)->io->infile);
 	start = head;
 	pipeline = create_execution_pipeline(&head, data);
-	printf("%p\n", head);
-	//printf("pipeline infile :%s:\n", ((t_bin *)pipeline->content)->io->infile);
 	if (pipeline == NULL)
 		return ;
 	if ((es != 0 && ((t_bin *)pipeline->content)->control_op == OR)
@@ -79,7 +75,5 @@ void	executor(t_node *head, t_data *data, int es)
 		es = ft_execute(pipeline, data);
 	ft_free_pipeline(&pipeline);
 	change_env_exit_status(data, es);
-	printf("%p\n", start);
-	if (executor_rec(head, data, es, start))
-		return ;
+	executor_rec(head, data, es, start);
 }

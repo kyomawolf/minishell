@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:49:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 01:32:05 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 {
 	char	**cmd_arr;
+	char	**envp_arr;
 
 	ft_adjust_pipes(exec_data, head);
 	if (((t_bin *)head->content)->command->arguments == NULL)
@@ -37,11 +38,13 @@ static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
 	builtin_check_child(cmd_arr, data, head);
 	path_main(data, cmd_arr);
-	execve(cmd_arr[0], cmd_arr, list_to_array(data->envp));
+	envp_arr = list_to_array(data->envp);
+	execve(cmd_arr[0], cmd_arr, envp_arr);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_arr[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
 	free_main(data);
+	free_char_array(&envp_arr);
 	exit(127);
 }
 
@@ -81,7 +84,6 @@ int	ft_execute(t_node *head, t_data *data)
 	t_exec		exec_data;
 	t_e_builtin	builtin_code;
 
-	printf("[%s][%d] execute infile :%s:\n", __FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
 	ft_t_exec_init(&exec_data, head);
 	builtin_code = builtin_check(head);
 	if (exec_data.num_cmds == 1 && builtin_code != NONE)

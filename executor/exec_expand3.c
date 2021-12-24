@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 00:14:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 02:43:31 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 		}
 		ft_t_word_append_char(exp_data->word, temp[exp_data->i++]);
 	}
+	printf("hello\n");
 	ft_terminate_word(exp_data);
 	return (exp_data->list);
 }
@@ -91,12 +92,8 @@ int	ft_exchange_tokens(t_node **head, t_expand *exp_data) //t_node *list
 {
 	t_node	*temp;
 
-	printf("test\n");
-	printf("%p\n", exp_data);
-	printf("%p\n", exp_data->list);
-	printf("%p\n", exp_data->list->content);
-	printf(":%s:\n", ((t_token *)exp_data->list->content)->string);
-	if (head != NULL && (*head) != NULL && ((t_token *)exp_data->list->content)->string[0] == '\0' \
+	if (head != NULL && (*head) != NULL \
+		&& ((t_token *)exp_data->list->content)->string[0] == '\0' \
 		&& exp_data->quote_status == VAR_UQUOTED)
 	{
 		temp = *head;
@@ -104,8 +101,20 @@ int	ft_exchange_tokens(t_node **head, t_expand *exp_data) //t_node *list
 		ft_t_node_detach_and_free(temp);
 		free (((t_token *)exp_data->list->content)->string);
 		((t_token *)exp_data->list->content)->string = NULL;
-		free (((t_token *)exp_data->list->content));
+		free(((t_token *)exp_data->list->content));
 		exp_data->list->content = NULL;
+		free(exp_data->list);
+		exp_data->list = NULL;
+		if (exp_data->word != NULL)
+		{
+			if (exp_data->word->chars != NULL)
+			{
+				free(exp_data->word->chars);
+				exp_data->word->chars = NULL;
+			}
+			free(exp_data->word);
+			exp_data->word = NULL;
+		}
 		return (1);
 	}
 	else

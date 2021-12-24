@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 23:24:58 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 01:22:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,11 @@ void	add_io_i(t_bin *tree, t_node *node)
 		tree->io->input = ft_realloc_charpp(&tree->io->input, \
 		ft_char_arr_len(tree->io->input) + 2);
 	idx = ft_char_arr_len(tree->io->input);
-	printf("idx %d\n", idx);
 	tree->io->input[idx] = \
 	ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
 	if (tree->io->infile)
 		free(tree->io->infile);
 	tree->io->infile = ft_strdup(tree->io->input[idx]);
-	printf("[%s][%d] tree->io->infile %s\n", __FILE__, __LINE__, tree->io->infile);
 }
 
 void	add_io_helper(t_bin *tree, t_node *node)
