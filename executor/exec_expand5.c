@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:33:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 02:17:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/25 14:46:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,10 @@ void	ft_handle_dquoted_var(t_word *word, char **var)
 	j = 0;
 	while (var[1][j] != '\0')
 	{
+		ft_t_word_append_char(word, var[1][j]);
 		if (var[1][j] == '*')
-		{
-			ft_t_word_append_char(word, var[1][j]);
 			ft_t_word_append_char(word, -1);
-		}
-		else
-			ft_t_word_append_char(word, var[1][j]);
 		j++;
 	}
-	ft_t_word_append_char(word, var[1][j]);
+	//ft_t_word_append_char(word, var[1][j]); WHAT WAS THE REASON BEHIND THIS ?
 }

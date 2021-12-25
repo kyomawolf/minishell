@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:50:18 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/25 15:08:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ static void	ft_exec_here_doc_helper(t_node *head)
 		write(pipe_fd[1], "\n", 1);
 		temp = here_doc;
 		here_doc = here_doc->next;
-		free(temp->content);
-		temp->content = NULL;
-		free(temp);
-		temp = NULL;
 	}
 	close(pipe_fd[1]);
 	dup2(pipe_fd[0], STDIN_FILENO);
