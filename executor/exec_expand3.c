@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 02:43:31 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 16:24:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 		}
 		ft_t_word_append_char(exp_data->word, temp[exp_data->i++]);
 	}
-	printf("hello\n");
 	ft_terminate_word(exp_data);
 	return (exp_data->list);
 }

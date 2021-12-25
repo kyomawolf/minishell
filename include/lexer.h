@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:35:50 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:46:08 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 17:49:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ char	ft_set_type(t_word *word);
 void	ft_t_token_add_empty_string(t_word *word, t_node **head, int *i);
 
 //lexer_heredoc.c
-int		ft_lexer_heredoc(t_node *head);
+int		ft_lexer_heredoc(t_node **head);
+//int		ft_lexer_heredoc(t_node *head);
 
 //lexer_tokenlist.c
 t_node	*ft_get_token_list(char *input);

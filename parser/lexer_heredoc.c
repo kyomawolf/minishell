@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:57:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:46:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 18:00:11 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ static void	ft_lexer_handle_heredoc_input_helper(t_token *token,
 		*line = NULL;
 	}
 	if (head != NULL)
+	{
 		token->heredoc = head;
+	}
 	return ;
 }
 
@@ -53,7 +55,11 @@ static int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 		{
 			node = ft_t_node_create(line);
 			if (node == NULL)
+			{
+				if (line != NULL)
+					free(line);
 				return (1);
+			}
 			ft_t_node_add_back(&head, node);
 		}
 	}
@@ -67,7 +73,36 @@ static int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 // The quoted status of the "delimiter" token
 // is copied to the here_doc token
 // and the delimiter token is removed from the list.
-int	ft_lexer_heredoc(t_node *head)
+int	ft_lexer_heredoc(t_node **head)
+{
+	t_token	*token;
+	t_token	*delimiter;
+	t_node	*temp;
+
+	temp = *head;
+	while (temp != NULL)
+	{
+		token = ((t_token *)temp->content);
+		if (token->type == HERE_DOC)
+		{
+			if ((t_token *)((t_node *)temp->next) == NULL)
+				return (1);
+			delimiter = ((t_token *)((t_node *)temp->next)->content);
+			if (delimiter->type != WORD)
+				return (1);
+			else
+			{
+				ft_lexer_handle_heredoc_input(token, delimiter);
+				token->quote_status = delimiter->quote_status;
+				ft_t_node_detach_and_free(temp->next);
+			}
+		}
+		temp = temp->next;
+	}
+	return (0);
+}
+
+/* int	ft_lexer_heredoc(t_node *head)
 {
 	t_token	*token;
 	t_token	*delimiter;
@@ -92,4 +127,4 @@ int	ft_lexer_heredoc(t_node *head)
 		head = head->next;
 	}
 	return (0);
-}
+} */

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:46:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/24 18:06:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ t_node	*ft_lexer(char *input)
 	}
 	else
 	{
-		if (ft_lexer_heredoc(head))
+		if (ft_lexer_heredoc(&head))
 		{
 			ft_putstr_fd("Error: syntax error near unexpected token: \\n\n", 2);
 			free_t_node_list2(&head);
