@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 01:20:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/28 00:19:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,19 @@ int	executor_rec(t_node *head, t_data *data, int es, t_node *start)
 	(void)last_depth;
 	return (0);
 }
+
+/* void	ft_print_env(t_data *data)
+{
+	t_node	*envp;
+
+	envp = data->envp;
+	while (envp != NULL)
+	{
+		printf("[exec_main: executor] %s\n", envp->content);
+		envp = envp->next;
+	}
+	printf("next: execution\n");
+} */
 
 void	executor(t_node *head, t_data *data, int es)
 {

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:27:21 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:50:05 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/28 00:47:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "exec.h"
 #include <stdlib.h>
 #include "minis.h"
+#include <stdio.h>
 
 void	ft_get_variable_name_guard(char **var)
 {

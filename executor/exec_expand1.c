@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 02:44:56 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/27 23:34:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,9 @@ int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 	{
 		if (ft_t_bin_var_expansion_check(head, data))
 			return (1);
+		if (head->next == NULL || ((t_bin *)((t_node *)head->next) \
+			->content)->control_op != PIPE)
+			break ;
 		head = head->next;
 	}
 	return (0);
