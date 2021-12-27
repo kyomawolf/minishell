@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 16:56:33 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 16:58:47 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/27 21:01:57 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,14 @@
 #include "parser.h"
 #include "struct.h"
 #include <stdio.h>
+#include <unistd.h>
 
-int	pwd_main(t_data *data)
+int	pwd_main(void)
 {
-	printf("%s\n", mini_getenv(data, "PWD"));
+	char	*cwd;
+
+	cwd = getcwd(NULL, 0);
+	printf("%s\n", cwd);
+	free (cwd);
 	return (0);
 }

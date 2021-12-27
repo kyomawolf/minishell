@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 22:45:31 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:55:27 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/27 22:24:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	unset_main(char **argv, t_data *data)
 					((t_node *)envp_cp->prev)->next = envp_cp->next;
 				if (envp_cp->next != NULL)
 					((t_node *)envp_cp->next)->prev = envp_cp->prev;
+				free(envp_cp);
+				envp_cp = NULL;
 				break ;
 			}
 			envp_cp = envp_cp->next;

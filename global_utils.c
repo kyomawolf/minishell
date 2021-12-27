@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:32:03 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:55:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/27 19:58:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ char	*mini_getenv(t_data *data, char *var_name)
 	start = ft_strlen(format_s);
 	while (temp != NULL)
 	{
-		if (ft_strnstr((const char *)temp->content, format_s, \
+		if (!ft_strncmp(temp->content, format_s, start)
+			&& ft_strnstr((const char *)temp->content, format_s, \
 			ft_strlen(temp->content)) != NULL)
 			break ;
 		temp = temp->next;

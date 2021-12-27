@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 01:00:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/27 21:29:48 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data, t_node
 	else if (builtin == CD)
 		exit_status = cd_main(cmd_arr, data);
 	else if (builtin == PWD)
-		exit_status = pwd_main(data);
+		exit_status = pwd_main();
 	else if (builtin == EXPORT)
 		exit_status = export_main(cmd_arr, data);
 	else if (builtin == UNSET)

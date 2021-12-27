@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/24 01:04:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/27 21:29:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int					cd_main(char **argv, t_data *data);
 int					unset_main(char **argv, t_data *data);
 int					env_main(t_data *data);
 int					exit_main(char **argv, t_data *data, t_node *head);
-int					pwd_main(t_data *data);
+int					pwd_main(void);
 //wildcard
 char				**wild_pattern_match(char **all_dir, char **matcher);
 char				**wild_get_seperator(char *string);
