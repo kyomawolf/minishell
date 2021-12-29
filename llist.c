@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 16:45:22 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:55:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:10:02 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,6 @@
 #include "struct.h"
 #include "libft.h"
 #include <stdio.h>
-
-//void	*ft_s_node_insert(t_node **head, t_node *new, int index, t_node **point)
-//{
-//	int		i;
-//	t_node	*temp;
-//
-//	i = 0;
-//	temp = *head;
-//	if (*point != NULL)
-//		index = -1;
-//	while (temp != *point && i < index)
-//	{
-//		temp = temp->next;
-//		if (*point == NULL && i + 1 == index)
-//			*point = temp;
-//	}
-//}
 
 void	*ft_s_token_create(void *content)
 {
@@ -53,7 +36,6 @@ void	*ft_s_node_create(void *content)
 	struct s_node	*node;
 
 	node = (struct s_node *)malloc(sizeof(struct s_node));
-	//printf("NODE_ALLOC2-P:\t%p-%p\n", node, node + sizeof(t_node));
 	if (node == NULL)
 		return (NULL);
 	node->next = NULL;

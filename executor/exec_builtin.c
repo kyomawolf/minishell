@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/27 21:29:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:09:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 #include "struct.h"
 #include "exec.h"
 #include "libft.h"
-#include <errno.h> //?
+#include <errno.h>
 #include <stdlib.h>
-#include <unistd.h> //?
-#include <stdio.h> //?
+#include <unistd.h>
+#include <stdio.h>
 
 static t_e_builtin	get_builtin_code(char *cmd_name)
 {
@@ -42,7 +42,8 @@ static t_e_builtin	get_builtin_code(char *cmd_name)
 	return (builtin);
 }
 
-static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data, t_node *head)
+static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data, \
+						t_node *head)
 {
 	int	exit_status;
 
@@ -77,7 +78,7 @@ void	builtin_check_child(char **cmd_arr, t_data *data, t_node *head)
 	if (builtin != NONE)
 	{
 		exit_status = run_builtin(builtin, cmd_arr, data, head);
-		//free everything ?
+		free_main(data);
 		exit(exit_status);
 	}
 }

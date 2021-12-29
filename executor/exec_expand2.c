@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:05:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 02:04:41 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:06:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ static void	ft_exchange_str_arr(char ***str_arr, t_node *head)
 	i = 0;
 	while (head != NULL)
 	{
-		//(*str_arr)[i] = ((t_token *)head->content)->string;
 		str_arr[0][i] = ((t_token *)head->content)->string;
 		free((t_token *)head->content);
 		head->content = NULL;
@@ -39,7 +38,6 @@ static void	ft_exchange_str_arr(char ***str_arr, t_node *head)
 		i++;
 	}
 	str_arr[0][i] = NULL;
-	//(*str_arr)[i] = NULL;
 }
 
 static t_node	*convert_str_arr_to_t_node(char **sel_dir)
@@ -75,7 +73,6 @@ int	ft_str_array_var_expansion(char ***str_arr, t_data *data)
 
 	if (*str_arr != NULL)
 	{
-
 		head_token = NULL;
 		head_token = convert_str_arr_to_t_node(*str_arr);
 		if (head_token == NULL)

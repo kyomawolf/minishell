@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 01:05:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 18:20:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 //exec_utils.c
 char		ft_tolower2(unsigned int i, char c);
 void		wait_child(int sig);
+void		ft_t_expand_init(t_expand *exp_data);
 void		ft_signals(void);
 
 //exec_builtin.c
@@ -32,6 +33,7 @@ int			ft_adjust_pipes(t_exec *exec_data, t_node *head);
 int			ft_set_outout_redirection_helper(t_node *head);
 
 //exec_io2.c
+int			ft_redirection_error(char *filename, int fd);
 void		ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
 int			ft_exec_here_doc(t_exec *exec_data, t_node *head);
 

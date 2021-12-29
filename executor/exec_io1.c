@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:53:23 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 17:40:50 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,8 @@ static int	ft_set_input_redirection(t_exec *exec_data, t_node *head)
 		&& ((t_bin *)head->content)->io->infile != NULL)
 	{
 		fd = open(((t_bin *)head->content)->io->infile, O_RDONLY);
-		if (fd == -1)
-		{
-			ft_putstr_fd("minishell:", 2);
-			ft_putstr_fd(((t_bin *)head->content)->io->infile, 2);
-			ft_putstr_fd(": Permission denied\n", 2);
-			//ft_free_input(exec_data, EXIT);
+		if (ft_redirection_error(((t_bin *)head->content)->io->infile, fd))
 			return (1);
-		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 	}
@@ -62,14 +56,8 @@ int	ft_set_outout_redirection_helper(t_node *head)
 			fd = open(((t_bin *)head->content)->io->output[i], \
 			O_WRONLY | O_CREAT | O_APPEND, 0777);
 		}
-		if (fd == -1)
-		{
-				ft_putstr_fd("minishell:", 2);
-				ft_putstr_fd(((t_bin *)head->content)->io->output[i], 2);
-				ft_putstr_fd(": Permission denied\n", 2);
-				return (1);
-		}
-		//close "unused files"
+		if (ft_redirection_error(((t_bin *)head->content)->io->output[i], fd))
+			return (1);
 		if (((t_bin *)head->content)->io->output[i + 1] == NULL)
 			dup2(fd, STDOUT_FILENO);
 		close (fd);

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 18:06:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 17:08:24 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ static int	ft_operator_is_valid(t_node *head)
 	return (ret);
 }
 
+// separates input string into list of tokens.
+// checks for invalid operator tokens
+// and syntax errors related to usage of here_docs.
+// returns t_node *head, which is the head of a list with content t_token *
 t_node	*ft_lexer(char *input)
 {
 	t_node	*head;
@@ -56,6 +60,5 @@ t_node	*ft_lexer(char *input)
 			return (NULL);
 		}
 	}
-	//ft_s_node_print_content(head);
 	return (head);
 }

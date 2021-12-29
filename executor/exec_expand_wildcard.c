@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:51:30 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 16:51:24 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 
 static int	ft_check_for_wc_expansion(t_node **head)
 {
-	t_token	*token;
-	t_expand exp_data;
-	int		i;
+	t_token		*token;
+	t_expand	exp_data;
+	int			i;
 
 	token = (t_token *)(*head)->content;
 	if (token->type == WORD)

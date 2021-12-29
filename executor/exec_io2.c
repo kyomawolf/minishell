@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/25 15:08:39 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 17:59:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,35 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+int	ft_redirection_error(char *filename, int fd)
+{
+	int	ret;
+
+	ret = 0;
+	if (fd == -1)
+	{
+		ft_putstr_fd("minishell:", 2);
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		ret = 1;
+	}
+	return (ret);
+}
+
 static void	ft_exec_here_doc_helper(t_node *head)
 {
 	int		pipe_fd[2];
 	t_node	*here_doc;
-	t_node	*temp;
 
 	here_doc = ((t_bin *)head->content)->io->heredoc_node;
 	pipe(pipe_fd);
 	while (here_doc != NULL)
 	{
-		write(pipe_fd[1], here_doc->content, ft_strlen(here_doc->content));
-		write(pipe_fd[1], "\n", 1);
-		temp = here_doc;
+		if (here_doc->content != NULL)
+		{
+			write(pipe_fd[1], here_doc->content, ft_strlen(here_doc->content));
+			write(pipe_fd[1], "\n", 1);
+		}
 		here_doc = here_doc->next;
 	}
 	close(pipe_fd[1]);

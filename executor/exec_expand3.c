@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 16:24:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:04:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,6 @@ static void	ft_terminate_word(t_expand *exp_data)
 	exp_data->word = NULL;
 }
 
-void	ft_t_expand_init(t_expand *exp_data)
-{
-	exp_data->i = 0;
-	exp_data->list = NULL;
-	exp_data->word = ft_calloc(1, sizeof(t_word));
-	ft_t_word_init(exp_data->word);
-}
-
 // initializes the variable expansion
 t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 {
@@ -55,7 +47,7 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 			exp_data->i++;
 			if (temp[exp_data->i] == '\0')
 			{
-				ft_t_word_append_char(exp_data->word, temp[exp_data->i]);//need?
+				ft_t_word_append_char(exp_data->word, temp[exp_data->i]);
 				break ;
 			}
 			continue ;
@@ -66,7 +58,21 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 	return (exp_data->list);
 }
 
-static void	ft_exchange_tokens_helper(t_node **head, t_node *list, t_expand *exp_data)
+static void	ft_exchange_tokens_free_exp_data_word(t_expand *exp_data)
+{
+	if (exp_data->word != NULL)
+	{
+		if (exp_data->word->chars != NULL)
+		{
+			free(exp_data->word->chars);
+			exp_data->word->chars = NULL;
+		}
+		free(exp_data->word);
+		exp_data->word = NULL;
+	}
+}
+
+static void	ft_exchange_tokens_helper(t_node **head, t_node *list)
 {
 	t_node	*last_in_list;
 
@@ -83,11 +89,10 @@ static void	ft_exchange_tokens_helper(t_node **head, t_node *list, t_expand *exp
 	(*head)->content = NULL;
 	free(*head);
 	*head = last_in_list;
-	(void)exp_data;
 }
 
 // exchanges token with information about var_expansion with expaned tokens
-int	ft_exchange_tokens(t_node **head, t_expand *exp_data) //t_node *list
+int	ft_exchange_tokens(t_node **head, t_expand *exp_data)
 {
 	t_node	*temp;
 
@@ -104,19 +109,10 @@ int	ft_exchange_tokens(t_node **head, t_expand *exp_data) //t_node *list
 		exp_data->list->content = NULL;
 		free(exp_data->list);
 		exp_data->list = NULL;
-		if (exp_data->word != NULL)
-		{
-			if (exp_data->word->chars != NULL)
-			{
-				free(exp_data->word->chars);
-				exp_data->word->chars = NULL;
-			}
-			free(exp_data->word);
-			exp_data->word = NULL;
-		}
+		ft_exchange_tokens_free_exp_data_word(exp_data);
 		return (1);
 	}
 	else
-		ft_exchange_tokens_helper(head, exp_data->list, exp_data);
+		ft_exchange_tokens_helper(head, exp_data->list);
 	return (0);
 }

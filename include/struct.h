@@ -6,13 +6,12 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/28 16:53:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 17:03:00 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCTS_H
-
-# define STRUCTS_H
+#ifndef STRUCT_H
+# define STRUCT_H
 
 # define BUFFER_SIZE  1
 # define VAR_UQUOTED -1
@@ -24,6 +23,13 @@
 
 # include <stdlib.h>
 
+// OPAR = opened parenthesis
+// CPAR = closed parenthesis
+// HERE_DOC with legacy = 1
+// IRD = input redirection
+// ORD_APP = output redirection: mode append, legacy = 3
+// ORD_TRC = output redirection: mode truncate, legacy = 4
+// DQUOTE = double quoted
 typedef enum e_op
 {
 	AND,
@@ -31,10 +37,10 @@ typedef enum e_op
 	PIPE,
 	OPAR,
 	CPAR,
-	HERE_DOC,	//				legacy 1
-	IRD,		//Input ReDirect no sw
-	ORD_APP,	//APP append 	leg 3
-	ORD_TRC,	//truncate		leg 4
+	HERE_DOC,
+	IRD,
+	ORD_APP,
+	ORD_TRC,
 	QUOTE,
 	DQUOTE,
 	WORD
@@ -136,4 +142,4 @@ typedef struct s_data
 	t_node				**opendes;
 }	t_data;
 
-#endif /*STRUCTS_H*/
+#endif /*STRUCT_H*/

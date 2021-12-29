@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 23:12:40 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:11:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,15 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+//maybe include pipecontrol
+//if (sig == SIGPIPE)
+//{
+//	printf("PIPE FAULT\n");
+//	input_attributes_clear();
+//	//close_pipe(data, 1);
+//	return ;
+//}
+
 void	input_interrupt(int sig)
 {
 	struct termios	loc;
@@ -33,17 +42,8 @@ void	input_interrupt(int sig)
 		input_attributes_clear();
 		exit(11);
 	}
-	//maybe include pipecontrol
-	//if (sig == SIGPIPE)
-	//{
-	//	printf("PIPE FAULT\n");
-	//	input_attributes_clear();
-	//	//close_pipe(data, 1);
-	//	return ;
-	//}
 	if (sig == SIGINT)
 	{
-		//write(1, "\n", 1);
 		printf("\n");
 		rl_replace_line("", 0);
 	}

@@ -6,11 +6,12 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:47:45 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/21 19:39:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 18:21:33 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
+#include "struct.h"
 #include <signal.h>
 
 char	ft_tolower2(unsigned int i, char c)
@@ -23,6 +24,14 @@ void	wait_child(int sig)
 {
 	(void) sig;
 	return ;
+}
+
+void	ft_t_expand_init(t_expand *exp_data)
+{
+	exp_data->i = 0;
+	exp_data->list = NULL;
+	exp_data->word = ft_calloc(1, sizeof(t_word));
+	ft_t_word_init(exp_data->word);
 }
 
 void	ft_signals(void)

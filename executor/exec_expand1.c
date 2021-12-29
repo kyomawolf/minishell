@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/27 23:34:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:07:15 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,19 +57,11 @@ static int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 	else
 	{
 		if (tree->command->arguments != NULL)
-		{
-			//printf("[%s][%d] before str arr var exp argument %s\n",__FILE__, __LINE__, ((t_bin *)head->content)->command->arguments[0]);
 			ft_str_array_var_expansion(&(tree->command->arguments), data);
-			//printf("[%s][%d] after str arr var exp argument %s\n",__FILE__, __LINE__, ((t_bin *)head->content)->command->arguments[0]);
-
-		}
 		if (tree->io != NULL)
 		{
 			ft_t_io_heredoc_var_expansion(tree->io, data);
-			//printf("[%s][%d]before tbin var exp check infile :%s:\n",__FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
 			ft_str_array_var_expansion(&(tree->io->input), data);
-			//printf("[%s][%d]after tbin var exp check head infile :%s:\n",__FILE__, __LINE__, ((t_bin *)head->content)->io->infile);
-			//printf("[%s][%d]after tbin var exp check tree infile :%s:\n",__FILE__, __LINE__, tree->io->infile);
 			ft_str_array_var_expansion(&(tree->io->output), data);
 		}
 	}

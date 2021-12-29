@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/24 16:28:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 19:18:27 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,32 +43,34 @@ void	get_prompt(t_data *data)
 	temp[ii++] = ' ';
 	temp[ii] = '\0';
 	if (data->prompt != NULL)
-	{
 		free(data->prompt);
-	}
 	data->prompt = ft_strjoin("minishell@", temp);
 	free(temp);
 	temp = NULL;
 }
 
+void	main_init(t_data *data)
+{
+	input_attributes_add();
+	input_readline(data);
+	input_attributes_clear();
+	if (data->input == NULL)
+	{
+		free_main(data);
+		printf("\n\nWARNING: LEAVING MINISHELL\n");
+		system("leaks minishell");
+		exit(0);
+	}
+}
+
 void	main_loop(t_data *data)
 {
 	t_node	*head;
-	t_node	*temp;
 
 	head = NULL;
 	while (1)
 	{
-		input_attributes_add();
-		input_readline(data);
-		input_attributes_clear();
-		if (data->input == NULL)
-		{
-			free_main(data);
-			printf("\n\nWARNING: LEAVING MINISHELL\n");
-			system("leaks minishell");
-			exit(0);
-		}
+		main_init(data);
 		if (data->input[0] == '\0')
 			continue ;
 		data->list = ft_lexer(data->input);
@@ -81,13 +83,7 @@ void	main_loop(t_data *data)
 			traverse_tree_rec(data->tree, &head);
 			executor(head, data, 0);
 		}
-		while (head != NULL)
-		{
-			temp = head;
-			head = head->next;
-			free(temp);
-			temp = NULL;
-		}
+		free_list_wo_content(&head);
 		free_tree(data->tree);
 		data->tree = NULL;
 		get_prompt(data);
@@ -107,12 +103,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
 
-	// if (argc > 1)
-	// {
-	// 	write(2,
-	// 	"Error: Too many arguments. No arugment allowed.", 48);
-	// 	return (1);
-	// }
 	(void) argc;
 	data = NULL;
 	data = new_t_data(envp);

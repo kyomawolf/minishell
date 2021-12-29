@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 10:45:42 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 16:40:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 17:23:54 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 	free_main(data);
 	ft_free_pipeline(&head);
 	free_char_array(&argv);
-	//system("leaks -quiet minishell");
+	system("leaks -quiet minishell");
 	exit(ret);
 }
