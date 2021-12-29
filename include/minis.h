@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/27 21:29:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 01:40:26 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,13 @@ void				free_token2(t_node **node);
 
 int					echo_main(char **argv);
 int					export_main(char **argv, t_data *data);
+void				export_print_list(t_data *data);
+int					export_detach_helper_expo(t_data *data, char *new, int ret_case);
+int					export_check_var_wo_value_list(t_data *data, char *new, int ret_case);
 int					cd_main(char **argv, t_data *data);
 int					unset_main(char **argv, t_data *data);
+int					builtin_invalid_name_check(char **argv, int i, char *name);
+void				print_error_inv_ident(char **argv, int i, char *name_ft);
 int					env_main(t_data *data);
 int					exit_main(char **argv, t_data *data, t_node *head);
 int					pwd_main(void);

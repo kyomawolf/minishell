@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 16:45:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 16:35:26 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/28 17:04:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,6 +154,7 @@ void	free_main(t_data *data)
 		data->currdir = NULL;
 	}
 	free_t_node_content_list(data->envp);
+	free_t_node_content_list(data->expo);
 	free(data);
 	data = NULL;
 }

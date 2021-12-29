@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:53:53 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:47:21 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/28 22:37:58 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 
 //detaches t_node and frees the content of t_token (string) and token itself
+// can only be used if to_detach is in the middle of a list
 void	ft_t_node_detach_and_free(t_node *to_detach)
 {
 	((t_node *)to_detach->prev)->next = to_detach->next;

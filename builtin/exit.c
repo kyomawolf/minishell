@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 10:45:42 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 16:39:13 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 01:35:11 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 		printf("Exitcode must be numerical!\n");
 	else if (argv[1] != NULL)
 		ret = ft_atoi(argv[1]);
-	/* if (argv[1] != NULL)
-		return (42); */
 	printf("Goodbye %s!\n", mini_getenv(data, "USER"));
 	free_main(data);
 	ft_free_pipeline(&head);
