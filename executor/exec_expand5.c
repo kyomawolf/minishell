@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:33:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 20:01:22 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:41:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,13 @@ void	ft_handle_squoted_var(t_node *head, t_word *word, int *i)
 void	ft_handle_unquoted_var(t_expand *exp_data, char **var)
 {
 	int	j;
+	int	flag;
 
+	flag = 1;
 	j = 0;
 	while (var[1][j] != '\0')
 	{
+		flag = 0;
 		if (ft_whitespaces(var[1][j]))
 		{
 			ft_skip_set(var[1], &j, " \t\n");
@@ -91,26 +94,32 @@ void	ft_handle_unquoted_var(t_expand *exp_data, char **var)
 		}
 		ft_t_word_append_char(exp_data->word, var[1][j]);
 		if (var[1][j] == '*')
-		{
 			ft_t_word_append_char(exp_data->word, -2);
-		}
 		j++;
 	}
+	if (flag)
+		ft_t_word_append_char(exp_data->word, var[1][j]);
 }
 
 // appends chars to word in case of a double quoted variable
 void	ft_handle_dquoted_var(t_word *word, char **var)
 {
 	int	j;
+	int	flag;
 
+	flag = 1;
 	j = 0;
 	while (var[1][j] != '\0')
 	{
+		flag = 0;
 		ft_t_word_append_char(word, var[1][j]);
 		if (var[1][j] == '*')
 			ft_t_word_append_char(word, -1);
 		j++;
 	}
+	if (flag)
+		ft_t_word_append_char(word, var[1][j]);
 }
 // in last line of function above.
-//ft_t_word_append_char(word, var[1][j]); WHAT WAS THE REASON BEHIND THIS ?
+//ft_t_word_append_char(word, var[1][j]); if var_name doesnt exist
+//-> expand to empty string

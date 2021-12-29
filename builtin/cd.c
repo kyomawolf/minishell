@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 15:37:02 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 20:29:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ void	cd_change_oldpwd(t_data *data)
 
 int	cd_execute(char	*path, t_data *data)
 {
+	int		ret;
+	char	*temp;
+
 	if (access(path, F_OK | X_OK))
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
@@ -70,8 +73,12 @@ int	cd_execute(char	*path, t_data *data)
 		ft_putstr_fd("\n", 2);
 		return (2);
 	}
+	temp = ft_strdup(path);
 	cd_change_oldpwd(data);
-	return (chdir(path));
+	ret = chdir(temp);
+	free (temp);
+	temp = NULL;
+	return (ret);
 }
 
 int	cd_main_special_cases(char **argv, t_data *data)

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:54:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 00:02:21 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 21:50:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ static t_node	*create_pipeline(t_node *start, t_node *end)
 	pipeline = NULL;
 	while (1)
 	{
+		if (start == NULL)
+			break ;
 		ft_t_node_add_back(&pipeline, ft_t_node_create(start->content));
 		if (start == end)
 			break ;
@@ -108,7 +110,11 @@ t_node	*create_execution_pipeline(t_node **head, t_data *data)
 			return (NULL);
 		if ((*head)->next == NULL || ((t_bin *)((t_node *)(*head)->next) \
 			->content)->control_op != PIPE)
+		{
+			if ((*head)->next == NULL)
+				*head = (*head)->next;
 			break ;
+		}
 		*head = (*head)->next;
 	}
 	end = *head;

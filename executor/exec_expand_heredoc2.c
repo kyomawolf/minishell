@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:44:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:49:33 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 22:37:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,16 +74,21 @@ int	ft_heredoc_handle_var_expansion(t_node *node, t_word *word, \
 {
 	char	**var;
 	int		j;
+	int		flag;
 
+	flag = 1;
 	var = ft_heredoc_get_variable_name(node, *i + 1, data);
 	if (var == NULL)
 		return (1);
 	j = 0;
 	while (var[1][j] != '\0')
 	{
+		flag = 0;
 		ft_t_word_append_char(word, var[1][j]);
 		j++;
 	}
+	if (flag)
+		ft_t_word_append_char(word, var[1][j]);
 	j = 0;
 	while (var[0][j++] != '\0')
 		(*i)++;

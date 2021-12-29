@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 20:07:15 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 21:42:34 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 
 int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 {
+	if (head != NULL && head->content != NULL)
+	{
+		if (ft_t_bin_var_expansion_check(head, data))
+			return (1);
+	}
+	return (0);
+}
+
+/*
+int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
+{
 	while (head != NULL && head->content != NULL)
 	{
 		if (ft_t_bin_var_expansion_check(head, data))
@@ -100,4 +111,4 @@ int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 		head = head->next;
 	}
 	return (0);
-}
+} */
