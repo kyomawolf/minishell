@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 01:40:26 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 14:58:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ void				ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
 void				*ft_s_node_get_last(void *head);
 void				free_t_node_list2(t_node **head);
 void				free_token2(t_node **node);
+t_node				*detach_node(t_node **head, t_node *node);
 
 //builtins
 

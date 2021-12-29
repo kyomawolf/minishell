@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/27 22:22:19 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/29 15:37:02 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <errno.h>
 
 void	cd_change_pwd(t_data *data)
 {
@@ -59,10 +61,14 @@ void	cd_change_oldpwd(t_data *data)
 
 int	cd_execute(char	*path, t_data *data)
 {
-	if (access(path, X_OK))
+	if (access(path, F_OK | X_OK))
 	{
-		printf("minishell: cd: permission denied.\n");
-		return (-2);
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(strerror(errno), 2);
+		ft_putstr_fd("\n", 2);
+		return (2);
 	}
 	cd_change_oldpwd(data);
 	return (chdir(path));
@@ -99,14 +105,7 @@ int	cd_main(char **argv, t_data *data)
 	err = cd_main_special_cases(argv, data);
 	if (err == 1)
 		err = cd_execute(argv[1], data);
-	if (err == -1)
-	{
-		ft_putstr_fd("minishell: cd: no such file or directory: ", 2);
-		ft_putstr_fd(argv[1], 2);
-		ft_putstr_fd("\n", 2);
-		return (1);
-	}
-	else if (err == -2 || err == 2)
+	if (err == 2)
 		return (1);
 	cd_change_pwd(data);
 	if (data->currdir != NULL)
