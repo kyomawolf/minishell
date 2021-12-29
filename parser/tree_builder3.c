@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/24 18:08:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 00:24:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		tree->io->heredoc_node = ((t_token *)node->content)->heredoc;
 		((t_token *)node->content)->heredoc = NULL;
 		tree->io->quoted_status = ((t_token *)node->content)->quote_status;
+		if (tree->io->infile)
+			free(tree->io->infile);
 		tree->io->infile = NULL;
 		return ((t_node *)node->next);
 	}
