@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 23:14:15 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 00:35:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	ft_set_input_redirection(t_exec *exec_data, t_node *head)
 		while (((t_bin *)head->content)->io->input[i])
 		{
 			fd = open(((t_bin *)head->content)->io->input[i], O_RDONLY);
-			if (ft_redirection_error(((t_bin *)head->content)->io->input[i], fd))
+			if (redirection_error(((t_bin *)head->content)->io->input[i], fd))
 				return (1);
 			if (((t_bin *)head->content)->io->input[i + 1] == NULL)
 				dup2(fd, STDIN_FILENO);
@@ -86,7 +86,7 @@ int	ft_set_outout_redirection_helper(t_node *head)
 			fd = open(((t_bin *)head->content)->io->output[i], \
 			O_WRONLY | O_CREAT | O_APPEND, 0777);
 		}
-		if (ft_redirection_error(((t_bin *)head->content)->io->output[i], fd))
+		if (redirection_error(((t_bin *)head->content)->io->output[i], fd))
 			return (1);
 		if (((t_bin *)head->content)->io->output[i + 1] == NULL)
 			dup2(fd, STDOUT_FILENO);

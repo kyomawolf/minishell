@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 18:20:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 00:35:13 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			ft_adjust_pipes(t_exec *exec_data, t_node *head);
 int			ft_set_outout_redirection_helper(t_node *head);
 
 //exec_io2.c
-int			ft_redirection_error(char *filename, int fd);
+int			redirection_error(char *filename, int fd);
 void		ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
 int			ft_exec_here_doc(t_exec *exec_data, t_node *head);
 

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 22:58:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 00:36:17 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <errno.h>
 #include <string.h>
 
-int	ft_redirection_error(char *filename, int fd)
+int	redirection_error(char *filename, int fd)
 {
 	int	ret;
 
@@ -29,7 +29,7 @@ int	ft_redirection_error(char *filename, int fd)
 	{
 		ft_putstr_fd("minishell:", 2);
 		ft_putstr_fd(filename, 2);
-		ft_putstr_fd(": ",2);
+		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(strerror(errno), 2);
 		ft_putstr_fd("\n", 2);
 		ret = 1;
