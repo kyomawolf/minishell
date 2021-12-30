@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 20:05:40 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 16:36:34 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,12 @@ void				ft_s_node_add_back(struct s_node **head, \
 int					ft_s_node_iter(struct s_node *head);
 
 //temporay
+t_node_io			*ft_t_node_io_create(char *file, char io_type);//, t_node *hd_content);
+int					ft_t_node_io_size(t_node_io *head);
+t_node_io			*ft_t_node_io_get_last(t_node_io *head, int type);
+void				ft_t_node_io_add_back(t_node_io **head, t_node_io *node);
+char				*ft_heredoc_get_var_name(char *str, int i);
+
 void				traverse_tree(t_bin *tree, t_node **head);
 void				traverse_tree_rec(t_bin *tree, t_node **head);
 void				ft_t_node_free(t_node *head);

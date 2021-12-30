@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/22 19:11:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 21:22:22 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,14 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 	while (*ori_node != NULL)
 	{
 		if (token > CPAR && token < QUOTE)
+		{
 			*ori_node = add_io(ret, *ori_node);
+			if (*ori_node == ((void*)1))
+			{
+				free_tree(ret);
+				return ((void *)1);
+			}
+		}
 		if (token < HERE_DOC)
 			break ;
 		*ori_node = add_words(ret->command, *ori_node);

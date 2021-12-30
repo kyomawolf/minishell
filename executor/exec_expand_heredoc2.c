@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:44:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 22:37:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 13:55:41 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static char	*ft_heredoc_get_var_name_special_cases(char *str, int i)
 	return (var_name);
 }
 
-static char	*ft_heredoc_get_var_name(char *str, int i)
+char	*ft_heredoc_get_var_name(char *str, int i)
 {
 	int		i_start;
 	char	*var_name;

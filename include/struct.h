@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 17:03:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 19:36:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,25 @@ typedef struct s_node
 	void	*content;
 }	t_node;
 
+typedef struct s_node_io
+{
+	struct s_node_io	*next;
+	struct s_node_io	*prev;
+	char				*file;
+	char				io_type;
+	char				active_hd;
+}	t_node_io;
+
 typedef struct s_io
 {
-	t_node	*heredoc_node;
-	int		quoted_status;
-	int		i_count;
-	char	**input;
-	char	*infile;
-	int		o_mode;
-	char	**output;
+	t_node		*heredoc_node;
+	int			quoted_status;
+	int			i_count;
+	t_node_io	*redir;
+	char		**input;
+	char		*infile;
+	int			o_mode;
+	char		**output;
 }	t_io;
 
 typedef struct s_simple_com

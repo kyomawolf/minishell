@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 00:24:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 21:53:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,34 +16,43 @@
 #include "parser.h"
 #include <stdio.h>
 
-void	add_io_i(t_bin *tree, t_node *node)
+int	ft_t_node_io_append(t_bin *tree, t_node *node, int type)
 {
-	int	idx;
+	t_node_io	*node_io;
 
-	tree->io->i_count++;
-	if (tree->io->input == NULL)
-		tree->io->input = ft_calloc(2, sizeof(char *));
+	if (type == HERE_DOC)
+		node_io = ft_t_node_io_create("__here_doc", HERE_DOC);
 	else
-		tree->io->input = ft_realloc_charpp(&tree->io->input, \
-		ft_char_arr_len(tree->io->input) + 2);
-	idx = ft_char_arr_len(tree->io->input);
-	tree->io->input[idx] = \
-	ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
-	if (tree->io->infile)
-		free(tree->io->infile);
-	tree->io->infile = ft_strdup(tree->io->input[idx]);
+	{
+		node_io = ft_t_node_io_create(((t_token *)((t_node *)node->next) \
+			->content)->string, type);
+	}
+	if (node_io == NULL)
+		return (1);
+	ft_t_node_io_add_back(&(tree->io->redir), node_io);
+	if (type == IRD)
+	{
+		if (tree->io->infile)
+			free(tree->io->infile);
+		tree->io->infile = ft_strdup(node_io->file);
+	}
+	return (0);
 }
 
-void	add_io_helper(t_bin *tree, t_node *node)
+int	add_io_i(t_bin *tree, t_node *node)
+{
+	tree->io->i_count++;
+	if (ft_t_node_io_append(tree, node, IRD))
+		return (1);
+	return (0);
+}
+
+int	add_io_helper(t_bin *tree, t_node *node)
 {
 	tree->io->o_mode = ((t_token *)node->content)->type - HERE_DOC + 1;
-	if (tree->io->output == NULL)
-		tree->io->output = ft_calloc(2, sizeof(char *));
-	else
-		tree->io->output = ft_realloc_charpp(&tree->io->output, \
-		ft_char_arr_len(tree->io->output) + 2);
-	tree->io->output[ft_char_arr_len(tree->io->output)] = \
-	ft_strdup(((t_token *)((t_node *)node->next)->content)->string);
+	if (ft_t_node_io_append(tree, node, ((t_token *)node->content)->type))
+		return (1);
+	return (0);
 }
 
 t_node	*add_io(t_bin *tree, t_node *node)
@@ -52,7 +61,8 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		tree->io = ft_calloc(1, sizeof(t_io));
 	if (((t_token *)node->content)->type == IRD)
 	{
-		add_io_i(tree, node);
+		if (add_io_i(tree, node))
+			return ((void *)1);
 	}
 	else if (((t_token *)node->content)->type == HERE_DOC)
 	{
@@ -64,10 +74,15 @@ t_node	*add_io(t_bin *tree, t_node *node)
 		if (tree->io->infile)
 			free(tree->io->infile);
 		tree->io->infile = NULL;
+		if (ft_t_node_io_append(tree, node, HERE_DOC))
+			return ((void *)1);
 		return ((t_node *)node->next);
 	}
 	else
-		add_io_helper(tree, node);
+	{
+		if (add_io_helper(tree, node))
+			return ((void *)1);
+	}
 	return (((t_node *)node->next)->next);
 }
 

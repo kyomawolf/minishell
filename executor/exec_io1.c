@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 00:35:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 21:50:57 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,105 +15,58 @@
 #include "libft.h"
 #include <unistd.h>
 #include <fcntl.h>
+#include <stdio.h>
 
-static int	ft_set_input_redirection(t_exec *exec_data, t_node *head)
+int	ft_check_last_redir(t_node_io *node_io, int type)
+{
+	int	ret;
+
+	ret = 1;
+	while (node_io)
+	{
+		if (type == IRD && node_io->io_type == IRD)
+		{
+			ret = 0;
+			break ;
+		}
+		else if ((type == ORD_APP || type == ORD_TRC) \
+			&& (node_io->io_type == ORD_APP || node_io->io_type == ORD_TRC))
+		{
+			ret = 0;
+			break ;
+		}
+		node_io = node_io->next;
+	}
+	return (ret);
+}
+
+int	ft_set_input_redirection(t_io *io, t_node_io *node_io)
 {
 	int	fd;
-	int	i;
 
-	if (((t_bin *)head->content)->io != NULL \
-		&& ((t_bin *)head->content)->io->infile != NULL \
-		&& ((t_bin *)head->content)->io->input != NULL)
-	{
-		i = 0;
-		while (((t_bin *)head->content)->io->input[i])
-		{
-			fd = open(((t_bin *)head->content)->io->input[i], O_RDONLY);
-			if (redirection_error(((t_bin *)head->content)->io->input[i], fd))
-				return (1);
-			if (((t_bin *)head->content)->io->input[i + 1] == NULL)
-				dup2(fd, STDIN_FILENO);
-			close(fd);
-			i++;
-		}
-	}
-	else if (exec_data->cmd_count != 0)
-	{
-		dup2(exec_data->pipes[exec_data->cmd_count][0], STDIN_FILENO);
-		close(exec_data->pipes[exec_data->cmd_count][0]);
-	}
+	fd = open(node_io->file, O_RDONLY);
+	if (redirection_error(node_io->file, fd))
+		return (1);
+	if (io->infile != NULL && ft_check_last_redir(node_io->next, IRD))
+		dup2(fd, STDIN_FILENO);
+	close(fd);
 	return (0);
 }
 
-//cpy
-/* static int	ft_set_input_redirection(t_exec *exec_data, t_node *head)
+static int	ft_set_output_redirection(t_io *io, t_node_io *node_io)
 {
-	int	fd;
-
-	if (((t_bin *)head->content)->io != NULL \
-		&& ((t_bin *)head->content)->io->infile != NULL)
-	{
-		fd = open(((t_bin *)head->content)->io->infile, O_RDONLY);
-		if (ft_redirection_error(((t_bin *)head->content)->io->infile, fd))
-			return (1);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
-	else if (exec_data->cmd_count != 0)
-	{
-		dup2(exec_data->pipes[exec_data->cmd_count][0], STDIN_FILENO);
-		close(exec_data->pipes[exec_data->cmd_count][0]);
-	}
-	return (0);
-} */
-
-int	ft_set_outout_redirection_helper(t_node *head)
-{
-	int	i;
 	int	fd;
 
 	fd = -2;
-	i = 0;
-	while (((t_bin *)head->content)->io->output[i] != NULL)
-	{
-		if (((t_bin *)head->content)->io->o_mode == 4)
-		{
-			fd = open(((t_bin *)head->content)->io->output[i], \
-			O_WRONLY | O_CREAT | O_TRUNC, 0777);
-		}
-		else if (((t_bin *)head->content)->io->o_mode == 3)
-		{
-			fd = open(((t_bin *)head->content)->io->output[i], \
-			O_WRONLY | O_CREAT | O_APPEND, 0777);
-		}
-		if (redirection_error(((t_bin *)head->content)->io->output[i], fd))
-			return (1);
-		if (((t_bin *)head->content)->io->output[i + 1] == NULL)
-			dup2(fd, STDOUT_FILENO);
-		close (fd);
-		i++;
-	}
-	return (0);
-}
-
-static int	ft_set_output_redirection(t_exec *exec_data, t_node *head)
-{
-	if (((t_bin *)head->content)->io != NULL \
-		&& ((t_bin *)head->content)->io->output != NULL)
-	{
-		if (ft_set_outout_redirection_helper(head))
-			return (1);
-	}
-	else if (exec_data->cmd_count != exec_data->num_cmds - 1)
-	{
-		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);
-		close(exec_data->pipes[exec_data->cmd_count + 1][1]);
-	}
-	else if (exec_data->cmd_count == 0 && exec_data->num_cmds != 1)
-	{
-		dup2(exec_data->pipes[1][1], STDOUT_FILENO);
-		close(exec_data->pipes[1][1]);
-	}
+	if (io->o_mode == 4)
+		fd = open(io->redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	else if (io->o_mode == 3)
+		fd = open(io->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	if (redirection_error(io->redir->file, fd))
+		return (1);
+	if (ft_check_last_redir(node_io->next, node_io->io_type))
+		dup2(fd, STDOUT_FILENO);
+	close (fd);
 	return (0);
 }
 
@@ -134,22 +87,60 @@ static void	ft_close_unused_pipes(t_exec *exec_data)
 
 int	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 {
-	int	ret;
+	int		ret;
+	t_io	*io;
+	int		output_flag;
+	int		input_flag;
 
+	output_flag = 0;
+	input_flag = 0;
 	ret = 0;
 	ft_close_unused_pipes(exec_data);
-	ft_t_exec_heredoc_check(head, exec_data);
-	if (exec_data->here_doc == 1)
+	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->redir != NULL)
 	{
-		if (ft_exec_here_doc(exec_data, head))
-			ret = 1;
+		io = ((t_bin *)head->content)->io;
+		while (io->redir)
+		{
+			if (io->redir->io_type == HERE_DOC && io->redir->active_hd)
+			{
+				ft_exec_here_doc_helper(head);
+				input_flag = 1;
+			}
+			else if (io->redir->io_type == IRD)
+			{
+				if (ft_set_input_redirection(io, io->redir))
+				{
+					ret = 1;
+					break ;
+				}
+				input_flag = 1;
+			}
+			else
+			{
+				if (ft_set_output_redirection(io, io->redir))
+				{
+					ret = 1;
+					break ;
+				}
+				output_flag = 1;
+			}
+			io->redir = io->redir->next;
+		}
 	}
-	else
+	if (input_flag == 0 && exec_data->cmd_count != 0)
 	{
-		if (ft_set_input_redirection(exec_data, head))
-			ret = 1;
-		if (ret != 1 && ft_set_output_redirection(exec_data, head))
-			ret = 1;
+		dup2(exec_data->pipes[exec_data->cmd_count][0], STDIN_FILENO);
+		close(exec_data->pipes[exec_data->cmd_count][0]);
+	}
+	if (output_flag == 0 && exec_data->cmd_count != exec_data->num_cmds - 1)
+	{
+		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);
+		close(exec_data->pipes[exec_data->cmd_count + 1][1]);
+	}
+	else if (output_flag == 0 && exec_data->cmd_count == 0 && exec_data->num_cmds != 1)
+	{
+		dup2(exec_data->pipes[1][1], STDOUT_FILENO);
+		close(exec_data->pipes[1][1]);
 	}
 	return (ret);
 }

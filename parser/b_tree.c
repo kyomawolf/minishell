@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_tree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 15:23:11 by jkasper          ###   ########.fr       */
+/*   Updated: 2021/12/30 21:23:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int		b_tree_add_child(t_node **node, t_bin *root);
 t_bin	*b_tree_init(t_node **node, int depth)
 {
 	t_bin	*root;
+	int		ret;
 
 	root = ft_calloc(1, sizeof(t_bin));
 	root->depth = depth;
@@ -33,8 +34,14 @@ t_bin	*b_tree_init(t_node **node, int depth)
 	root->child = ft_calloc(root->child_amount + 1, sizeof(t_bin *));
 	while (1)
 	{
-		if (b_tree_add_child(node, root))
+		ret = b_tree_add_child(node, root);
+		if (ret == 1)
 			break ;
+		else if (ret == 2)
+		{
+			free_tree(root);
+			return (NULL);
+		}
 	}
 	return (root);
 }
@@ -64,6 +71,8 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 			*node = (*node)->next;
 			root->child[i] = b_tree_init(node, root->depth + 1);
 		}
+		else if (root->child[i] == (void *)1)
+			return (2);
 		i++;
 	}
 	return (ret);

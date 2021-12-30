@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 00:35:13 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:06:02 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int			ft_set_outout_redirection_helper(t_node *head);
 int			redirection_error(char *filename, int fd);
 void		ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
 int			ft_exec_here_doc(t_exec *exec_data, t_node *head);
+void		ft_exec_here_doc_helper(t_node *head);
 
 //exec_executor.c
 int			ft_execute(t_node *head, t_data *data);
@@ -76,6 +77,13 @@ void		ft_t_io_heredoc_var_expansion(t_io *io, t_data *data);
 //exec_expand_heredoc2.c
 int			ft_heredoc_handle_var_expansion(t_node *node, t_word *word, \
 											int *i, t_data *data);
+
+//exec_expand_io1.c
+void		ft_t_io_redir_expansion(t_io *io, t_data *data);
+
+//exec_expand_io2.c
+int			ft_redir_handle_var_expansion(t_node_io *node, t_word *word, \
+											int *i,	t_data *data);
 
 //exec_expand_utils.c
 int			ft_get_beginning_of_list(t_node *temp, t_node **head);

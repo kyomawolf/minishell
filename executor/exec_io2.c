@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 00:36:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:12:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,31 @@ int	redirection_error(char *filename, int fd)
 	return (ret);
 }
 
-static void	ft_exec_here_doc_helper(t_node *head)
+void	ft_exec_here_doc_helper(t_node *head)
 {
 	int		pipe_fd[2];
 	t_node	*here_doc;
 
-	here_doc = ((t_bin *)head->content)->io->heredoc_node;
-	pipe(pipe_fd);
-	while (here_doc != NULL)
+	if (((t_bin *)head->content)->io->infile == NULL)
 	{
-		if (here_doc->content != NULL)
+		here_doc = ((t_bin *)head->content)->io->heredoc_node;
+		pipe(pipe_fd);
+		while (here_doc != NULL)
 		{
-			write(pipe_fd[1], here_doc->content, ft_strlen(here_doc->content));
-			write(pipe_fd[1], "\n", 1);
+			if (here_doc->content != NULL)
+			{
+				write(pipe_fd[1], here_doc->content, ft_strlen(here_doc->content));
+				write(pipe_fd[1], "\n", 1);
+			}
+			here_doc = here_doc->next;
 		}
-		here_doc = here_doc->next;
+		close(pipe_fd[1]);
+		dup2(pipe_fd[0], STDIN_FILENO);
+		close(pipe_fd[0]);
 	}
-	close(pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	close(pipe_fd[0]);
 }
 
-int	ft_exec_here_doc(t_exec *exec_data, t_node *head)
+/* int	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 {
 	int	ret;
 
@@ -81,7 +84,7 @@ int	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 		close(exec_data->pipes[1][1]);
 	}
 	return (ret);
-}
+} */
 
 void	ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data)
 {

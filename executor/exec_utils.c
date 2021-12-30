@@ -6,12 +6,13 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:47:45 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 18:21:33 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 20:08:01 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "struct.h"
+#include "lexer.h"
 #include <signal.h>
 
 char	ft_tolower2(unsigned int i, char c)
