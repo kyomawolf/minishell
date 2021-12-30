@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 21:50:57 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/30 23:30:30 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,18 @@ static int	ft_set_output_redirection(t_io *io, t_node_io *node_io)
 {
 	int	fd;
 
-	fd = -2;
-	if (io->o_mode == 4)
-		fd = open(io->redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	else if (io->o_mode == 3)
-		fd = open(io->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	if (redirection_error(io->redir->file, fd))
-		return (1);
-	if (ft_check_last_redir(node_io->next, node_io->io_type))
-		dup2(fd, STDOUT_FILENO);
-	close (fd);
+	if (io->o_mode == 4 || io->o_mode == 3)
+	{
+		if (io->o_mode == 4)
+			fd = open(io->redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		else if (io->o_mode == 3)
+			fd = open(io->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		if (redirection_error(io->redir->file, fd))
+			return (1);
+		if (ft_check_last_redir(node_io->next, node_io->io_type))
+			dup2(fd, STDOUT_FILENO);
+		close (fd);
+	}
 	return (0);
 }
 
@@ -115,7 +117,7 @@ int	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 				}
 				input_flag = 1;
 			}
-			else
+			else if (io->redir->io_type == ORD_APP || io->redir->io_type == ORD_TRC)
 			{
 				if (ft_set_output_redirection(io, io->redir))
 				{
