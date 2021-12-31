@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 13:38:50 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/31 18:25:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,6 @@ static int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 		{
 			ft_t_io_heredoc_var_expansion(tree->io, data);
 			ft_t_io_redir_expansion(tree->io, data);
-			//ft_str_array_var_expansion(&(tree->io->input), data);
-			//ft_str_array_var_expansion(&(tree->io->output), data);
 		}
 	}
 	return (0);
@@ -98,18 +96,3 @@ int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
 	}
 	return (0);
 }
-
-/*
-int	ft_t_bin_variable_expansion(t_node *head, t_data *data)
-{
-	while (head != NULL && head->content != NULL)
-	{
-		if (ft_t_bin_var_expansion_check(head, data))
-			return (1);
-		if (head->next == NULL || ((t_bin *)((t_node *)head->next) \
-			->content)->control_op != PIPE)
-			break ;
-		head = head->next;
-	}
-	return (0);
-} */

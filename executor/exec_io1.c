@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 23:30:30 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/31 17:42:00 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ static int	ft_set_output_redirection(t_io *io, t_node_io *node_io)
 {
 	int	fd;
 
+	fd = -1;
 	if (io->o_mode == 4 || io->o_mode == 3)
 	{
 		if (io->o_mode == 4)

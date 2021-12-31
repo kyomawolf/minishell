@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:27:21 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/28 00:47:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/31 21:55:03 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "exec.h"
 #include <stdlib.h>
 #include "minis.h"
+#include "lexer.h"
 #include <stdio.h>
 
 void	ft_get_variable_name_guard(char **var)
@@ -90,6 +91,27 @@ int	ft_handle_var_expansion(t_node **head, t_expand *exp_data, t_data *data)
 		len = ft_strlen(var[0]);
 		(exp_data->i) = (exp_data->i) + len + 2;
 		ft_free_char_array(var);
+	}
+	return (0);
+}
+
+int	ft_init_handle_var_expansion(t_node **head, t_data *data, \
+									t_expand *exp_data, char *temp)
+{
+	if (temp[exp_data->i] == '$')
+	{
+		if (ft_handle_var_expansion(head, exp_data, data))
+			return (1);
+		exp_data->i++;
+		if (temp[exp_data->i] != '\0' \
+			&& exp_data->word->chars[exp_data->word->write_head - 1] == '\0')
+			exp_data->word->write_head--;
+		if (temp[exp_data->i] == '\0')
+		{
+			ft_t_word_append_char(exp_data->word, temp[exp_data->i]);
+			return (2) ;
+		}
+		return (3) ;
 	}
 	return (0);
 }

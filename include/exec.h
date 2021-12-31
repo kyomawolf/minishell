@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 20:06:02 by mstrantz         ###   ########.fr       */
+/*   Updated: 2021/12/31 21:50:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int			ft_handle_var_expansion(t_node **head, t_expand *exp_data, \
 									 t_data *data);
 void		ft_set_variable_name_and_value(char ***var, t_data *data);
 void		ft_get_variable_name_guard(char **var);
-
+int			ft_init_handle_var_expansion(t_node **head, t_data *data, \
+									t_expand *exp_data, char *temp);
 //exec_expand5.c
 void		ft_handle_dquoted_var(t_word *word, char **var);
 void		ft_handle_unquoted_var(t_expand *exp_data, char **var);
