@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:49:00 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:54:27 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 02:16:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,12 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <fcntl.h>
-
 #include "libft.h"
 #include "minis.h"
 #include "struct.h"
 
+// if dir runs out of chars before matcher does: return 1 -> no match
+// same if chars of matcher and dir are not the same
 int	wild_comp_end(char *matcher, char *dir)
 {
 	int	i;
@@ -34,7 +35,13 @@ int	wild_comp_end(char *matcher, char *dir)
 	}
 	return (0);
 }
-
+// returns 1 if pattern matches, 0 if not.
+// loops through the remaining matchers
+//  first if:  no wc as first char in matcher: checks pattern
+//   second if: shifts index of dir according the matching pattern
+//  1st if out of while: if last matcher is plan * : return 1
+//  2nd if out of while: pattern not found, return 0
+//  3rd if out of while: checks rest of strings for matching pattern
 int	wild_sub_sub(char *dir, char **matcher, int i, int ii)
 {
 	while (matcher[ii + 1] != NULL)
@@ -57,6 +64,10 @@ int	wild_sub_sub(char *dir, char **matcher, int i, int ii)
 	return (1);
 }
 
+// returns 1 to keep file selected and 0 to unselect.
+//  first if condition: checks for plane *. expands to everything given
+//  second if condition: returns 0 if pattern of dir is not matching with matcher[ii]
+//   else: wc * found: calls wild_sub_sub with next matcher
 int	wild_sub_match(char *dir, char **matcher)
 {
 	int	i;
@@ -112,6 +123,9 @@ char	**wild_pattern_match(char **all_dir, char **matcher)
 			sw = 1;
 	}
 	if (!sw)
+	{
+		free (ident);
 		return (NULL);
+	}
 	return (wild_select(all_dir, ident, i, len));
 }

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:47:48 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:54:24 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 02:17:42 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,23 @@ t_node	*formatted_string(char *string)
 	node->content = ft_calloc(1, sizeof(t_token));
 	((t_token *)node->content)->string = ret;
 	((t_token *)node->content)->type = WORD;
-	free(string);
 	return (node);
 }
+
+
+/* //debug
+void	ft_print_str_arr(char **arr)
+{
+	int	i;
+
+	i = 0;
+	while (arr && arr[i] && arr[i][0] != '\0')
+	{
+		printf("[%d]:%s:\n", i, arr[i]);
+		i++;
+	}
+	printf("next\n");
+} */
 
 t_node	*wild_main(char *string)
 {
@@ -111,8 +125,8 @@ t_node	*wild_main(char *string)
 	times = wild_get_seperator(string);
 	all_dir = wild_open_dir();
 	selected_dir = wild_pattern_match(all_dir, times);
-	free_char_array2(&times);
-	free_char_array2(&all_dir);
+	free_char_array(&times);
+	free_char_array(&all_dir);
 	if (selected_dir == NULL)
 		return (formatted_string(string));
 	return (wild_combine(selected_dir));

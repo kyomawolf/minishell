@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 16:51:24 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 02:18:46 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "struct.h"
 #include "exec.h"
 #include "lexer.h"
+#include "libft.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -30,13 +31,24 @@ static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 			if (ft_t_node_size(list) > 1)
 			{
 				ft_t_node_free(list);
-				printf("Error ambigious redirections\n");
+				ft_putstr_fd("minishell: Error: ambigious redirections\n", 2);
 				return (1);
 			}
 		}
 	}
 	return (0);
 }
+
+/*
+//debug
+void	print_list(t_node *head)
+{
+	while (head)
+	{
+		printf("return wild_main :%s:\n", ((t_token *)head->content)->string);
+		head = head->next;
+	}
+} */
 
 static int	ft_check_for_wc_expansion(t_node **head)
 {
