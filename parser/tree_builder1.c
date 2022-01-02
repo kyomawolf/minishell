@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 21:22:22 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 16:06:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,34 @@
 #include "parser.h"
 #include <stdio.h>
 
+t_bin	*add_com_helper(t_node **ori_node, t_bin *parent, t_e_op *token)
+{
+	t_bin	*ret;
+
+	*token = ((t_token *)(*ori_node)->content)->type;
+	ret = add_node(parent, *ori_node);
+	if (*token < OPAR)
+		*ori_node = (*ori_node)->next;
+	if (*token < OPAR)
+		*token = ((t_token *)(*ori_node)->content)->type;
+	return (ret);
+}
+
 t_bin	*add_com(t_node **ori_node, t_bin *parent)
 {
 	t_bin	*ret;
 	t_e_op	token;
 
-	token = ((t_token *)(*ori_node)->content)->type;
-	ret = add_node(parent, *ori_node);
-	if (token < OPAR)
-	{
-		*ori_node = (*ori_node)->next;
-		token = ((t_token *)(*ori_node)->content)->type;
-	}
+	ret = add_com_helper(ori_node, parent, &token);
 	while (*ori_node != NULL)
 	{
 		if (token > CPAR && token < QUOTE)
 		{
 			*ori_node = add_io(ret, *ori_node);
-			if (*ori_node == ((void*)1))
-			{
+			if (*ori_node == (void *)1)
 				free_tree(ret);
+			if (*ori_node == (void *)1)
 				return ((void *)1);
-			}
 		}
 		if (token < HERE_DOC)
 			break ;
@@ -96,17 +102,13 @@ int	count_children(t_node *node)
 	return (count);
 }
 
-//print_binary_tree(tree, 3);
 t_bin	*builder_main(t_node *head)
 {
 	t_bin	*tree;
 	t_node	*cpy;
 
 	if (check_input(head) > 0)
-	{
-		free_t_node_list(head);
 		return (NULL);
-	}
 	cpy = head;
 	tree = b_tree_init(&cpy, 0);
 	return (tree);

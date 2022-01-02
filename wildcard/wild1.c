@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:47:48 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 02:17:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:27:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ t_node	*formatted_string(char *string)
 	return (node);
 }
 
-
 /* //debug
 void	ft_print_str_arr(char **arr)
 {
@@ -115,7 +114,6 @@ void	ft_print_str_arr(char **arr)
 	}
 	printf("next\n");
 } */
-
 t_node	*wild_main(char *string)
 {
 	char	**times;

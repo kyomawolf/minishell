@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 21:23:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:46:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,11 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 		}
 		root->child[i] = bracket_check(node, root);
 		if (root->child[i] == NULL)
-		{
 			*node = (*node)->next;
-			root->child[i] = b_tree_init(node, root->depth + 1);
-		}
-		else if (root->child[i] == (void *)1)
+		if (root->child[i] == NULL)
+			root->child[i++] = b_tree_init(node, root->depth + 1);
+		else if (root->child[i++] == (void *)1)
 			return (2);
-		i++;
 	}
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/31 17:42:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 18:03:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_set_input_redirection(t_io *io, t_node_io *node_io)
 	return (0);
 }
 
-static int	ft_set_output_redirection(t_io *io, t_node_io *node_io)
+int	ft_set_output_redirection(t_io *io, t_node_io *node_io)
 {
 	int	fd;
 
@@ -91,7 +91,6 @@ static void	ft_close_unused_pipes(t_exec *exec_data)
 int	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 {
 	int		ret;
-	t_io	*io;
 	int		output_flag;
 	int		input_flag;
 
@@ -99,51 +98,12 @@ int	ft_adjust_pipes(t_exec *exec_data, t_node *head)
 	input_flag = 0;
 	ret = 0;
 	ft_close_unused_pipes(exec_data);
-	if (((t_bin *)head->content)->io != NULL && ((t_bin *)head->content)->io->redir != NULL)
+	if (((t_bin *)head->content)->io != NULL \
+		&& ((t_bin *)head->content)->io->redir != NULL)
 	{
-		io = ((t_bin *)head->content)->io;
-		while (io->redir)
-		{
-			if (io->redir->io_type == HERE_DOC && io->redir->active_hd)
-			{
-				ft_exec_here_doc_helper(head);
-				input_flag = 1;
-			}
-			else if (io->redir->io_type == IRD)
-			{
-				if (ft_set_input_redirection(io, io->redir))
-				{
-					ret = 1;
-					break ;
-				}
-				input_flag = 1;
-			}
-			else if (io->redir->io_type == ORD_APP || io->redir->io_type == ORD_TRC)
-			{
-				if (ft_set_output_redirection(io, io->redir))
-				{
-					ret = 1;
-					break ;
-				}
-				output_flag = 1;
-			}
-			io->redir = io->redir->next;
-		}
+		if (adjust_redirections(head, &input_flag, &output_flag))
+			ret = 1;
 	}
-	if (input_flag == 0 && exec_data->cmd_count != 0)
-	{
-		dup2(exec_data->pipes[exec_data->cmd_count][0], STDIN_FILENO);
-		close(exec_data->pipes[exec_data->cmd_count][0]);
-	}
-	if (output_flag == 0 && exec_data->cmd_count != exec_data->num_cmds - 1)
-	{
-		dup2(exec_data->pipes[exec_data->cmd_count + 1][1], STDOUT_FILENO);
-		close(exec_data->pipes[exec_data->cmd_count + 1][1]);
-	}
-	else if (output_flag == 0 && exec_data->cmd_count == 0 && exec_data->num_cmds != 1)
-	{
-		dup2(exec_data->pipes[1][1], STDOUT_FILENO);
-		close(exec_data->pipes[1][1]);
-	}
+	adjust_pipes_helper(exec_data, input_flag, output_flag);
 	return (ret);
 }

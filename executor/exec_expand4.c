@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:27:21 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/31 21:55:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:48:55 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,9 @@ int	ft_init_handle_var_expansion(t_node **head, t_data *data, \
 		if (temp[exp_data->i] == '\0')
 		{
 			ft_t_word_append_char(exp_data->word, temp[exp_data->i]);
-			return (2) ;
+			return (2);
 		}
-		return (3) ;
+		return (3);
 	}
 	return (0);
 }

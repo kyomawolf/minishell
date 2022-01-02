@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/30 13:38:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 20:05:09 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:48:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_t_node_io_reset_head(t_node_io *temp, t_node_io **head)
 	}
 }
 
-void	ft_redir_var_expansion_check(t_node_io ** node, t_data *data)
+void	ft_redir_var_expansion_check(t_node_io **node, t_data *data)
 {
 	t_node_io	*temp;
 

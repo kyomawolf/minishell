@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 10:45:42 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 22:12:04 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:55:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,9 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 		ret = 255;
 	}
 	else if (argv[1] != NULL)
-		ret = ft_atoi(argv[1]); // not protected against digits larger than u_max_char (255) creates overflow.
+		ret = ft_atoi(argv[1]); //argv[1] is only allowed to be 255 or less
 	free_tree(data->tree);
 	free_main(data);
-	//free_char_array(&argv);
 	ft_free_pipeline(&head);
 	system("leaks -quiet minishell");
 	exit(ret);

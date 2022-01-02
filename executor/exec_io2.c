@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 18:28:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 20:12:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:47:33 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	ft_exec_here_doc_helper(t_node *head)
 		{
 			if (here_doc->content != NULL)
 			{
-				write(pipe_fd[1], here_doc->content, ft_strlen(here_doc->content));
+				write(pipe_fd[1], here_doc->content, \
+					ft_strlen(here_doc->content));
 				write(pipe_fd[1], "\n", 1);
 			}
 			here_doc = here_doc->next;
@@ -60,7 +61,6 @@ void	ft_exec_here_doc_helper(t_node *head)
 		close(pipe_fd[0]);
 	}
 }
-
 /* int	ft_exec_here_doc(t_exec *exec_data, t_node *head)
 {
 	int	ret;

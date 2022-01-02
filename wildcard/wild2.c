@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 21:49:00 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 02:16:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:27:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	wild_comp_end(char *matcher, char *dir)
 	}
 	return (0);
 }
+
 // returns 1 if pattern matches, 0 if not.
 // loops through the remaining matchers
 //  first if:  no wc as first char in matcher: checks pattern
@@ -66,8 +67,9 @@ int	wild_sub_sub(char *dir, char **matcher, int i, int ii)
 
 // returns 1 to keep file selected and 0 to unselect.
 //  first if condition: checks for plane *. expands to everything given
-//  second if condition: returns 0 if pattern of dir is not matching with matcher[ii]
-//   else: wc * found: calls wild_sub_sub with next matcher
+//  second if condition: returns 0 if pattern of dir is not matching
+//   with matcher[ii]
+//  else: wc * found: calls wild_sub_sub with next matcher
 int	wild_sub_match(char *dir, char **matcher)
 {
 	int	i;

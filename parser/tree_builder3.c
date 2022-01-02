@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 21:53:32 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:59:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,19 +65,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 			return ((void *)1);
 	}
 	else if (((t_token *)node->content)->type == HERE_DOC)
-	{
-		if (tree->io->heredoc_node != NULL)
-			free_t_node_content_list(tree->io->heredoc_node);
-		tree->io->heredoc_node = ((t_token *)node->content)->heredoc;
-		((t_token *)node->content)->heredoc = NULL;
-		tree->io->quoted_status = ((t_token *)node->content)->quote_status;
-		if (tree->io->infile)
-			free(tree->io->infile);
-		tree->io->infile = NULL;
-		if (ft_t_node_io_append(tree, node, HERE_DOC))
-			return ((void *)1);
-		return ((t_node *)node->next);
-	}
+		return (add_io_heredoc(tree, node));
 	else
 	{
 		if (add_io_helper(tree, node))

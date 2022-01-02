@@ -1,20 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_check.c                                     :+:      :+:    :+:   */
+/*   parser_check1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/01 15:17:51 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:45:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:17:38 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "struct.h"
 #include "minis.h"
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
+#include "libft.h"
+#include "parser.h"
 
 int	check_pars(t_node *head)
 {
@@ -65,62 +64,22 @@ int	check_io(t_node *head)
 	return (0);
 }
 
-int	check_wordpar(t_node *head)
-{
-	t_e_op	token;
-	t_e_op	last_token;
-
-	last_token = ((t_token *)head->content)->type;
-	head = head->next;
-	while (head != NULL)
-	{
-		token = ((t_token *)head->content)->type;
-		if (token == OPAR && last_token > CPAR && last_token != HERE_DOC)
-			return (1);
-		else if (last_token == CPAR && token > CPAR && last_token != HERE_DOC)
-			return (1);
-		head = head->next;
-		last_token = token;
-	}
-	return (0);
-}
-
-int	check_op(t_node *head)
-{
-	int		sw;
-	t_e_op	token;
-
-	sw = -1;
-	while (head != NULL)
-	{
-		token = ((t_token *)head->content)->type;
-		if (token < OPAR && (sw == 1 || sw == 2))
-			return (1);
-		if (token < OPAR && sw == -1)
-			return (1);
-		if (token < OPAR && sw == 0)
-			sw = 1;
-		else if (token == CPAR || token == WORD || token == HERE_DOC)
-			sw = 0;
-		else if (token < OPAR)
-			sw = 2;
-		head = head->next;
-	}
-	if (sw == -1 || sw == 1)
-		return (1);
-	return (0);
-}
-
 int	check_input(t_node *head)
 {
 	if (check_pars(head))
-		return (printf("syntax error near unexpected token parenthesis\n"));
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("syntax error near unexpected token parenthesis\n", 2);
+		return (1);
+	}
 	if (check_io(head))
-		return (printf("syntax error near unexpected token input/output \
-		redirection\n"));
-	if (check_op(head))
-		return (printf("syntax error near unexpected token operator\n"));
-	if (check_wordpar(head))
-		return (printf("syntax error near unexpected token parenthesis\n"));
+	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("syntax error near unexpected token input/output ", 2);
+		ft_putstr_fd("redirection\n", 2);
+		return (1);
+	}
+	if (check_input_part2(head))
+		return (1);
 	return (0);
 }

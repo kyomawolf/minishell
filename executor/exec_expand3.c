@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/31 21:52:23 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:49:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,6 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 	temp = token->string;
 	while (temp[exp_data->i] != '\0')
 	{
-		/* if (temp[exp_data->i] == '$')
-		{
-			if (ft_handle_var_expansion(head, exp_data, data))
-				return (NULL);
-			exp_data->i++;
-			if (temp[exp_data->i] != '\0' && exp_data->word->chars[exp_data->word->write_head - 1] == '\0')
-				exp_data->word->write_head--;
-			if (temp[exp_data->i] == '\0')
-			{
-				ft_t_word_append_char(exp_data->word, temp[exp_data->i]);
-				break ;
-			}
-			continue ;
-		} */
 		es = ft_init_handle_var_expansion(head, data, exp_data, temp);
 		if (es == 1)
 			return (NULL);

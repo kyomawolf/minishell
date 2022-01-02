@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/01 18:42:53 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 15:21:44 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ t_node	*ft_lexer(char *input)
 	head = ft_get_token_list(input);
 	if (ft_operator_is_valid(head))
 	{
-		ft_putstr_fd("Error: invalid operator token.\n", 2);
+		ft_putstr_fd("minishell: invalid operator token\n", 2);
 		free_t_node_list2(&head);
 		return (NULL);
 	}
@@ -55,7 +55,8 @@ t_node	*ft_lexer(char *input)
 	{
 		if (ft_lexer_heredoc(&head))
 		{
-			ft_putstr_fd("Error: syntax error near unexpected token: \\n\n", 2);
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd("syntax error near unexpected token \\n\n", 2);
 			free_t_node_list2(&head);
 			return (NULL);
 		}

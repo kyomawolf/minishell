@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/31 21:50:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 18:03:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ int			ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
 
 //exec_io1.c
 int			ft_adjust_pipes(t_exec *exec_data, t_node *head);
+int			ft_check_last_redir(t_node_io *node_io, int type);
+int			ft_set_input_redirection(t_io *io, t_node_io *node_io);
+int			ft_set_output_redirection(t_io *io, t_node_io *node_io);
 int			ft_set_outout_redirection_helper(t_node *head);
 
 //exec_io2.c
@@ -37,6 +40,10 @@ int			redirection_error(char *filename, int fd);
 void		ft_t_exec_heredoc_check(t_node *head, t_exec *exec_data);
 int			ft_exec_here_doc(t_exec *exec_data, t_node *head);
 void		ft_exec_here_doc_helper(t_node *head);
+
+//exec_io_adjust_pipes.c
+void		adjust_pipes_helper(t_exec *exec_data, int i_flag, int o_flag);
+int			adjust_redirections(t_node *head, int *inp_flag, int *outp_flag);
 
 //exec_executor.c
 int			ft_execute(t_node *head, t_data *data);

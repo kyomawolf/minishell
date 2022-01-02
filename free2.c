@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:02:27 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 22:03:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 17:41:09 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,32 @@
 #include "struct.h"
 #include <stdio.h>
 
-void	free_io(t_io *io)
+void	free_io_redir(t_io *io)
 {
 	t_node_io	*temp2;
+
+	while (io->redir != NULL)
+	{
+		if (io->redir->file != NULL)
+		{
+			free(io->redir->file);
+			io->redir->file = NULL;
+		}
+		temp2 = io->redir;
+		io->redir = io->redir->next;
+		free(temp2);
+		temp2 = NULL;
+	}
+}
+
+void	free_io(t_io *io)
+{
 	if (io == NULL)
 		return ;
 	if (io->heredoc_node != NULL)
 		free_t_node_content_list(io->heredoc_node);
 	if (io->redir != NULL)
-	{
-		while (io->redir != NULL)
-		{
-			if (io->redir->file != NULL)
-			{
-				free(io->redir->file);
-				io->redir->file = NULL;
-			}
-			temp2 = io->redir;
-			io->redir = io->redir->next;
-			free(temp2);
-			temp2 = NULL;
-		}
-	}
+		free_io_redir(io);
 	if (io->infile != NULL)
 	{
 		free(io->infile);
