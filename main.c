@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 21:23:54 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 23:37:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,8 @@ void	main_loop(t_data *data)
 		if (data->tree != NULL)
 		{
 			traverse_tree_rec(data->tree, &head);
-			executor(head, data, 0);
+			executor(&head, data, 0);
 		}
-		free_list_wo_content(&head);
 		free_tree(data->tree);
 		data->tree = NULL;
 		get_prompt(data);

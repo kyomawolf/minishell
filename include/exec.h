@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 18:03:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 23:28:09 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int			ft_terminate_word_and_add_to_list(t_expand *exp_data);
 void		ft_free_char_array(char **arr);
 
 //exec_main.c
-void		executor(t_node *head, t_data *data, int es);
+void		executor(t_node **head, t_data *data, int es);
 
 // exec_pipeline
 t_node		*create_execution_pipeline(t_node **head, t_data *data);

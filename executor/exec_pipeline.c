@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:54:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 21:50:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/02 23:27:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	ft_free_pipeline(t_node **pipeline)
 static t_node	*create_pipeline(t_node *start, t_node *end)
 {
 	t_node	*pipeline;
+	t_node	*temp;
 
 	pipeline = NULL;
 	while (1)
@@ -64,8 +65,13 @@ static t_node	*create_pipeline(t_node *start, t_node *end)
 			break ;
 		ft_t_node_add_back(&pipeline, ft_t_node_create(start->content));
 		if (start == end)
+		{
+			free (start);
 			break ;
+		}
+		temp = start;
 		start = start->next;
+		free (temp);
 	}
 	return (pipeline);
 }
@@ -118,5 +124,7 @@ t_node	*create_execution_pipeline(t_node **head, t_data *data)
 		*head = (*head)->next;
 	}
 	end = *head;
+	if (*head)
+		*head = (*head)->next;
 	return (create_pipeline(start, end));
 }
