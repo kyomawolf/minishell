@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 10:45:42 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 15:55:32 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 22:45:56 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,6 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 	free_tree(data->tree);
 	free_main(data);
 	ft_free_pipeline(&head);
-	system("leaks -quiet minishell");
+	//system("leaks -quiet minishell");
 	exit(ret);
 }

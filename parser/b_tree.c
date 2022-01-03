@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_tree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 15:46:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 23:09:54 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 		if (root->child[i] == NULL)
 			root->child[i++] = b_tree_init(node, root->depth + 1);
 		else if (root->child[i++] == (void *)1)
+		{
+			root->child[i - 1] = NULL;
 			return (2);
+		}
 	}
 	return (ret);
 }

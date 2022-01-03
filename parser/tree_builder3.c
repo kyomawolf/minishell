@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 15:59:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 23:01:56 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	add_io_helper(t_bin *tree, t_node *node)
 
 t_node	*add_io(t_bin *tree, t_node *node)
 {
+	if (((t_token *)node->content)->type != HERE_DOC && node->next == NULL)
+		return ((void *) 1);
 	if (tree->io == NULL)
 		tree->io = ft_calloc(1, sizeof(t_io));
 	if (((t_token *)node->content)->type == IRD)
