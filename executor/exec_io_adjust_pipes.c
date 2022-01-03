@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 16:14:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 18:06:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 21:02:10 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,29 +39,29 @@ void	adjust_pipes_helper(t_exec *exec_data, int i_flag, int o_flag)
 
 int	adjust_redirections(t_node *head, int *inp_flag, int *outp_flag)
 {
-	t_io	*io;
+	t_node_io	*redir;
 
-	io = ((t_bin *)head->content)->io;
-	while (io->redir)
+	redir = ((t_bin *)head->content)->io->redir;
+	while (redir)
 	{
-		if (io->redir->io_type == HERE_DOC && io->redir->active_hd)
+		if (redir->io_type == HERE_DOC && redir->active_hd)
 		{
 			ft_exec_here_doc_helper(head);
 			*inp_flag = 1;
 		}
-		else if (io->redir->io_type == IRD)
+		else if (redir->io_type == IRD)
 		{
-			if (ft_set_input_redirection(io, io->redir))
+			if (ft_set_input_redirection(((t_bin *)head->content)->io, redir))
 				return (1);
 			*inp_flag = 1;
 		}
-		else if (io->redir->io_type == ORD_APP || io->redir->io_type == ORD_TRC)
+		else if (redir->io_type == ORD_APP || redir->io_type == ORD_TRC)
 		{
-			if (ft_set_output_redirection(io, io->redir))
+			if (ft_set_output_redirection(((t_bin *)head->content)->io, redir))
 				return (1);
 			*outp_flag = 1;
 		}
-		io->redir = io->redir->next;
+		redir = redir->next;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 10:45:42 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 15:55:32 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 22:47:23 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+//exit code bis 255: Achtung mit atoi (schutz gegen groessere datentypen)
 int	exit_main(char **argv, t_data *data, t_node *head)
 {
 	int	ret;
@@ -37,7 +38,7 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 		ret = 255;
 	}
 	else if (argv[1] != NULL)
-		ret = ft_atoi(argv[1]); //argv[1] is only allowed to be 255 or less
+		ret = ft_atoi(argv[1]);
 	free_tree(data->tree);
 	free_main(data);
 	ft_free_pipeline(&head);
