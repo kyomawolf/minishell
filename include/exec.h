@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 23:28:09 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:41:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ void		ft_t_expand_init(t_expand *exp_data);
 void		ft_signals(void);
 
 //exec_builtin.c
-void		builtin_check_child(char **cmd_arr, t_data *data, t_node *head);
+void		builtin_check_child(char **cmd_arr, t_data *data, t_node *head, \
+								t_exec *exec_data);
 t_e_builtin	builtin_check(t_node *head);
 int			ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
 				t_data *data, t_exec *exec_data);
@@ -108,7 +109,8 @@ void		ft_free_pipeline(t_node **pipeline);
 void		traverse_tree_rec(t_bin *tree, t_node **head);
 
 // exec_parent
-int			ft_open_pipes(t_exec *exec_data, pid_t *pid);
-int			ft_parent_waitpid(t_exec *exec_data, pid_t *pid);
+int			ft_open_pipes(t_exec *exec_data);
+int			ft_parent_waitpid(t_exec *exec_data);
+void		ft_exec_data_free_pipes(t_exec *exec_data);
 
 #endif /* EXEC_H */

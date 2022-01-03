@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:50:25 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:41:47 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-static void	ft_exec_data_free_pipes(t_exec *exec_data)
+void	ft_exec_data_free_pipes(t_exec *exec_data)
 {
 	int	i;
 
@@ -50,7 +50,7 @@ static int	ft_create_pipe_fd(t_exec *exec_data)
 	return (0);
 }
 
-int	ft_open_pipes(t_exec *exec_data, pid_t *pid)
+int	ft_open_pipes(t_exec *exec_data)
 {
 	int	ret;
 	int	i;
@@ -68,13 +68,13 @@ int	ft_open_pipes(t_exec *exec_data, pid_t *pid)
 	}
 	else
 	{
-		free(pid);
-		pid = NULL;
+		free(exec_data->pid);
+		exec_data->pid = NULL;
 	}
 	return (ret);
 }
 
-int	ft_parent_waitpid(t_exec *exec_data, pid_t *pid)
+int	ft_parent_waitpid(t_exec *exec_data)
 {
 	int	status;
 	int	es;
@@ -82,12 +82,12 @@ int	ft_parent_waitpid(t_exec *exec_data, pid_t *pid)
 
 	i = 0;
 	while (i < exec_data->num_cmds)
-		waitpid(pid[i++], &status, 0);
+		waitpid(exec_data->pid[i++], &status, 0);
 	es = 0;
 	if (WIFEXITED(status))
 		es = WEXITSTATUS(status);
-	free(pid);
-	pid = NULL;
+	free(exec_data->pid);
+	exec_data->pid = NULL;
 	ft_exec_data_free_pipes(exec_data);
 	return (es);
 }

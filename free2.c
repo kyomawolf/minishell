@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:02:27 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 17:41:09 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 17:09:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,39 +15,39 @@
 #include "struct.h"
 #include <stdio.h>
 
-void	free_io_redir(t_io *io)
+void	free_io_redir(t_bin *tree)
 {
 	t_node_io	*temp2;
 
-	while (io->redir != NULL)
+	while (tree->io->redir != NULL)
 	{
-		if (io->redir->file != NULL)
+		if (tree->io->redir->file != NULL)
 		{
-			free(io->redir->file);
-			io->redir->file = NULL;
+			free(tree->io->redir->file);
+			tree->io->redir->file = NULL;
 		}
-		temp2 = io->redir;
-		io->redir = io->redir->next;
+		temp2 = tree->io->redir;
+		tree->io->redir = tree->io->redir->next;
 		free(temp2);
 		temp2 = NULL;
 	}
 }
 
-void	free_io(t_io *io)
+void	free_io(t_bin *tree)
 {
-	if (io == NULL)
+	if (tree->io == NULL)
 		return ;
-	if (io->heredoc_node != NULL)
-		free_t_node_content_list(io->heredoc_node);
-	if (io->redir != NULL)
-		free_io_redir(io);
-	if (io->infile != NULL)
+	if (tree->io->heredoc_node != NULL)
+		free_t_node_content_list(tree->io->heredoc_node);
+	if (tree->io->redir != NULL)
+		free_io_redir(tree);
+	if (tree->io->infile != NULL)
 	{
-		free(io->infile);
-		io->infile = NULL;
+		free(tree->io->infile);
+		tree->io->infile = NULL;
 	}
-	free(io);
-	io = NULL;
+	free(tree->io);
+	tree->io = NULL;
 }
 
 void	free_simplecommand(t_simple_com *command)
@@ -81,7 +81,7 @@ void	free_tree(t_bin *tree)
 	if (tree->command != NULL)
 		free_simplecommand(tree->command);
 	if (tree->io != NULL)
-		free_io(tree->io);
+		free_io(tree);
 	free(tree);
 	tree = NULL;
 }

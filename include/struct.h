@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/30 19:36:44 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:38:49 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_exec
 	int		num_cmds;
 	int		cmd_count;
 	int		**pipes;
+	pid_t	*pid;
 	int		here_doc;
 }	t_exec;
 

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/17 01:33:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 20:09:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 16:43:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static int	run_builtin(t_e_builtin builtin, char **cmd_arr, t_data *data, \
 	return (exit_status);
 }
 
-void	builtin_check_child(char **cmd_arr, t_data *data, t_node *head)
+void	builtin_check_child(char **cmd_arr, t_data *data, t_node *head, t_exec *exec_data)
 {
 	char		*cmd_name;
 	int			exit_status;
@@ -78,6 +78,10 @@ void	builtin_check_child(char **cmd_arr, t_data *data, t_node *head)
 	if (builtin != NONE)
 	{
 		exit_status = run_builtin(builtin, cmd_arr, data, head);
+		free_tree(data->tree);
+		ft_exec_data_free_pipes(exec_data);
+		free(exec_data->pid);
+		free_list_wo_content(&head);
 		free_main(data);
 		exit(exit_status);
 	}

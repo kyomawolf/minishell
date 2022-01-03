@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 23:39:21 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 17:25:20 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 	exec_data->num_cmds = ft_s_node_iter(head);
 	exec_data->cmd_count = 0;
 	exec_data->pipes = NULL;
+	exec_data->pid = NULL;
 	exec_data->here_doc = 0;
 }
 
@@ -37,7 +38,7 @@ static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	if (((t_bin *)head->content)->command->arguments == NULL)
 		exit(EXIT_SUCCESS);
 	cmd_arr = ((t_bin *)head->content)->command->arguments;
-	builtin_check_child(cmd_arr, data, head);
+	builtin_check_child(cmd_arr, data, head, exec_data);
 	path_main(data, cmd_arr);
 	envp_arr = list_to_array(data->envp);
 	execve(cmd_arr[0], cmd_arr, envp_arr);
@@ -57,18 +58,17 @@ static void	ft_parent_close_used_pipes(t_exec *exec_data)
 		close(exec_data->pipes[exec_data->cmd_count][0]);
 }
 
-static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data, \
-								pid_t *pid)
+static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data)
 {
 	int	i;
 
 	i = 0;
 	while (exec_data->cmd_count < exec_data->num_cmds)
 	{
-		pid[i] = fork();
-		if (pid[i] < 0)
+		exec_data->pid[i] = fork();
+		if (exec_data->pid[i] < 0)
 			return (-1);
-		if (pid[i] == 0)
+		if (exec_data->pid[i] == 0)
 			ft_child_process(head, data, exec_data);
 		ft_parent_close_used_pipes(exec_data);
 		exec_data->cmd_count++;
@@ -80,7 +80,6 @@ static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data, \
 
 int	ft_execute(t_node *head, t_data *data)
 {
-	pid_t		*pid;
 	int			exit_status;
 	t_exec		exec_data;
 	t_e_builtin	builtin_code;
@@ -91,15 +90,15 @@ int	ft_execute(t_node *head, t_data *data)
 		return (ft_builtin_exec_init(builtin_code, head, data, &exec_data));
 	else
 	{
-		pid = (pid_t *)malloc(sizeof(pid_t) * exec_data.num_cmds);
-		if (pid == NULL)
+		exec_data.pid = (pid_t *)malloc(sizeof(pid_t) * exec_data.num_cmds);
+		if (exec_data.pid == NULL)
 			return (-1);
-		if (ft_open_pipes(&exec_data, pid))
+		if (ft_open_pipes(&exec_data))
 			return (-1);
-		if (ft_execution_init(head, &exec_data, data, pid))
+		if (ft_execution_init(head, &exec_data, data))
 			return (-1);
 		ft_signals();
-		exit_status = ft_parent_waitpid(&exec_data, pid);
+		exit_status = ft_parent_waitpid(&exec_data);
 	}
 	return (exit_status);
 }
