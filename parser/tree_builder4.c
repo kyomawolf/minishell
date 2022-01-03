@@ -6,13 +6,16 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/02 15:31:22 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 15:38:19 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/03 19:45:14 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "struct.h"
+#include <unistd.h>
 #include "minis.h"
-#include <stdlib.h>
+#include "libft.h"
+#include "parser.h"
+#include "struct.h"
+#include <stdio.h>
 
 t_node	*add_io_heredoc(t_bin *tree, t_node *node)
 {
