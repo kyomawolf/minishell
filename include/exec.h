@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/03 16:41:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 00:59:41 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,8 @@ void		ft_free_char_array(char **arr);
 void		executor(t_node **head, t_data *data, int es);
 
 // exec_pipeline
-t_node		*create_execution_pipeline(t_node **head, t_data *data);
+t_node		*create_execution_pipeline(t_node **head, t_data *data, \
+										int *last_depth);
 void		ft_free_pipeline(t_node **pipeline);
 void		traverse_tree_rec(t_bin *tree, t_node **head);
 

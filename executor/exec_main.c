@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/03 20:03:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 01:06:45 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,25 @@ static void	change_env_exit_status(t_data *data, int es)
 	}
 }
 
-int	executor_rec(t_node **head, t_data *data, int es)
+int	executor_rec(t_node **head, t_data *data, int es, int last_depth)
 {
-	int		last_depth;
 	t_node	*temp;
 
 	if (*head != NULL)
 	{
-		last_depth = ((t_bin *)((t_node *)(*head)->prev)->content)->depth;
 		if (((t_bin *)(*head)->content)->control_op == OR && es == 0)
 		{
 			while (*head != NULL && \
-				((t_bin *)(*head)->content)->depth > last_depth)
+			(((t_bin *)(*head)->content)->depth > last_depth \
+				|| (((t_bin *)(*head)->content)->control_op == OR && es == 0)))
 			{
 				temp = *head;
 				*head = (*head)->next;
 				free (temp);
 			}
 		}
-		executor(head, data, es);
+		if (*head != NULL)
+			executor(head, data, es);
 	}
 	(void)last_depth;
 	return (0);
@@ -79,8 +79,10 @@ int	executor_rec(t_node **head, t_data *data, int es)
 void	executor(t_node **head, t_data *data, int es)
 {
 	t_node	*pipeline;
+	int		last_depth;
 
-	pipeline = create_execution_pipeline(head, data);
+	last_depth = 0;
+	pipeline = create_execution_pipeline(head, data, &last_depth);
 	if (pipeline == NULL)
 	{
 		free_list_wo_content(head);
@@ -91,5 +93,5 @@ void	executor(t_node **head, t_data *data, int es)
 		es = ft_execute(pipeline, data);
 	ft_free_pipeline(&pipeline);
 	change_env_exit_status(data, es);
-	executor_rec(head, data, es);
+	executor_rec(head, data, es, last_depth);
 }

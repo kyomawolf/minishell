@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:54:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 23:27:14 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 01:08:05 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static t_node	*create_pipeline(t_node *start, t_node *end)
 	return (pipeline);
 }
 
-//DEBUG ONLY ----> delete later on
+/* //DEBUG ONLY ----> delete later on
 void	print_pipeline(t_node *pipeline)
 {
 	char	**cmd_arr;
@@ -100,9 +100,19 @@ void	print_pipeline(t_node *pipeline)
 		pipeline = pipeline->next;
 	}
 	printf("next pipeline\n");
+}*/
+
+void	create_execution_pipeline_helper(t_node **head, int *last_depth)
+{
+	if (*head != NULL)
+		*last_depth = ((t_bin *)(*head)->content)->depth;
+	else
+		*last_depth = 0;
+	if (*head)
+		*head = (*head)->next;
 }
 
-t_node	*create_execution_pipeline(t_node **head, t_data *data)
+t_node	*create_execution_pipeline(t_node **head, t_data *data, int *last_depth)
 {
 	t_node	*start;
 	t_node	*end;
@@ -124,7 +134,6 @@ t_node	*create_execution_pipeline(t_node **head, t_data *data)
 		*head = (*head)->next;
 	}
 	end = *head;
-	if (*head)
-		*head = (*head)->next;
+	create_execution_pipeline_helper(head, last_depth);
 	return (create_pipeline(start, end));
 }

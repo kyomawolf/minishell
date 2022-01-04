@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_tree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 23:09:54 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/03 23:26:46 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,17 @@ t_bin	*b_tree_init(t_node **node, int depth)
 	return (root);
 }
 
+int	b_tree_add_child_skip_cpars(t_node **node)
+{
+	while (((t_token *)(*node)->content)->type == CPAR)
+	{
+		if ((*node)->next == NULL)
+			return (1);
+		(*node) = (*node)->next;
+	}
+	return (0);
+}
+
 //recursive with b_tree_init();
 int	b_tree_add_child(t_node **node, t_bin *root)
 {
@@ -59,12 +70,8 @@ int	b_tree_add_child(t_node **node, t_bin *root)
 	while (i < root->child_amount)
 	{
 		ret = 0;
-		while (((t_token *)(*node)->content)->type == CPAR)
-		{
-			if ((*node)->next == NULL)
-				return (1);
-			(*node) = (*node)->next;
-		}
+		if (b_tree_add_child_skip_cpars(node))
+			return (1);
 		root->child[i] = bracket_check(node, root);
 		if (root->child[i] == NULL)
 			*node = (*node)->next;
