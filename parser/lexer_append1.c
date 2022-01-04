@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:46:20 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:45:57 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 13:35:40 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,9 @@ int	ft_append(char *input, int *i, t_word *word, t_node **head)
 		return (0);
 	else if (word->status == '\'' && input[*i] != '*' && input[*i] != '$')
 		ft_t_word_append_char(word, input[*i]);
+	else if (input[*i] == '$' && (input[*i + 1] == '\'' || input[*i + 1] == '"')
+		&& (input[*i + 2] != '\0' && input[*i + 2] != ' '))
+		return (0);
 	else if (input[*i] == '$')
 	{
 		if (ft_append_variable(input, i, word, head))
