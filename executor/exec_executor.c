@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/03 20:35:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 13:58:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_arr[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
+	free_tree(data->tree);
+	ft_exec_data_free_pipes(exec_data);
+	free(exec_data->pid);
+	free_list_wo_content(&head);
 	free_main(data);
 	free_char_array(&envp_arr);
 	exit(127);
