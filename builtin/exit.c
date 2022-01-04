@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/18 10:45:42 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 23:20:54 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 01:10:17 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-//exit code bis 255: Achtung mit atoi (schutz gegen groessere datentypen)
 int	exit_main(char **argv, t_data *data, t_node *head)
 {
 	int	ret;
@@ -30,7 +29,7 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		return (1);
 	}
-	else if (argv[1] != NULL && ft_isallnum(argv[1]) == 0)
+	else if (argv[1] != NULL && (ft_isallnum(argv[1])) == 0)
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(argv[1], 2);
@@ -38,7 +37,7 @@ int	exit_main(char **argv, t_data *data, t_node *head)
 		ret = 255;
 	}
 	else if (argv[1] != NULL)
-		ret = ft_atoi(argv[1]);
+		ret = (char) ft_atoi(argv[1]);
 	free_tree(data->tree);
 	free_main(data);
 	ft_free_pipeline(&head);
