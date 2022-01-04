@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 23:20:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 18:26:42 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ t_node	*add_io(t_bin *tree, t_node *node)
 {
 	if (((t_token *)node->content)->type != HERE_DOC && node->next == NULL)
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token", 2);
+		ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
 		return ((void *) 1);
 	}
 	if (tree->io == NULL)
