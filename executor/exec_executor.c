@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/04 13:58:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 14:55:55 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 	exec_data->here_doc = 0;
 }
 
-static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
+static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data, \
+								t_node **ori_head)
 {
 	char	**cmd_arr;
 	char	**envp_arr;
@@ -49,6 +50,7 @@ static void	ft_child_process(t_node *head, t_data *data, t_exec *exec_data)
 	ft_exec_data_free_pipes(exec_data);
 	free(exec_data->pid);
 	free_list_wo_content(&head);
+	free_list_wo_content(ori_head);
 	free_main(data);
 	free_char_array(&envp_arr);
 	exit(127);
@@ -62,7 +64,8 @@ static void	ft_parent_close_used_pipes(t_exec *exec_data)
 		close(exec_data->pipes[exec_data->cmd_count][0]);
 }
 
-static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data)
+static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data, \
+								t_node **ori_head)
 {
 	int	i;
 
@@ -73,7 +76,7 @@ static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data)
 		if (exec_data->pid[i] < 0)
 			return (-1);
 		if (exec_data->pid[i] == 0)
-			ft_child_process(head, data, exec_data);
+			ft_child_process(head, data, exec_data, ori_head);
 		ft_parent_close_used_pipes(exec_data);
 		exec_data->cmd_count++;
 		head = head->next;
@@ -82,7 +85,7 @@ static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data)
 	return (0);
 }
 
-int	ft_execute(t_node *head, t_data *data)
+int	ft_execute(t_node *head, t_data *data, t_node **ori_head)
 {
 	int			exit_status;
 	t_exec		exec_data;
@@ -99,7 +102,7 @@ int	ft_execute(t_node *head, t_data *data)
 			return (-1);
 		if (ft_open_pipes(&exec_data))
 			return (-1);
-		if (ft_execution_init(head, &exec_data, data))
+		if (ft_execution_init(head, &exec_data, data, ori_head))
 			return (-1);
 		ft_signals();
 		exit_status = ft_parent_waitpid(&exec_data);

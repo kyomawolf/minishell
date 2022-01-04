@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/04 01:06:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 14:59:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	executor(t_node **head, t_data *data, int es)
 	}
 	if ((es != 0 && ((t_bin *)pipeline->content)->control_op == OR)
 		|| (es == 0 && ((t_bin *)pipeline->content)->control_op == AND))
-		es = ft_execute(pipeline, data);
+		es = ft_execute(pipeline, data, head);
 	ft_free_pipeline(&pipeline);
 	change_env_exit_status(data, es);
 	executor_rec(head, data, es, last_depth);

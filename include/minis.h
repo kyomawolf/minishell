@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 17:09:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 14:57:46 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ int					ft_t_bin_variable_expansion(t_node *head, t_data *data);
 t_node				*wild_combine(char **sel_dir);
 int					ft_wildcard_expansion(t_node **head);
 int					ft_get_beginning_of_list(t_node *temp, t_node **head);
-int					ft_execute(t_node *head, t_data *data);
 t_e_builtin			builtin_check(t_node *head);
 int					path_main(t_data *data, char **args);
 int					ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/04 00:59:41 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/04 14:56:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void		adjust_pipes_helper(t_exec *exec_data, int i_flag, int o_flag);
 int			adjust_redirections(t_node *head, int *inp_flag, int *outp_flag);
 
 //exec_executor.c
-int			ft_execute(t_node *head, t_data *data);
+int			ft_execute(t_node *head, t_data *data, t_node **ori_head);
 
 //exec_expand_wildcard.c
 int			ft_wildcard_expansion(t_node **head);
