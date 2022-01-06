@@ -6,10 +6,11 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/31 18:25:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 01:15:42 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minis.h"
 #include "struct.h"
 #include "exec.h"
 #include "libft.h"
@@ -67,23 +68,54 @@ static int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
 	return (0);
 }
 
+void	ft_t_node_t_token_detach_n_free(t_node **head_token, t_node **temp_ori)
+{
+	t_node	*temp;
+
+	temp = (*head_token);
+	if ((*head_token)->next == NULL && (*head_token)->prev == NULL)
+		*head_token = NULL;
+	else if (*head_token && (*head_token)->prev == NULL)
+	{
+		*head_token = (*head_token)->next;
+		(*head_token)->prev = NULL;
+	}
+	else if ((*head_token) && (*head_token)->next == NULL)
+		((t_node *)(*head_token)->prev)->next = NULL;
+	else if ((*head_token))
+	{
+		((t_node *)(*head_token)->next)->prev = (*head_token)->prev;
+		((t_node *)(*head_token)->prev)->next = (*head_token)->next;
+	}
+	if (*head_token && (*head_token)->prev != NULL)
+		*head_token = (*head_token)->next;
+	else
+		*temp_ori = *head_token;
+	free (((t_token *)temp->content)->string);
+	free (temp->content);
+	free (temp);
+}
+
 int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 {
+	t_node	*temp_ori;
 	t_node	*temp;
 	int		ret;
 
-	temp = *head_token;
+	temp_ori = *head_token;
 	while (*head_token != NULL)
 	{
 		ret = ft_t_token_var_expansion_check(head_token, data);
 		if (ret == 1)
 			continue ;
 		else if (ret == -1)
-			return (1);
-		temp = *head_token;
+		{
+			ft_t_node_t_token_detach_n_free(head_token, &temp_ori);
+			continue ;
+		}
 		*head_token = (*head_token)->next;
 	}
-	ret = ft_get_beginning_of_list(temp, head_token);
+	ret = ft_get_beginning_of_list(temp_ori, head_token);
 	return (ret);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 15:49:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 01:16:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_node	*ft_init_var_expansion(t_node **head, t_data *data, t_expand *exp_data)
 	{
 		es = ft_init_handle_var_expansion(head, data, exp_data, temp);
 		if (es == 1)
-			return (NULL);
+			continue ;
 		else if (es == 2)
 			break ;
 		else if (es == 3)

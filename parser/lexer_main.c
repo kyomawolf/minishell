@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/04 19:24:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 00:30:17 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_node	*ft_lexer(char *input)
 			free_t_node_list2(&head);
 			return (NULL);
 		}
-		ft_s_node_print_content(head);
 	}
 	return (head);
 }

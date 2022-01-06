@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:27:21 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 15:48:55 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 00:27:36 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,13 @@ static char	**ft_get_var_name_and_value(t_node **head, int *i, t_data *data)
 	token = (t_token *)(*head)->content;
 	var[0] = ft_expander_get_var_name(token->string, *i + 2);
 	if (var[0] == NULL)
+	{
+		while (token->string[*i] != VAR_END)
+			(*i)++;
+		(*i)++;
+		free (var);
 		return (NULL);
+	}
 	ft_set_variable_name_and_value(&var, data);
 	return (var);
 }
