@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:57:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 17:25:09 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 23:44:53 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "lexer.h"
 #include "libft.h"
 #include <stdio.h>
+#include <unistd.h>
 #include <readline/readline.h>
 #include <stdlib.h>
 
@@ -51,6 +52,12 @@ static int	ft_lexer_heredoc_input_append(char **line, t_node **head)
 	return (ret);
 }
 
+void	ft_signals_heredoc(int signal)
+{
+	(void)signal;
+	close(STDIN_FILENO);
+}
+
 // reads stdin, saves input in list until line is equal to delimiter string
 // saves list of input in token member heredoc
 static int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
@@ -58,7 +65,10 @@ static int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 	char	*line;
 	size_t	len;
 	t_node	*head;
+	int		temp_fd;
 
+	temp_fd = dup(STDIN_FILENO);
+	signal(SIGINT, ft_signals_heredoc);
 	head = NULL;
 	len = ft_strlen(delimiter->string) + 1;
 	while (1)
@@ -72,6 +82,9 @@ static int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 				return (1);
 		}
 	}
+	if (line == NULL)
+		dup2(temp_fd, STDIN_FILENO);
+	close (temp_fd);
 	ft_lexer_handle_heredoc_input_helper(token, head, &line);
 	return (0);
 }

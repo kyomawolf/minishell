@@ -6,13 +6,15 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:47:45 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 14:22:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 21:46:54 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minis.h"
 #include "libft.h"
 #include "struct.h"
 #include "lexer.h"
+#include "exec.h"
 #include <signal.h>
 
 void	child_free_at_exit(t_node *pl, t_data *data, t_exec *exec_data, \

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 20:20:36 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 21:41:35 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	ft_t_node_t_token_detach_n_free(t_node **head_token, t_node **temp_ori)
 int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 {
 	t_node	*temp_ori;
-	t_node	*temp;
 	int		ret;
 
 	temp_ori = *head_token;

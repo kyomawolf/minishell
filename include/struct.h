@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 16:38:49 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 00:02:59 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # define WC_END      -2
 
 # include <stdlib.h>
+# include <stddef.h>
+# include <unistd.h>
 
 // OPAR = opened parenthesis
 // CPAR = closed parenthesis

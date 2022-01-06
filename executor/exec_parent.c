@@ -6,15 +6,17 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/03 16:41:47 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 23:51:17 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 #include "minis.h"
 #include "struct.h"
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <stdio.h>
 
 void	ft_exec_data_free_pipes(t_exec *exec_data)
 {
@@ -62,7 +64,18 @@ int	ft_open_pipes(t_exec *exec_data)
 		ret = 0;
 		i = 0;
 		while (exec_data->pipes[i])
-			pipe(exec_data->pipes[i++]);
+		{
+			if(pipe(exec_data->pipes[i++]) == -1)
+			{
+				ft_putstr_fd(strerror(errno), 2);
+				errno = 0;
+				//close and free
+				// return error
+				//
+			}
+		}
+
+
 		close(exec_data->pipes[0][0]);
 		close(exec_data->pipes[0][1]);
 	}
@@ -86,6 +99,14 @@ int	ft_parent_waitpid(t_exec *exec_data)
 	es = 0;
 	if (WIFEXITED(status))
 		es = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+	{
+		es = 128 + WTERMSIG(status);
+		if (es == 128 + SIGQUIT)
+			ft_putstr_fd("Quit: 3\n", 2);
+		else if (es == 128 + SIGINT)
+			ft_putchar_fd('\n', 2);
+	}
 	free(exec_data->pid);
 	exec_data->pid = NULL;
 	ft_exec_data_free_pipes(exec_data);
