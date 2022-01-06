@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 01:15:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 20:20:36 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,21 @@
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
 //  and calls function to exchange the old token with the new ones.
-static int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
+static int	ft_t_token_var_expansion_check(t_node ***head, t_data *data)
 {
 	t_token		*token;
-	t_node		*list;
 	t_expand	exp_data;
+	int			ret;
 
 	ft_t_expand_init(&exp_data);
-	token = (t_token *)(*head)->content;
+	token = (t_token *)(**head)->content;
+	ret = 0;
 	if (token->type == WORD && ft_strchr(token->string, '$'))
 	{
-		list = ft_init_var_expansion(head, data, &exp_data);
-		if (list == NULL)
+		exp_data.list = ft_init_var_expansion(*head, data, &exp_data);
+		if (exp_data.list == NULL)
 			return (-1);
-		if (ft_exchange_tokens(head, &exp_data))
-			return (1);
+		ret = ft_exchange_tokens_var(head, &exp_data);
 	}
 	if (exp_data.word != NULL)
 	{
@@ -45,7 +45,7 @@ static int	ft_t_token_var_expansion_check(t_node **head, t_data *data)
 		free(exp_data.word);
 		exp_data.word = NULL;
 	}
-	return (0);
+	return (ret);
 }
 
 static int	ft_t_bin_var_expansion_check(t_node *head, t_data *data)
@@ -105,15 +105,18 @@ int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 	temp_ori = *head_token;
 	while (*head_token != NULL)
 	{
-		ret = ft_t_token_var_expansion_check(head_token, data);
-		if (ret == 1)
+		ret = ft_t_token_var_expansion_check(&head_token, data);
+		if (ret == 1 || ret == 2)
 			continue ;
 		else if (ret == -1)
 		{
 			ft_t_node_t_token_detach_n_free(head_token, &temp_ori);
 			continue ;
 		}
-		*head_token = (*head_token)->next;
+		if (*head_token)
+			*head_token = (*head_token)->next;
+		else
+			return (0);
 	}
 	ret = ft_get_beginning_of_list(temp_ori, head_token);
 	return (ret);

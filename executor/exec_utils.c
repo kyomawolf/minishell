@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:47:45 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 20:08:01 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 14:22:47 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,18 @@
 #include "struct.h"
 #include "lexer.h"
 #include <signal.h>
+
+void	child_free_at_exit(t_node *pl, t_data *data, t_exec *exec_data, \
+								t_node **ori_head)
+{
+	ft_exec_data_free_pipes(exec_data);
+	free(exec_data->pid);
+	ft_get_beginning_of_list(pl, &pl);
+	free_list_wo_content(&pl);
+	free_list_wo_content(ori_head);
+	free_tree(data->tree);
+	free_main(data);
+}
 
 char	ft_tolower2(unsigned int i, char c)
 {

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/04 14:57:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 14:24:58 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ void				free_t_node_list2(t_node **head);
 void				free_token2(t_node **node);
 t_node				*detach_node(t_node **head, t_node *node);
 void				free_list_wo_content(t_node **head);
+void				child_free_at_exit(t_node *pl, t_data *data, \
+						t_exec *exec_data, t_node **ori_head);
 
 //builtins
 int					echo_main(char **argv);

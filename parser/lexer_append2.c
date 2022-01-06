@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:48:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/23 22:46:18 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 20:15:20 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static char	*ft_get_var_name(char *str, int i)
 {
 	int		i_start;
 	char	*var_name;
+	int		flag;
 
 	i_start = i;
 	if (str[i] == '?')
@@ -29,8 +30,16 @@ static char	*ft_get_var_name(char *str, int i)
 		var_name[1] = '\0';
 		return (var_name);
 	}
-	while (ft_isalnum(str[i]) || str[i] == '_')
+	flag = 1;
+	if (ft_isdigit(str[i]))
+		flag = 0;
+	if (ft_isalnum(str[i] || str[i] == '_'))
 		i++;
+	if (flag)
+	{
+		while (ft_isalnum(str[i]) || str[i] == '_')
+			i++;
+	}
 	var_name = ft_substr(str, i_start, i - i_start);
 	return (var_name);
 }
@@ -54,8 +63,13 @@ static int	ft_append_variable_var_name(t_word *word, char *input, int *i)
 	return (0);
 }
 
-static void	ft_append_variable_prefix(t_word *word, char *input, int *i)
+static int	ft_append_variable_prefix(t_word *word, char *input, int *i)
 {
+	if (ft_isdigit(input[*i + 1]))
+	{
+		*i = *i + 1;
+		return (1);
+	}
 	ft_t_word_append_char(word, input[*i]);
 	if (word->status == -1)
 		ft_t_word_append_char(word, VAR_UQUOTED);
@@ -63,7 +77,7 @@ static void	ft_append_variable_prefix(t_word *word, char *input, int *i)
 		ft_t_word_append_char(word, VAR_DQUOTED);
 	else if (word->status == '\'')
 		ft_t_word_append_char(word, VAR_SQUOTED);
-	return ;
+	return (0);
 }
 
 // is called if variable is found: checks for
@@ -82,7 +96,8 @@ int	ft_append_variable(char *input, int *i, t_word *word, t_node **head)
 		ft_t_word_append_char(word, input[*i]);
 	else
 	{
-		ft_append_variable_prefix(word, input, i);
+		if (ft_append_variable_prefix(word, input, i))
+			return (ret);
 		if (ft_append_variable_var_name(word, input, i))
 			ret = 1;
 		else

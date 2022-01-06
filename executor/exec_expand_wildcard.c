@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/02 02:18:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 20:14:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,31 @@ static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 			}
 		}
 	}
+	return (0);
+}
+
+static int	ft_exchange_tokens_wil(t_node **head, t_expand *exp_data)
+{
+	t_node	*temp;
+
+	if (head != NULL && (*head) != NULL \
+		&& ((t_token *)exp_data->list->content)->string[0] == '\0' \
+		&& exp_data->quote_status == VAR_UQUOTED)
+	{
+		temp = detach_node(head, *head);
+		free (((t_token *)temp->content)->string);
+		free ((t_token *)temp->content);
+		free (temp);
+		free (((t_token *)exp_data->list->content)->string);
+		((t_token *)exp_data->list->content)->string = NULL;
+		free(((t_token *)exp_data->list->content));
+		exp_data->list->content = NULL;
+		free(exp_data->list);
+		exp_data->list = NULL;
+		ft_exchange_tokens_free_exp_data_word(exp_data);
+	}
+	else
+		ft_exchange_tokens_helper(head, exp_data->list);
 	return (0);
 }
 
@@ -69,7 +94,7 @@ static int	ft_check_for_wc_expansion(t_node **head)
 					return (1);
 				if (ft_check_ambigious_redirection(*head, exp_data.list))
 					return (1);
-				ft_exchange_tokens(head, &exp_data);
+				ft_exchange_tokens_wil(head, &exp_data);
 				break ;
 			}
 			i++;

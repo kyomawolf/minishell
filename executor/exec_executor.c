@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/04 17:11:05 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 14:27:56 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,15 @@ static void	ft_child_process(t_node *pl, t_data *data, t_exec *exec_data, \
 	char	**envp_arr;
 
 	if (ft_adjust_pipes(exec_data, pl))
+	{
+		child_free_at_exit(pl, data, exec_data, ori_head);
 		exit(EXIT_FAILURE);
+	}
 	if (((t_bin *)pl->content)->command->arguments == NULL)
+	{
+		child_free_at_exit(pl, data, exec_data, ori_head);
 		exit(EXIT_SUCCESS);
+	}
 	cmd_arr = ((t_bin *)pl->content)->command->arguments;
 	builtin_check_child(cmd_arr, data, pl, exec_data);
 	path_main(data, cmd_arr);
@@ -46,13 +52,7 @@ static void	ft_child_process(t_node *pl, t_data *data, t_exec *exec_data, \
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_arr[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
-	ft_exec_data_free_pipes(exec_data);
-	free(exec_data->pid);
-	ft_get_beginning_of_list(pl, &pl);
-	free_list_wo_content(&pl);
-	free_list_wo_content(ori_head);
-	free_tree(data->tree);
-	free_main(data);
+	child_free_at_exit(pl, data, exec_data, ori_head);
 	free_char_array(&envp_arr);
 	exit(127);
 }
@@ -64,27 +64,6 @@ static void	ft_parent_close_used_pipes(t_exec *exec_data)
 	if (exec_data->cmd_count > 0)
 		close(exec_data->pipes[exec_data->cmd_count][0]);
 }
-
-/* static int	ft_execution_init(t_node *head, t_exec *exec_data, t_data *data, \
-								t_node **ori_head)
-{
-	int	i;
-
-	i = 0;
-	while (exec_data->cmd_count < exec_data->num_cmds)
-	{
-		exec_data->pid[i] = fork();
-		if (exec_data->pid[i] < 0)
-			return (-1);
-		if (exec_data->pid[i] == 0)
-			ft_child_process(head, data, exec_data, ori_head);
-		ft_parent_close_used_pipes(exec_data);
-		exec_data->cmd_count++;
-		head = head->next;
-		i++;
-	}
-	return (0);
-} */
 
 static int	ft_execution_init(t_node *pipeline, t_exec *exec_data, \
 								t_data *data, t_node **ori_head)

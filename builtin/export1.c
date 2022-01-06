@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 17:21:48 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 01:40:54 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 13:10:42 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,29 +16,6 @@
 #include "struct.h"
 #include <stdlib.h>
 #include <stdio.h>
-
-//WARNING NEW HAS TO BE FREED OUT OF EXPORT
-
-t_node	*detach_node(t_node **head, t_node *node)
-{
-	if (head == NULL || *head == NULL)
-		return (NULL);
-	if ((*head)->next == NULL && (*head)->prev == NULL )
-		*head = NULL;
-	else if (node && node->prev == NULL)
-	{
-		*head = (*head)->next;
-		(*head)->prev = NULL;
-	}
-	else if (node && node->next == NULL)
-		((t_node *)node->prev)->next = NULL;
-	else if (node)
-	{
-		((t_node *)node->next)->prev = node->prev;
-		((t_node *)node->prev)->next = node->next;
-	}
-	return (node);
-}
 
 int	export_detach_helper_envp(t_node *envp, char *new, int len, char *equalSign)
 {

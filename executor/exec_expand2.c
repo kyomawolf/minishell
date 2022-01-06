@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:05:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 01:16:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 20:04:06 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ static void	ft_exchange_str_arr(char ***str_arr, t_node *head)
 
 	len = ft_t_node_size(head);
 	ft_free_char_array(*str_arr);
+	if (head == NULL)
+	{
+		*str_arr = NULL;
+		return ;
+	}
 	*str_arr = ft_calloc(len + 1, sizeof(char *));
 	i = 0;
 	while (head != NULL)

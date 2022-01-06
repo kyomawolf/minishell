@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:32:03 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/28 00:47:21 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 17:11:46 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,25 @@ int	ft_s_node_iter(struct s_node *head)
 		i++;
 	}
 	return (i);
+}
+
+t_node	*detach_node(t_node **head, t_node *node)
+{
+	if (head == NULL || *head == NULL)
+		return (NULL);
+	if ((*head)->next == NULL && (*head)->prev == NULL)
+		*head = NULL;
+	else if (node && node->prev == NULL)
+	{
+		*head = (*head)->next;
+		(*head)->prev = NULL;
+	}
+	else if (node && node->next == NULL)
+		((t_node *)node->prev)->next = NULL;
+	else if (node)
+	{
+		((t_node *)node->next)->prev = node->prev;
+		((t_node *)node->prev)->next = node->next;
+	}
+	return (node);
 }
