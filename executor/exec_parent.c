@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 23:51:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:36:11 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
 void	ft_exec_data_free_pipes(t_exec *exec_data)
 {
@@ -65,7 +67,7 @@ int	ft_open_pipes(t_exec *exec_data)
 		i = 0;
 		while (exec_data->pipes[i])
 		{
-			if(pipe(exec_data->pipes[i++]) == -1)
+			if (pipe(exec_data->pipes[i++]) == -1)
 			{
 				ft_putstr_fd(strerror(errno), 2);
 				errno = 0;
@@ -74,8 +76,6 @@ int	ft_open_pipes(t_exec *exec_data)
 				//
 			}
 		}
-
-
 		close(exec_data->pipes[0][0]);
 		close(exec_data->pipes[0][1]);
 	}
