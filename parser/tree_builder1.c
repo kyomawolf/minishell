@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:37 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/02 16:06:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 17:34:56 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_bin	*add_com_helper(t_node **ori_node, t_bin *parent, t_e_op *token)
 
 	*token = ((t_token *)(*ori_node)->content)->type;
 	ret = add_node(parent, *ori_node);
+	if (ret == NULL)
+		return (NULL);
 	if (*token < OPAR)
 		*ori_node = (*ori_node)->next;
 	if (*token < OPAR)
@@ -35,6 +37,8 @@ t_bin	*add_com(t_node **ori_node, t_bin *parent)
 	t_e_op	token;
 
 	ret = add_com_helper(ori_node, parent, &token);
+	if (ret == NULL)
+		return (NULL);
 	while (*ori_node != NULL)
 	{
 		if (token > CPAR && token < QUOTE)

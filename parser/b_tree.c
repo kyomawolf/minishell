@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   b_tree.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:48:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 23:26:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 17:20:02 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ t_bin	*b_tree_init(t_node **node, int depth)
 	int		ret;
 
 	root = ft_calloc(1, sizeof(t_bin));
+	if (root == NULL)
+		return (NULL);
 	root->depth = depth;
 	if ((t_node *)((*node)->prev) != NULL)
 		root->control_op = ((t_token *)(*node)->content)->type;
@@ -32,6 +34,11 @@ t_bin	*b_tree_init(t_node **node, int depth)
 		root->control_op = add_last_operator(*node);
 	root->child_amount = count_children(*node);
 	root->child = ft_calloc(root->child_amount + 1, sizeof(t_bin *));
+	if (root->child == NULL)
+	{
+		free_tree(root);
+		return (NULL);
+	}
 	while (1)
 	{
 		ret = b_tree_add_child(node, root);

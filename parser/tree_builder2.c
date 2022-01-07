@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:44 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/18 15:23:41 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/07 17:34:18 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,15 @@ t_bin	*add_node(t_bin *par, t_node *node)
 	t_bin	*ret;
 
 	ret = ft_calloc(1, sizeof(t_bin));
+	if (ret == NULL)
+		return (NULL);
 	ret->command = ft_calloc(1, sizeof(t_simple_com));
 	ret->parent = par;
 	ret->control_op = add_last_operator(node);
-	return (ret);
+	if (ret->command != NULL)
+		return (ret);
+	free(ret);
+	return (NULL);
 }
 
 void	move_bracket(t_node **ori_node)
