@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wild2.c                                            :+:      :+:    :+:   */
+/*   newwild2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/15 21:49:00 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 17:12:07 by jkasper          ###   ########.fr       */
+/*   Created: 2022/01/07 14:41:54 by jkasper           #+#    #+#             */
+/*   Updated: 2022/01/07 17:12:21 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <fcntl.h>
+
 #include "libft.h"
 #include "minis.h"
 #include "struct.h"
@@ -45,7 +46,7 @@ int	wild_comp_end(char *matcher, char *dir)
 //  3rd if out of while: checks rest of strings for matching pattern
 int	wild_sub_sub(char *dir, char **matcher, int i, int ii)
 {
-	while (matcher[ii + 1] != NULL)
+	while (matcher[ii + 1] != NULL && matcher[ii + 1][0] != '\0')
 	{
 		if (matcher[ii][0] != -1)
 		{
@@ -72,21 +73,19 @@ int	wild_sub_sub(char *dir, char **matcher, int i, int ii)
 //  else: wc * found: calls wild_sub_sub with next matcher
 int	wild_sub_match(char *dir, char **matcher)
 {
-	int	i;
 	int	ii;
 
-	i = 0;
 	ii = 0;
 	if (matcher[0][0] == -1 && matcher[1][0] == '\0')
 		return (1);
 	if (matcher[ii][0] != -1)
 	{
-		if (dir - ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) != 0)
+		if (dir - ft_strnstr(dir, matcher[ii], ft_strlen(dir)) != 0)
 			return (0);
 	}
 	else
 		ii++;
-	return (wild_sub_sub(dir, matcher, i, ii));
+	return (wild_sub_sub(dir, matcher, 0, ii));
 }
 
 char	**wild_select(char **all_dir, int *ident, int i, int len)
