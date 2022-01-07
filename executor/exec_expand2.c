@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:05:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/07 19:54:23 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/07 23:14:15 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,9 @@ static void	ft_exchange_str_arr(char ***str_arr, t_node *head)
 
 	len = ft_t_node_size(head);
 	ft_free_char_array(*str_arr);
+	*str_arr = NULL;
 	if (head == NULL)
-	{
-		*str_arr = NULL;
 		return ;
-	}
 	*str_arr = ft_calloc(len + 1, sizeof(char *));
 	if (*str_arr == NULL)
 		return ;
@@ -122,6 +120,8 @@ int	ft_str_array_var_expansion(char ***str_arr, t_data *data)
 		if (ft_wildcard_expansion(&head_token))
 			return (1);
 		ft_exchange_str_arr(str_arr, head_token);
+		if (str_arr == NULL)
+			return (1);
 	}
 	return (0);
 }
