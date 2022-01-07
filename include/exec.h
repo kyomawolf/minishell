@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 20:22:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:56:42 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ char		ft_tolower2(unsigned int i, char c);
 void		wait_child(int sig);
 void		ft_t_expand_init(t_expand *exp_data);
 void		ft_signals(void);
+void		child_signal(int signal);
 
 //exec_builtin.c
 void		builtin_check_child(char **cmd_arr, t_data *data, t_node *head, \

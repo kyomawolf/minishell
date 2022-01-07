@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_io.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/30 12:19:31 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 21:51:54 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:13:50 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,11 @@ t_node_io	*ft_t_node_io_create(char *file, char io_type)
 	ret->next = NULL;
 	ret->prev = NULL;
 	ret->file = ft_strdup(file);
+	if (ret->file == NULL)
+	{
+		free(ret);
+		return (NULL);
+	}
 	ret->io_type = io_type;
 	ret->active_hd = 1;
 	return (ret);

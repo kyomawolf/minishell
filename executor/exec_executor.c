@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 21:51:22 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/07 19:55:23 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
-
-void	child_signal(int signal)
-{
-	if (signal == SIGQUIT)
-		printf("Quit: 3\n");
-}
 
 static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 {

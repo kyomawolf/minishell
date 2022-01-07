@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_parent.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 23:51:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:57:55 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,13 @@ int	ft_open_pipes(t_exec *exec_data)
 		{
 			if(pipe(exec_data->pipes[i++]) == -1)
 			{
-				ft_putstr_fd(strerror(errno), 2);
-				errno = 0;
+				//ft_putstr_fd(strerror(errno), 2);
+				//errno = 0;
 				//close and free
 				// return error
 				//
 			}
 		}
-
-
 		close(exec_data->pipes[0][0]);
 		close(exec_data->pipes[0][1]);
 	}

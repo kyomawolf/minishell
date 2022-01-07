@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_expand_heredoc2.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:44:48 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/30 13:55:41 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:35:33 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ static char	*ft_heredoc_get_var_name_special_cases(char *str, int i)
 	if (str[i] == '?')
 	{
 		var_name = ft_calloc(2, sizeof(char));
+		if (var_name == NULL)
+			return (NULL);
 		var_name[0] = '?';
 		var_name[1] = '\0';
 	}
 	if (!ft_isalnum(str[i]) && str[i] != '_')
 	{
 		var_name = ft_calloc(2, sizeof(char));
+		if (var_name == NULL)
+			return (NULL);
 		var_name[0] = '$';
 		var_name[1] = '\0';
 	}

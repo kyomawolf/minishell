@@ -27,6 +27,7 @@ SRC = main.c input.c new.c \
 	  executor/exec_expand4.c executor/exec_expand5.c executor/exec_io1.c \
 	  executor/exec_io2.c executor/exec_main.c executor/exec_parent.c \
 	  executor/exec_path.c executor/exec_pipeline.c executor/exec_utils.c \
+	  executor/exec_utils2.c \
 	  wildcard/newwild1.c wildcard/newwild2.c wildcard/newwild3.c wildcard/newwild4.c\
 	  builtin/cd.c builtin/export1.c builtin/export2.c builtin/echo.c \
 	  builtin/unset.c builtin/env.c builtin/exit.c builtin/pwd.c \

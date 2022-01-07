@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 23:22:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:36:31 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,13 @@ void	input_readline(t_data *data)
 		free(data->input);
 		data->input = NULL;
 	}
-	data->input = readline(data->prompt);
+	if (data->prompt == NULL)
+	{
+		printf("\n\n		NO MEMORY LEFT\n");
+		data->input = readline("minishell -> ");
+	}
+	else
+		data->input = readline(data->prompt);
 	if (data->input != NULL && data->input[0] != '\0')
 		add_history(data->input);
 }

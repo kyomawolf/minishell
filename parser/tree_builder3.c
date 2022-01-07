@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 17:45:14 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/07 18:15:35 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	ft_t_node_io_append(t_bin *tree, t_node *node, int type)
 		if (tree->io->infile)
 			free(tree->io->infile);
 		tree->io->infile = ft_strdup(node_io->file);
+		if (tree->io->infile == NULL)
+			return (1);
 	}
 	return (0);
 }
