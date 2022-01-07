@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   wild1.c                                            :+:      :+:    :+:   */
+/*   newwild1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/15 21:47:48 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 15:11:14 by jkasper          ###   ########.fr       */
+/*   Created: 2022/01/07 14:41:48 by jkasper           #+#    #+#             */
+/*   Updated: 2022/01/07 15:32:52 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,28 +75,10 @@ t_node	*wild_combine(char **sel_dir)
 	return (ret);
 }
 
-t_node	*formatted_string(char *string, char **selected_dir)
+t_node	*formatted_string_node(char *ret)
 {
-	int		i;
-	int		ii;
-	char	*ret;
 	t_node	*node;
 
-	ret = ft_calloc(1, ft_strlen(string));
-	if (ret == NULL)
-		return (NULL);
-	i = 0;
-	ii = 0;
-	while (string[ii] != '\0')
-	{
-		if (string[ii] == -1 || string[ii] == -2)
-		{
-			ii++;
-			continue ;
-		}
-		ret[i++] = string[ii++];
-	}
-	free(selected_dir);
 	node = ft_calloc(1, sizeof(t_node));
 	if (node == NULL)
 	{
@@ -113,6 +95,30 @@ t_node	*formatted_string(char *string, char **selected_dir)
 	((t_token *)node->content)->string = ret;
 	((t_token *)node->content)->type = WORD;
 	return (node);
+}
+
+t_node	*formatted_string(char *string, char **selected_dir)
+{
+	int		i;
+	int		ii;
+	char	*ret;
+
+	ret = ft_calloc(1, ft_strlen(string));
+	if (ret == NULL)
+		return (NULL);
+	i = 0;
+	ii = 0;
+	while (string[ii] != '\0')
+	{
+		if (string[ii] == -1 || string[ii] == -2)
+		{
+			ii++;
+			continue ;
+		}
+		ret[i++] = string[ii++];
+	}
+	free(selected_dir);
+	return (formatted_string_node(ret));
 }
 
 t_node	*wild_main(char *string)

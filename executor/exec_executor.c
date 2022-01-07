@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_executor.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 14:27:56 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/06 21:51:22 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+
+void	child_signal(int signal)
+{
+	if (signal == SIGQUIT)
+		printf("Quit: 3\n");
+}
 
 static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 {
@@ -48,6 +54,7 @@ static void	ft_child_process(t_node *pl, t_data *data, t_exec *exec_data, \
 	builtin_check_child(cmd_arr, data, pl, exec_data);
 	path_main(data, cmd_arr);
 	envp_arr = list_to_array(data->envp);
+	signal(SIGQUIT, child_signal);
 	execve(cmd_arr[0], cmd_arr, envp_arr);
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd_arr[0], 2);

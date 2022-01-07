@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/06 14:24:58 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:57:17 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,4 +104,5 @@ char				**wild_pattern_match(char **all_dir, char **matcher);
 char				**wild_get_seperator(char *string);
 char				**ft_realloc_charpp(char ***old, size_t new_size);
 void				free_char_array2(char ***arr);
+void				*freetili(char **arr);
 #endif /* MINIS_H */
