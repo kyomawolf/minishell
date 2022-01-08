@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:11:43 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/07 16:36:11 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 02:02:40 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,28 +54,40 @@ static int	ft_create_pipe_fd(t_exec *exec_data)
 	return (0);
 }
 
+static int	ft_open_pipes_loop(t_exec *exec_data)
+{
+	int	i;
+
+	i = 0;
+	while (exec_data->pipes[i])
+	{
+		if (pipe(exec_data->pipes[i++]) == -1)
+		{
+			ft_putstr_fd(strerror(errno), 2);
+			errno = 0;
+			while (i - 2 > -3 && i >= 0)
+			{
+				close (exec_data->pipes[0][i - 2]);
+				i--;
+			}
+			ft_exec_data_free_pipes(exec_data);
+			return (1);
+		}
+	}
+	return (0);
+}
+
 int	ft_open_pipes(t_exec *exec_data)
 {
 	int	ret;
-	int	i;
 
 	ret = 1;
 	exec_data->pipes = malloc(sizeof(int *) * (exec_data->num_cmds + 1));
 	if (exec_data->pipes != NULL && !ft_create_pipe_fd(exec_data))
 	{
 		ret = 0;
-		i = 0;
-		while (exec_data->pipes[i])
-		{
-			if (pipe(exec_data->pipes[i++]) == -1)
-			{
-				ft_putstr_fd(strerror(errno), 2);
-				errno = 0;
-				//close and free
-				// return error
-				//
-			}
-		}
+		if (ft_open_pipes_loop(exec_data))
+			return (1);
 		close(exec_data->pipes[0][0]);
 		close(exec_data->pipes[0][1]);
 	}

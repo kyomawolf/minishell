@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:56:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 02:22:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:21:38 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ int	ft_t_word_init(t_word *word)
 	word->alloc = BUFFER_SIZE;
 	word->chars = ft_calloc(sizeof(char), word->alloc);
 	if (word->chars == NULL)
+	{
+		ft_putstr_fd("minishell: allocation error\n", 2);
 		return (1);
+	}
 	return (0);
 }
 
@@ -38,7 +41,10 @@ int	ft_t_word_append_char(t_word *word, char c)
 		new_alloc = word->write_head + word->alloc;
 		new_chars = ft_calloc(new_alloc, sizeof(char));
 		if (new_chars == NULL)
+		{
+			ft_putstr_fd("minishell: allocation error\n", 2);
 			return (1);
+		}
 		ft_memcpy(new_chars, word->chars, word->write_head);
 		free (word->chars);
 		word->chars = NULL;
@@ -64,6 +70,7 @@ char	*ft_t_word_get_str(t_word *word)
 	str = ft_calloc(word->write_head + 1, sizeof(char));
 	if (str == NULL)
 	{
+		ft_putstr_fd("minishell: allocation error\n", 2);
 		free(word->chars);
 		word->chars = NULL;
 		return (NULL);

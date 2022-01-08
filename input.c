@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/03 23:22:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 13:22:52 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-
-//maybe include pipecontrol
-//if (sig == SIGPIPE)
-//{
-//	printf("PIPE FAULT\n");
-//	input_attributes_clear();
-//	//close_pipe(data, 1);
-//	return ;
-//}
 
 void	input_interrupt(int sig)
 {

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/06 22:42:17 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 13:34:42 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	main_init(t_data *data)
 	if (data->input == NULL)
 	{
 		free_main(data);
-		printf("\n\nWARNING: LEAVING MINISHELL\n");
+		ft_putstr_fd("\n\nWARNING: LEAVING MINISHELL\n", 2);
 		system("leaks minishell");
 		exit(0);
 	}
@@ -72,7 +72,7 @@ void	main_loop(t_data *data)
 		main_init(data);
 		if (data->input[0] == '\0')
 			continue ;
-		data->list = ft_lexer(data->input);
+		data->list = ft_lexer(data);
 		if (data->list == NULL)
 			continue ;
 		input_attributes_clear();

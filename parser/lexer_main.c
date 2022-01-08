@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 20:05:24 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 16:58:24 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,11 @@ static int	ft_operator_is_valid(t_node *head)
 // checks for invalid operator tokens
 // and syntax errors related to usage of here_docs.
 // returns t_node *head, which is the head of a list with content t_token *
-t_node	*ft_lexer(char *input)
+t_node	*ft_lexer(t_data *data)
 {
 	t_node	*head;
 
-	head = ft_get_token_list(input);
+	head = ft_get_token_list(data);
 	if (ft_operator_is_valid(head))
 	{
 		ft_putstr_fd("minishell: invalid operator token\n", 2);
@@ -61,5 +61,6 @@ t_node	*ft_lexer(char *input)
 			return (NULL);
 		}
 	}
+	ft_s_node_print_content(head);
 	return (head);
 }

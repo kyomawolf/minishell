@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 17:35:50 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/07 00:03:04 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 01:59:49 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int		ft_t_node_size(t_node *head);
 void	ft_t_node_free(t_node *head);
 //void	ft_t_node_free_heredoc(t_token *token, t_node *temp);
 void	ft_t_node_detach_and_free(t_node *to_detach);
+void	ft_free_lexer(t_word *word, t_node **head, t_data *data);
 
 //lexer_utils3.c
 int		ft_t_word_init(t_word *word);
@@ -43,21 +44,28 @@ int		ft_append(char *input, int *i, t_word *word, t_node **head);
 //lexer_append2.c
 int		ft_append_variable(char *input, int *i, t_word *word, t_node **head);
 
+//lexer_append2_helper.c
+char	*ft_lexer_get_var_name(char *str, int i);
+
 //lexer_append3.c
 int		ft_terminate_token(char *input, int *i, t_word *word, t_node **head);
 int		ft_append_token(t_word *word, t_node **head, int end);
 int		ft_append_token_helper(char *str, t_node **head, int type, int status);
 char	ft_set_type(t_word *word);
-void	ft_t_token_add_empty_string(t_word *word, t_node **head, int *i);
+int		ft_t_token_add_empty_string(t_word *word, t_node **head, int *i);
 
-//lexer_heredoc.c
+//lexer_heredoc1.c
 int		ft_lexer_heredoc(t_node **head);
+void	ft_signals_heredoc(int signal);
 //int		ft_lexer_heredoc(t_node *head);
 
+//lexer_heredoc2.c
+int		ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter);
+
 //lexer_tokenlist.c
-t_node	*ft_get_token_list(char *input);
+t_node	*ft_get_token_list(t_data *data);
 
 //lexer_main.c
-t_node	*ft_lexer(char *input);
+t_node	*ft_lexer(t_data *data);
 
 #endif /*LEXER_H*/

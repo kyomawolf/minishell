@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:53:53 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 12:59:37 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 00:22:36 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,34 @@ void	ft_t_node_free(t_node *head)
 		head = head->next;
 		free(temp);
 		temp = NULL;
+	}
+}
+
+void	ft_free_lexer(t_word *word, t_node **head, t_data *data)
+{
+	t_node	*temp;
+
+	free(data->input);
+	data->input = NULL;
+	if (word->chars != NULL)
+	{
+		free(word->chars);
+		word->chars = NULL;
+	}
+	while (*head != NULL)
+	{
+		if ((*head)->content != NULL)
+		{
+			if (((t_token *)(*head)->content)->string != NULL)
+			{
+				free(((t_token *)(*head)->content)->string);
+				((t_token *)(*head)->content)->string = NULL;
+			}
+			free ((*head)->content);
+			(*head)->content = NULL;
+		}
+		temp = *head;
+		*head = (*head)->next;
+		free (temp);
 	}
 }

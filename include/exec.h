@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 20:22:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 01:42:25 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void		builtin_check_child(char **cmd_arr, t_data *data, t_node *head, \
 t_e_builtin	builtin_check(t_node *head);
 int			ft_builtin_exec_init(t_e_builtin builtin, t_node *head, \
 				t_data *data, t_exec *exec_data);
-
-//exec_child.c
 
 //exec_io1.c
 int			ft_adjust_pipes(t_exec *exec_data, t_node *head);

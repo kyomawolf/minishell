@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:49:54 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/24 02:32:06 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 23:43:29 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	ft_append_token_helper(char *str, t_node **head, int type, int status)
 	token = ft_t_token_create(str);
 	if (token == NULL)
 	{
+		ft_putstr_fd("minishell: allocation error\n", 2);
 		free (str);
 		str = NULL;
 		return (1);
@@ -64,6 +65,7 @@ int	ft_append_token_helper(char *str, t_node **head, int type, int status)
 	node = ft_t_node_create(token);
 	if (node == NULL)
 	{
+		ft_putstr_fd("minishell: allocation error\n", 2);
 		free(str);
 		str = NULL;
 		free(token);
@@ -90,15 +92,21 @@ int	ft_append_token(t_word *word, t_node **head, int end)
 	if (ft_append_token_helper(str, head, token_type, quote_status))
 		return (1);
 	if (end == 0)
-		ft_t_word_init(word);
+	{
+		if (ft_t_word_init(word))
+			return (1);
+	}
 	return (0);
 }
 
-void	ft_t_token_add_empty_string(t_word *word, t_node **head, int *i)
+int	ft_t_token_add_empty_string(t_word *word, t_node **head, int *i)
 {
-	ft_t_word_append_char(word, '\0');
-	ft_append_token(word, head, 0);
+	if (ft_t_word_append_char(word, '\0'))
+		return (1);
+	if (ft_append_token(word, head, 0))
+		return (1);
 	(*i) = (*i) + 2;
+	return (0);
 }
 
 // terminates_token on unquoted metacharacter, inits appendage of token
@@ -107,18 +115,23 @@ int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 	int	ret;
 
 	ret = 0;
-	if (word->status == -1 && word->write_head != 0)
+	if (word->status == VAR_UQUOTED && word->write_head != 0)
 	{
 		if (ft_strchr(" \t\n", input[*i]))
 			ret = 2;
 		else if (ft_strchr("<>|&()", input[*i]))
 			ret = 1;
 		if (ret > 0)
-			ft_append_token(word, head, 0);
+		{
+			if (ft_append_token(word, head, 0))
+				return (-1);
+		}
 		if (ret == 2)
 			ft_skip_set(input, i, " \t\n");
+		if (input[*i] == '\0')
+			return (1);
 	}
-	else if (word->status == -1 && word->write_head == 0)
+	else if (word->status == VAR_UQUOTED && word->write_head == 0)
 		ft_skip_set(input, i, " \t\n");
 	return (ret);
 }

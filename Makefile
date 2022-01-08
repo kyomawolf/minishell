@@ -13,8 +13,9 @@ SRC = main.c input.c new.c \
 	  parser/b_tree.c parser/tree_builder1.c parser/tree_builder2.c \
 	  parser/tree_builder3.c parser/tree_builder4.c \
 	  parser/parser_io.c parser/parser_check1.c parser/parser_check2.c \
-	  parser/lexer_append1.c parser/lexer_append2.c\
-	  parser/lexer_append3.c parser/lexer_heredoc.c parser/lexer_main.c \
+	  parser/lexer_append1.c parser/lexer_append2.c parser/lexer_append2_helper.c\
+	  parser/lexer_append3.c parser/lexer_heredoc1.c parser/lexer_heredoc2.c \
+	  parser/lexer_main.c \
 	  parser/lexer_tokenlist.c parser/lexer_utils1.c parser/lexer_utils2.c \
 	  parser/lexer_utils3.c parser/lexer_utils4.c \
 	  executor/exec_builtin.c executor/exec_executor.c\

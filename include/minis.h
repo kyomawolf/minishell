@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/06 14:24:58 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 14:43:53 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ char				**ft_realloc_charpp(char ***old, size_t new_size);
 t_node				*wild_main(char *string);
 void				print_binary_tree(t_bin *prin, int dep);
 void				free_t_node_list(t_node *head);
-t_node				*ft_lexer(char *input);
-t_node				*ft_get_token_list(char *input);
 t_bin				*builder_main(t_node *list);
 void				free_char_array(char ***arr);
 void				free_t_node_content_list(t_node *head);
