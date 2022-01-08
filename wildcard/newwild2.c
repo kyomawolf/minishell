@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   newwild2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 14:41:54 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 17:12:21 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/08 14:02:05 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,14 +118,12 @@ char	**wild_pattern_match(char **all_dir, char **matcher)
 	int		len;
 	int		*ident;
 	int		i;
-	int		sw;
 
 	len = 0;
 	ident = ft_calloc(ft_char_arr_len(all_dir), sizeof(int));
 	if (ident == NULL)
 		return (NULL);
 	i = 0;
-	sw = 0;
 	while (all_dir[i] != NULL)
 	{
 		ident[i] = wild_sub_match(all_dir[i], matcher);

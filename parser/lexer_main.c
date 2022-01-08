@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/07 16:58:24 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 14:54:53 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ static int	ft_operator_is_valid(t_node *head)
 t_node	*ft_lexer(t_data *data)
 {
 	t_node	*head;
+	int		ret;
 
 	head = ft_get_token_list(data);
 	if (ft_operator_is_valid(head))
@@ -53,14 +54,17 @@ t_node	*ft_lexer(t_data *data)
 	}
 	else
 	{
-		if (ft_lexer_heredoc(&head))
+		ret = ft_lexer_heredoc(&head);
+		if (ret == 1)
 		{
 			ft_putstr_fd("minishell: ", 2);
 			ft_putstr_fd("syntax error near unexpected token \\n\n", 2);
+		}
+		if (ret > 0)
+		{
 			free_t_node_list2(&head);
 			return (NULL);
 		}
 	}
-	ft_s_node_print_content(head);
 	return (head);
 }

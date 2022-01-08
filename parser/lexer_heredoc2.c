@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 01:11:01 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 02:01:48 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 14:43:31 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	ft_lexer_heredoc_input_append(char **line, t_node **head)
 		ft_putstr_fd("minishell: allocation error\n", 2);
 		if (*line != NULL)
 			free(*line);
-		ret = 1;
+		ret = 2;
 	}
 	ft_t_node_add_back(head, node);
 	return (ret);
@@ -67,7 +67,7 @@ static int	ft_get_heredoc_input(t_node **head, t_token *delimiter, char **line)
 		else
 		{
 			if (ft_lexer_heredoc_input_append(line, head))
-				return (1);
+				return (2);
 		}
 	}
 	return (0);
@@ -75,18 +75,23 @@ static int	ft_get_heredoc_input(t_node **head, t_token *delimiter, char **line)
 
 static int	ft_lexer_heredoc_post_input(char *line, int temp_fd)
 {
-	if (line == NULL && errno == 0)
+	if (line == NULL && errno == 9)
 	{
 		if (dup2(temp_fd, STDIN_FILENO) == -1)
 		{
 			ft_putstr_fd(strerror(errno), 2);
-			return (1);
+			return (2);
 		}
 	}
 	if (close (temp_fd) == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
-		return (1);
+		return (2);
+	}
+	if (errno == 9)
+	{
+		errno = 0;
+		return (2);
 	}
 	return (0);
 }
@@ -98,19 +103,21 @@ int	ft_lexer_handle_heredoc_input(t_token *token, t_token *delimiter)
 	char	*line;
 	t_node	*head;
 	int		temp_fd;
+	int		ret;
 
 	temp_fd = dup(STDIN_FILENO);
 	if (temp_fd == -1)
 	{
 		ft_putstr_fd(strerror(errno), 2);
-		return (1);
+		return (2);
 	}
 	signal(SIGINT, ft_signals_heredoc);
 	head = NULL;
 	if (ft_get_heredoc_input(&head, delimiter, &line))
-		return (1);
-	if (ft_lexer_heredoc_post_input(line, temp_fd))
-		return (1);
+		return (2);
+	ret = ft_lexer_heredoc_post_input(line, temp_fd);
+	if (ret == 2)
+		return (2);
 	ft_lexer_handle_heredoc_input_helper(token, head, &line);
 	return (0);
 }

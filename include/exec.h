@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 18:39:41 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 02:08:41 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 15:23:32 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ int			ft_t_token_variable_expansion(t_node **head_token, t_data *data);
 int			ft_str_array_var_expansion(char ***str_arr, t_data *data);
 
 //exec_expand3.c
-int			ft_exchange_tokens_var(t_node ***head, t_expand *exp_data);
+int			ft_exchange_tokens_var(t_node ***head, t_expand *exp_data, \
+									t_node **temp_ori);
 void		ft_exchange_tokens_helper(t_node **head, t_node *list);
 void		ft_exchange_tokens_free_exp_data_word(t_expand *exp_data);
 t_node		*ft_init_var_expansion(t_node **head, t_data *data, \

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:57:36 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 01:59:20 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 15:34:50 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,15 @@
 void	ft_signals_heredoc(int signal)
 {
 	(void)signal;
+	write(1, "\n", 1);
 	close(STDIN_FILENO);
-	errno = 0;
 }
 
 static int	ft_lexer_handle_heredoc(t_node *temp)
 {
 	t_token	*token;
 	t_token	*delimiter;
+	int		ret;
 
 	token = ((t_token *)temp->content);
 	if (token->type == HERE_DOC)
@@ -37,8 +38,9 @@ static int	ft_lexer_handle_heredoc(t_node *temp)
 			return (1);
 		else
 		{
-			if (ft_lexer_handle_heredoc_input(token, delimiter))
-				return (1);
+			ret = ft_lexer_handle_heredoc_input(token, delimiter);
+			if (ret == 2)
+				return (2);
 			token->quote_status = delimiter->quote_status;
 			ft_t_node_detach_and_free(temp->next);
 		}
@@ -55,12 +57,16 @@ static int	ft_lexer_handle_heredoc(t_node *temp)
 int	ft_lexer_heredoc(t_node **head)
 {
 	t_node	*temp;
+	int		ret;
 
 	temp = *head;
 	while (temp != NULL)
 	{
-		if (ft_lexer_handle_heredoc(temp))
+		ret = ft_lexer_handle_heredoc(temp);
+		if (ret == 1)
 			return (1);
+		else if (ret == 2)
+			return (2);
 		temp = temp->next;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:57:44 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 21:41:35 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 15:30:58 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 //loops through string and searches for char $.
 // if necessary calls variable expansion initialization function
 //  and calls function to exchange the old token with the new ones.
-static int	ft_t_token_var_expansion_check(t_node ***head, t_data *data)
+static int	ft_t_token_var_expansion_check(t_node ***head, t_data *data, \
+											t_node **temp_ori)
 {
 	t_token		*token;
 	t_expand	exp_data;
@@ -33,7 +34,7 @@ static int	ft_t_token_var_expansion_check(t_node ***head, t_data *data)
 		exp_data.list = ft_init_var_expansion(*head, data, &exp_data);
 		if (exp_data.list == NULL)
 			return (-1);
-		ret = ft_exchange_tokens_var(head, &exp_data);
+		ret = ft_exchange_tokens_var(head, &exp_data, temp_ori);
 	}
 	if (exp_data.word != NULL)
 	{
@@ -102,9 +103,9 @@ int	ft_t_token_variable_expansion(t_node **head_token, t_data *data)
 	int		ret;
 
 	temp_ori = *head_token;
-	while (*head_token != NULL)
+	while (head_token != NULL && *head_token != NULL)
 	{
-		ret = ft_t_token_var_expansion_check(&head_token, data);
+		ret = ft_t_token_var_expansion_check(&head_token, data, &temp_ori);
 		if (ret == 1 || ret == 2)
 			continue ;
 		else if (ret == -1)

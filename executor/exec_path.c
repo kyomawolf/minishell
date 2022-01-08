@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 21:07:35 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/23 22:50:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 14:02:28 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,9 @@
 
 char	**path_splitter(t_data *data)
 {
-	int		i;
 	char	*path;
 	t_node	*cp;
 
-	i = 0;
 	path = NULL;
 	cp = data->envp;
 	while (cp != NULL)

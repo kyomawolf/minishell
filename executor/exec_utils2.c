@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 19:55:46 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 19:56:26 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/08 15:02:37 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include "exec.h"
-#include <stdio.h>
+#include <signal.h>
+#include "libft.h"
 
 void	child_signal(int signal)
 {
 	if (signal == SIGQUIT)
-		printf("Quit: 3\n");
+		ft_putstr_fd("Quit: 3\n", 2);
 }

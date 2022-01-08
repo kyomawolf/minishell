@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 20:21:39 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 15:32:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ void	ft_exchange_tokens_helper(t_node **head, t_node *list)
 }
 
 // exchanges token with information about var_expansion with expaned tokens
-int	ft_exchange_tokens_var(t_node ***head, t_expand *exp_data)
+int	ft_exchange_tokens_var(t_node ***head, t_expand *exp_data, \
+							t_node **temp_ori)
 {
 	t_node	*temp;
 
@@ -99,10 +100,12 @@ int	ft_exchange_tokens_var(t_node ***head, t_expand *exp_data)
 		temp = detach_node(*head, **head);
 		free (((t_token *)temp->content)->string);
 		free ((t_token *)temp->content);
-		**head = (**head)->next;
+		if (**head != NULL)
+			**head = (**head)->next;
+		else
+			*temp_ori = NULL;
 		free (temp);
 		free (((t_token *)exp_data->list->content)->string);
-		((t_token *)exp_data->list->content)->string = NULL;
 		free(((t_token *)exp_data->list->content));
 		exp_data->list->content = NULL;
 		free(exp_data->list);

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 15:56:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 02:09:01 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 14:58:50 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,22 @@
 // initializes struct s_word
 int	ft_t_word_init(t_word *word)
 {
-	word->type = -1;
-	word->status = -1;
-	word->write_head = 0;
-	word->alloc = BUFFER_SIZE;
-	word->chars = ft_calloc(sizeof(char), word->alloc);
-	if (word->chars == NULL)
+	if (word)
 	{
-		ft_putstr_fd("minishell: allocation error\n", 2);
-		return (1);
+		word->type = -1;
+		word->status = -1;
+		word->write_head = 0;
+		word->alloc = BUFFER_SIZE;
+		word->chars = ft_calloc(sizeof(char), word->alloc);
+		if (word->chars == NULL)
+		{
+			ft_putstr_fd("minishell: allocation error\n", 2);
+			return (1);
+		}
+		return (0);
 	}
-	return (0);
+	ft_putstr_fd("minishell: allocation error\n", 2);
+	return (1);
 }
 
 //appends character to struct s_word member chars
