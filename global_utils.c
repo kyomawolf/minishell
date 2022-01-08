@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   global_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/15 19:32:03 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/06 17:11:46 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:18:18 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ char	*mini_getenv(t_data *data, char *var_name)
 
 	temp = data->envp;
 	format_s = ft_strjoin(var_name, "=");
+	if (format_s == NULL)
+		return (NULL);
 	start = ft_strlen(format_s);
 	while (temp != NULL)
 	{
@@ -45,10 +47,14 @@ char	**list_to_array(t_node *node)
 	int		i;
 
 	ret = ft_calloc(ft_s_node_iter(node) + 1, sizeof(char *));
+	if (ret == NULL)
+		return (NULL);
 	i = 0;
 	while (node != NULL)
 	{
 		ret[i] = ft_strdup(((char *)node->content));
+		if (ret[i] == NULL)
+			return (freetili(ret));
 		node = node->next;
 		i++;
 	}

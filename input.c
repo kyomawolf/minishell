@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 13:22:52 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 02:09:07 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,13 @@ void	input_readline(t_data *data)
 		free(data->input);
 		data->input = NULL;
 	}
-	data->input = readline(data->prompt);
+	if (data->prompt == NULL)
+	{
+		printf("\n\n		NO MEMORY LEFT\n");
+		data->input = readline("minishell -> ");
+	}
+	else
+		data->input = readline(data->prompt);
 	if (data->input != NULL && data->input[0] != '\0')
 		add_history(data->input);
 }

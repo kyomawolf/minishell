@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree_builder3.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 01:07:47 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/04 18:26:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:15:35 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	ft_t_node_io_append(t_bin *tree, t_node *node, int type)
 		if (tree->io->infile)
 			free(tree->io->infile);
 		tree->io->infile = ft_strdup(node_io->file);
+		if (tree->io->infile == NULL)
+			return (1);
 	}
 	return (0);
 }
@@ -92,11 +94,15 @@ t_node	*add_words(t_simple_com *command, t_node *node)
 	else
 		command->arguments = ft_realloc_charpp(&command->arguments, \
 		command->number_arguments + n_words + 1);
+	if (command->arguments == NULL)
+		return (NULL);
 	i = 0;
 	while (i < n_words)
 	{
 		command->arguments[command->number_arguments + i] = \
 		ft_strdup(((t_token *)node->content)->string);
+		if (command->arguments[command->number_arguments + i] == NULL)
+			return (NULL);
 		node = node->next;
 		i++;
 	}

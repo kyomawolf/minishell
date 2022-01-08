@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 13:34:42 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 02:09:17 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,16 @@ void	get_prompt(t_data *data)
 
 	i = ft_strlen(data->currdir) - 1;
 	temp = malloc(ft_strlen(data->currdir) + 3);
+	if (temp == NULL)
+	{
+		printf("WARNING: no memory left\n");
+		return ;
+	}
 	ii = 0;
 	while (data->currdir[i] != '/')
 		i--;
-	i++;
-	while (data->currdir[i] != '\0')
-	{
-		temp[ii] = data->currdir[i];
-		ii++;
-		i++;
-	}
+	while (data->currdir[++i] != '\0')
+		temp[ii++] = data->currdir[i];
 	temp[ii++] = '-';
 	temp[ii++] = '>';
 	temp[ii++] = ' ';

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 13:53:37 by jkasper           #+#    #+#             */
-/*   Updated: 2021/12/29 20:29:43 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 18:33:32 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	cd_change_pwd(t_data *data)
 		{
 			free(envpcp->content);
 			cwd = getcwd(NULL, 0);
+			if (cwd == NULL)
+				return ;
 			envpcp->content = ft_strjoin("PWD=", cwd);
 			free(cwd);
 			return ;
@@ -51,6 +53,8 @@ void	cd_change_oldpwd(t_data *data)
 		{
 			free(envpcp->content);
 			cwd = getcwd(NULL, 0);
+			if (cwd == NULL)
+				return ;
 			envpcp->content = ft_strjoin("OLDPWD=", cwd);
 			free (cwd);
 			return ;

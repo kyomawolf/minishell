@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_expand5.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:33:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2021/12/29 22:41:45 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/07 19:33:28 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,16 @@ char	*ft_get_var_name_special_cases(char *str, int i)
 	if (str[i] == '?')
 	{
 		var_name = ft_calloc(2, sizeof(char));
+		if (var_name == NULL)
+			return (NULL);
 		var_name[0] = '?';
 		var_name[1] = '\0';
 	}
 	else if (str[i] == VAR_END)
 	{
 		var_name = ft_calloc(2, sizeof(char));
+		if (var_name == NULL)
+			return (NULL);
 		var_name[0] = '$';
 		var_name[1] = '\0';
 	}
