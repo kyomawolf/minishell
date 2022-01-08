@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 17:25:23 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 12:33:15 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 21:54:10 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void	change_env_exit_status(t_data *data, int es)
+void	change_env_exit_status(t_data *data, int es)
 {
 	char	*status;
 	t_node	*temp;

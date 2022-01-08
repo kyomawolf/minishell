@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/08 14:46:57 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 19:28:18 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	main_init(t_data *data)
 	{
 		free_main(data);
 		ft_putstr_fd("\n\nWARNING: LEAVING MINISHELL\n", 2);
-		system("leaks minishell");
 		exit(0);
 	}
 }

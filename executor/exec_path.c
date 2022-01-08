@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/05 21:07:35 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/08 14:02:28 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 21:42:13 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	path_main(t_data *data, char **args)
 		return (-1);
 	to_app = path_check_access(all_p, args);
 	if (to_app == NULL)
-		return (-1);
+		return (1);
 	free (args[0]);
 	args[0] = to_app;
 	return (0);

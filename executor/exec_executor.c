@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 14:00:16 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 21:27:51 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include "libft.h"
 #include "exec.h"
 #include <errno.h>
+#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -27,36 +28,6 @@ static void	ft_t_exec_init(t_exec *exec_data, t_node *head)
 	exec_data->pipes = NULL;
 	exec_data->pid = NULL;
 	exec_data->here_doc = 0;
-}
-
-static void	ft_child_process(t_node *pl, t_data *data, t_exec *exec_data, \
-								t_node **ori_head)
-{
-	char	**cmd_arr;
-	char	**envp_arr;
-
-	if (ft_adjust_pipes(exec_data, pl))
-	{
-		child_free_at_exit(pl, data, exec_data, ori_head);
-		exit(EXIT_FAILURE);
-	}
-	if (((t_bin *)pl->content)->command->arguments == NULL)
-	{
-		child_free_at_exit(pl, data, exec_data, ori_head);
-		exit(EXIT_SUCCESS);
-	}
-	cmd_arr = ((t_bin *)pl->content)->command->arguments;
-	builtin_check_child(cmd_arr, data, pl, exec_data);
-	path_main(data, cmd_arr);
-	envp_arr = list_to_array(data->envp);
-	signal(SIGQUIT, child_signal);
-	execve(cmd_arr[0], cmd_arr, envp_arr);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd_arr[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
-	child_free_at_exit(pl, data, exec_data, ori_head);
-	free_char_array(&envp_arr);
-	exit(127);
 }
 
 static void	ft_parent_close_used_pipes(t_exec *exec_data)

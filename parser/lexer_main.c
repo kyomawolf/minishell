@@ -6,13 +6,14 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:05:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 14:54:53 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/08 21:56:12 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "struct.h"
 #include "lexer.h"
+#include "exec.h"
 #include "libft.h"
 #include <stdio.h>
 
@@ -56,12 +57,12 @@ t_node	*ft_lexer(t_data *data)
 	{
 		ret = ft_lexer_heredoc(&head);
 		if (ret == 1)
-		{
 			ft_putstr_fd("minishell: ", 2);
+		if (ret == 1)
 			ft_putstr_fd("syntax error near unexpected token \\n\n", 2);
-		}
 		if (ret > 0)
 		{
+			change_env_exit_status(data, 1);
 			free_t_node_list2(&head);
 			return (NULL);
 		}

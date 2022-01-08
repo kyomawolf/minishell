@@ -1,7 +1,7 @@
 
 NAME = minishell
 LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Wextra #-Werror
+FLAGS = -Wall -Wextra -Werror
 
 #-fsanitize=address -fno-omit-frame-pointer -static-libsan
 
@@ -18,7 +18,7 @@ SRC = main.c input.c new.c \
 	  parser/lexer_main.c \
 	  parser/lexer_tokenlist.c parser/lexer_utils1.c parser/lexer_utils2.c \
 	  parser/lexer_utils3.c parser/lexer_utils4.c \
-	  executor/exec_builtin.c executor/exec_executor.c\
+	  executor/exec_builtin.c executor/exec_child.c executor/exec_executor.c\
 	  executor/exec_expand_wildcard.c executor/pipe_count.c\
 	  executor/exec_expand_heredoc1.c executor/exec_expand_heredoc2.c \
 	  executor/exec_expand_io1.c executor/exec_expand_io2.c \
