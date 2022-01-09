@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 19:13:00 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/03 21:03:00 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 18:50:20 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ int	ft_set_output_redirection(t_io *io, t_node_io *node_io)
 	if (io->o_mode == 4 || io->o_mode == 3)
 	{
 		if (io->o_mode == 4)
-			fd = open(io->redir->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			fd = open(node_io->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		else if (io->o_mode == 3)
-			fd = open(io->redir->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
-		if (redirection_error(io->redir->file, fd))
+			fd = open(node_io->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		if (redirection_error(node_io->file, fd))
 			return (1);
 		if (ft_check_last_redir(node_io->next, node_io->io_type))
 			dup2(fd, STDOUT_FILENO);

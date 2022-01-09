@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_expand5.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:33:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/07 19:33:28 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/09 13:30:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	ft_handle_unquoted_var(t_expand *exp_data, char **var)
 		if (ft_whitespaces(var[1][j]))
 		{
 			ft_skip_set(var[1], &j, " \t\n");
-			if (exp_data->word->write_head != 0)
+			if (exp_data->word->w_head != 0)
 			{
 				ft_terminate_word_and_add_to_list(exp_data);
 			}

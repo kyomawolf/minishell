@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:54:58 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 00:26:08 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 13:30:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	ft_change_status(char *input, int *i, t_word *word, t_node **head)
 	if (word->status == VAR_UQUOTED && (input[*i] == '"' || input[*i] == '\''))
 	{
 		word->status = input[*i];
-		if (input[*i + 1] == word->status && word->write_head == 0
+		if (input[*i + 1] == word->status && word->w_head == 0
 			&& ft_strlen(input) > (size_t)(*i + 1)
 			&& ft_strchr(" \t\n", input[*i + 2]))
 		{
@@ -49,7 +49,7 @@ static int	ft_change_status(char *input, int *i, t_word *word, t_node **head)
 
 static int	ft_token_list_handle_last_word(t_word *word, t_node **head, int sw)
 {
-	if (word->write_head != 0)
+	if (word->w_head != 0)
 	{
 		if (ft_append_token(word, head, 1))
 			return (1);

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 16:49:54 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/07 23:43:29 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 13:32:57 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,23 +22,23 @@ char	ft_set_type(t_word *word)
 	char	ret;
 
 	ret = WORD;
-	if (word->type == -1)
+	if (word->type == VAR_UQUOTED)
 	{
-		if (word->chars[0] == '&' && word->chars[1] == '&')
+		if (word->chars[0] == '&' && word->w_head >= 2 && word->chars[1] == '&')
 			ret = AND;
-		else if (word->chars[0] == '|' && word->write_head == 1)
+		else if (word->chars[0] == '|' && word->w_head == 1)
 			ret = PIPE;
 		else if (word->chars[0] == '|' && word->chars[1] == '|')
 			ret = OR;
-		else if (word->chars[0] == '(' && word->write_head == 1)
+		else if (word->chars[0] == '(' && word->w_head == 1)
 			ret = OPAR;
-		else if (word->chars[0] == ')' && word->write_head == 1)
+		else if (word->chars[0] == ')' && word->w_head == 1)
 			ret = CPAR;
-		else if (word->chars[0] == '<' && word->write_head == 1)
+		else if (word->chars[0] == '<' && word->w_head == 1)
 			ret = IRD;
 		else if (word->chars[0] == '<' && word->chars[1] == '<')
 			ret = HERE_DOC;
-		else if (word->chars[0] == '>' && word->write_head == 1)
+		else if (word->chars[0] == '>' && word->w_head == 1)
 			ret = ORD_TRC;
 		else if (word->chars[0] == '>' && word->chars[1] == '>')
 			ret = ORD_APP;
@@ -115,7 +115,7 @@ int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 	int	ret;
 
 	ret = 0;
-	if (word->status == VAR_UQUOTED && word->write_head != 0)
+	if (word->status == VAR_UQUOTED && word->w_head != 0)
 	{
 		if (ft_strchr(" \t\n", input[*i]))
 			ret = 2;
@@ -131,7 +131,7 @@ int	ft_terminate_token(char *input, int *i, t_word *word, t_node **head)
 		if (input[*i] == '\0')
 			return (1);
 	}
-	else if (word->status == VAR_UQUOTED && word->write_head == 0)
+	else if (word->status == VAR_UQUOTED && word->w_head == 0)
 		ft_skip_set(input, i, " \t\n");
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/09 01:25:38 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 13:30:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // terminates a word. Addes token to the token list
 static void	ft_terminate_word(t_expand *exp_data)
 {
-	if (exp_data->word->write_head != 0)
+	if (exp_data->word->w_head != 0)
 		ft_terminate_word_and_add_to_list(exp_data);
 	if (exp_data->word->chars != NULL)
 	{

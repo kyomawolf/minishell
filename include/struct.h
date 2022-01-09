@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 15:51:37 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 00:02:59 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 13:30:39 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ typedef struct s_bin
 typedef struct s_word
 {
 	char			*chars;
-	size_t			write_head;
+	size_t			w_head;
 	unsigned int	alloc;
 	char			type;
 	char			status;
