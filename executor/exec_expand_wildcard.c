@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 15:42:56 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/06 20:14:12 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:30:20 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,25 @@ static int	ft_check_ambigious_redirection(t_node *head, t_node *list)
 	return (0);
 }
 
+static void	ft_exchange_tokens_helper_wc(t_node **head, t_node *list)
+{
+	t_node	*last_in_list;
+
+	if ((*head)->prev != NULL)
+		((t_node *)(*head)->prev)->next = list;
+	last_in_list = ft_t_node_get_last(list);
+	if ((*head)->next != NULL)
+		((t_node *)(*head)->next)->prev = last_in_list;
+	list->prev = (*head)->prev;
+	last_in_list->next = (*head)->next;
+	free(((t_token *)(*head)->content)->string);
+	((t_token *)(*head)->content)->string = NULL;
+	free((t_token *)(*head)->content);
+	(*head)->content = NULL;
+	free(*head);
+	*head = last_in_list;
+}
+
 static int	ft_exchange_tokens_wil(t_node **head, t_expand *exp_data)
 {
 	t_node	*temp;
@@ -60,7 +79,7 @@ static int	ft_exchange_tokens_wil(t_node **head, t_expand *exp_data)
 		ft_exchange_tokens_free_exp_data_word(exp_data);
 	}
 	else
-		ft_exchange_tokens_helper(head, exp_data->list);
+		ft_exchange_tokens_helper_wc(head, exp_data->list);
 	return (0);
 }
 
@@ -81,7 +100,7 @@ static int	ft_check_for_wc_expansion(t_node **head)
 	t_expand	exp_data;
 	int			i;
 
-	token = (t_token *)(*head)->content;
+	token = (*head)->content;
 	if (token->type == WORD)
 	{
 		i = 0;

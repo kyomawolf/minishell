@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 17:13:25 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 21:27:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 00:06:21 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,11 @@ int	ft_execute(t_node *pl, t_data *data, t_node **ori_head)
 		if (ft_open_pipes(&exec_data))
 			return (-1);
 		if (ft_execution_init(pl, &exec_data, data, ori_head))
+		{
+			free (exec_data.pid);
+			ft_exec_data_free_pipes(&exec_data);
 			return (-1);
+		}
 		ft_signals();
 		exit_status = ft_parent_waitpid(&exec_data);
 	}

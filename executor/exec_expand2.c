@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:05:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 15:30:30 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:24:43 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "lexer.h"
 #include "minis.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 static void	ft_exchange_str_arr_sec(char ***str_arr, t_node *head)
 {

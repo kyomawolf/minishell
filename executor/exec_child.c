@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 20:59:19 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 21:43:03 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:34:21 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <signal.h>
+#include <stdio.h>
 
 static void	ft_child_process_error(char **cmd_arr)
 {
 	if (errno == 13)
 	{
+		errno = 0;
 		ft_putstr_fd("minishell: ", 2);
 		ft_putstr_fd(cmd_arr[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);

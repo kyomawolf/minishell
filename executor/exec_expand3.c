@@ -6,7 +6,7 @@
 /*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/21 20:10:27 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 15:32:51 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/09 01:25:38 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,15 @@ void	ft_exchange_tokens_free_exp_data_word(t_expand *exp_data)
 	}
 }
 
-void	ft_exchange_tokens_helper(t_node **head, t_node *list)
+void	ft_exchange_tokens_helper(t_node **head, t_node *list, \
+									t_node **temp_ori)
 {
 	t_node	*last_in_list;
 
 	if ((*head)->prev != NULL)
 		((t_node *)(*head)->prev)->next = list;
+	else
+		*temp_ori = list;
 	last_in_list = ft_t_node_get_last(list);
 	if ((*head)->next != NULL)
 		((t_node *)(*head)->next)->prev = last_in_list;
@@ -114,6 +117,6 @@ int	ft_exchange_tokens_var(t_node ***head, t_expand *exp_data, \
 		return (2);
 	}
 	else
-		ft_exchange_tokens_helper(*head, exp_data->list);
+		ft_exchange_tokens_helper(*head, exp_data->list, temp_ori);
 	return (0);
 }
