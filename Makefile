@@ -34,8 +34,6 @@ SRC = main.c input.c new.c \
 	  builtin/unset.c builtin/env.c builtin/exit.c builtin/pwd.c \
 	  free.c free2.c free3.c global_utils.c llist.c DEBUG_print.c
 
-#wildcard/wild1.c wildcard/wild2.c wildcard/wild3.c \ OLD
-#./parser/par_main.c ./parser/par_utils1.c ./parser/brackets.c b_tree.c
 
 OBJ_DIR = obj/
 
@@ -57,7 +55,7 @@ $(OBJ_DIR)%.o: %.c
 
 re : fclean all
 
-bonus :
+bonus : all
 
 lib/libft.a :
 	@make -silent -C lib/libft
