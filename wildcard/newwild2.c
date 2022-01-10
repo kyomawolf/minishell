@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   newwild2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 14:41:54 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/08 14:02:05 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/10 14:06:25 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ int	wild_sub_sub(char *dir, char **matcher, int i, int ii)
 				return (0);
 		}
 		if (matcher[ii][0] != -1)
-			i = ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) + 1 - dir;
+			i = ft_strnstr(dir + i, matcher[ii], ft_strlen(dir) - i) - dir + \
+							ft_strlen(matcher[ii]);
 		ii++;
 	}
 	if (matcher[ii][0] == -1)
@@ -78,13 +79,13 @@ int	wild_sub_match(char *dir, char **matcher)
 	ii = 0;
 	if (matcher[0][0] == -1 && matcher[1][0] == '\0')
 		return (1);
-	if (matcher[ii][0] != -1)
+	if (matcher[0][0] != -1)
 	{
-		if (dir - ft_strnstr(dir, matcher[ii], ft_strlen(dir)) != 0)
+		if (dir - ft_strnstr(dir, matcher[0], ft_strlen(dir)) != 0)
 			return (0);
 	}
 	else
-		ii++;
+		ii = 1;
 	return (wild_sub_sub(dir, matcher, 0, ii));
 }
 
