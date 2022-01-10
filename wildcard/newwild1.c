@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/07 14:41:48 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/07 15:32:52 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/10 14:43:34 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,19 @@
 #include "minis.h"
 #include "struct.h"
 
-char	**wild_open_dir(void)
+void	inloop(struct dirent *cur_dir, char ***ret, int *size, char first)
+{
+	if ((cur_dir->d_name[0] == '.' && first == '.') || \
+		cur_dir->d_name[0] != '.')
+	{
+		*ret = ft_realloc_charpp(ret, *size + 2);
+		(*ret)[*size] = ft_strdup(cur_dir->d_name);
+		(*ret)[*size][ft_strlen(cur_dir->d_name)] = '\0';
+		(*size)++;
+	}
+}
+
+char	**wild_open_dir(char first)
 {
 	DIR				*open_dir;
 	struct dirent	*cur_dir;
@@ -31,47 +43,20 @@ char	**wild_open_dir(void)
 	cwd = getcwd(NULL, 0);
 	open_dir = opendir(cwd);
 	free(cwd);
-	cur_dir = readdir(open_dir);
-	cur_dir = readdir(open_dir);
+	if (first != '.')
+		cur_dir = readdir(open_dir);
+	if (first != '.')
+		cur_dir = readdir(open_dir);
 	cur_dir = readdir(open_dir);
 	ret = NULL;
 	size = 0;
 	while (cur_dir != NULL)
 	{
-		ret = ft_realloc_charpp(&ret, size + 2);
-		ret[size] = ft_strdup(cur_dir->d_name);
-		ret[size][ft_strlen(cur_dir->d_name)] = '\0';
+		inloop(cur_dir, &ret, &size, first);
 		cur_dir = readdir(open_dir);
-		size++;
 	}
 	closedir(open_dir);
 	ret[size] = NULL;
-	return (ret);
-}
-
-t_node	*wild_combine(char **sel_dir)
-{
-	t_node	*ret;
-	t_node	*curr;
-	int		i;
-
-	curr = ft_calloc(1, sizeof(t_node));
-	curr->content = ft_calloc(1, sizeof(t_token));
-	((t_token *)curr->content)->string = sel_dir[0];
-	((t_token *)curr->content)->type = WORD;
-	ret = curr;
-	i = 1;
-	while (sel_dir[i] != NULL)
-	{
-		curr->next = ft_calloc(1, sizeof(t_node));
-		((t_node *)curr->next)->prev = curr;
-		curr = curr->next;
-		curr->content = ft_calloc(1, sizeof(t_token));
-		((t_token *)curr->content)->string = sel_dir[i];
-		((t_token *)curr->content)->type = WORD;
-		i++;
-	}
-	free(sel_dir);
 	return (ret);
 }
 
@@ -130,7 +115,7 @@ t_node	*wild_main(char *string)
 	matcher = wild_get_seperator(string);
 	if (matcher == NULL)
 		return (NULL);
-	all_dir = wild_open_dir();
+	all_dir = wild_open_dir(matcher[0][0]);
 	if (all_dir == NULL)
 	{
 		free_char_array(&matcher);
