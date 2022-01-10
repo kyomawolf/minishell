@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
+/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/10 20:41:32 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/01/10 21:05:16 by mstrantz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,16 @@ void	get_prompt(t_data *data)
 
 void	main_init(t_data *data)
 {
+	int	es;
+
 	input_attributes_add();
 	input_readline(data);
 	if (data->input == NULL)
 	{
+		es = ft_atoi(mini_getenv(data, "?"));
 		free_main(data);
 		ft_putstr_fd("\n\nWARNING: LEAVING MINISHELL\n", 2);
-		exit(0);
+		exit(es);
 	}
 }
 
