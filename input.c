@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/08 02:09:07 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/10 20:40:57 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,47 @@ void	input_attributes_clear(void)
 	}
 }
 
+char *ft_gnl_append(char *line, char c)
+{
+    int i;
+    char *longer;
+    
+    i = 0;
+    while(line[i] != '\0')
+        i++;
+    longer = malloc(i + 2);
+    if(longer == NULL)
+        return(NULL);
+    i = 0;
+    while(line[i] != '\0')
+    {
+        longer[i] = line[i];
+        i++;
+    }
+    longer[i] = c;
+    longer[++i] = '\0';
+    free(line);
+    return(longer);
+}
+int get_next_line(char **line, int fd)
+{
+    char    buffer;
+    int     flag;
+    if(line == NULL)
+        return(-1);
+    *line = malloc(1);
+    if(*line == NULL)
+        return(-1);
+    *line[0] = '\0';
+    while ((flag = read(fd, &buffer, 1) > 0))
+    {
+        if(buffer == '\n')
+            break;
+        *line = ft_gnl_append(*line, buffer);
+    }
+    return(flag);       
+}
+
 void	input_readline(t_data *data)
 {
 	input_attributes_add();
@@ -87,13 +128,8 @@ void	input_readline(t_data *data)
 		free(data->input);
 		data->input = NULL;
 	}
-	if (data->prompt == NULL)
-	{
-		printf("\n\n		NO MEMORY LEFT\n");
-		data->input = readline("minishell -> ");
-	}
-	else
-		data->input = readline(data->prompt);
-	if (data->input != NULL && data->input[0] != '\0')
-		add_history(data->input);
+	if (get_next_line(&data->input, 0) == 0)
+		data->input = NULL;
+	//if (data->input != NULL && data->input[0] != '\0')
+	//	add_history(data->input);
 }

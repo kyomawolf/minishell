@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 18:23:13 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/08 19:28:18 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/01/10 20:41:32 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ void	main_loop(t_data *data)
 
 void	main_print_entry(void)
 {
+	return ;
 	printf("         {\n      {   }\n       }_{ __{\n    .-{   }   }-.\n   (\
 	}     {  )\n   |`-.._____..-'|\n   |             ;--.\n   |           \
  (__  \\\n   |             | )  )\n   |             |/  /\n   |        \
