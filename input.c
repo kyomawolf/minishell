@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2022/04/04 13:50:18 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/04/04 15:04:19 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,16 @@ void	input_interrupt(int sig)
 	if (sig == SIGINT)
 	{
 		printf("\n");
-		//printf("%s", data->prompt);
-		fflush(0);
+		#ifndef READLINE
+			fflush(0);
 	}
+		#endif /*NOT READLINE*/
+		#ifdef READLINE
+			rl_replace_line("", 0);
+	}
+		rl_on_new_line();
+		rl_redisplay();
+	#endif /*READLINE*/
 }
 
 //tcsetattr for disabling signal printing
@@ -129,7 +136,7 @@ void	input_readline(t_data *data)
 	#ifndef READLINE
 		printf("%s", data->prompt);
 		fflush(0);
-	#endif
+	#endif /*NOT READLINE*/
 	if (data->input != NULL)
 	{
 		free(data->input);
@@ -138,10 +145,10 @@ void	input_readline(t_data *data)
 	#ifndef READLINE
 		if (get_next_line_wrapper(&data->input, 0) == 0)
 			data->input = NULL;
-	#endif
+	#endif /*NOT READLINE*/
 	#ifdef READLINE
 		data->input = readline(data->prompt);
 		if (data->input != NULL && data->input[0] != '\0')
 			add_history(data->input);
-	#endif
+	#endif /*READLINE*/
 }

@@ -6,7 +6,7 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 01:11:01 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/04/04 13:29:38 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/04/04 15:04:38 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ static int	ft_get_heredoc_input(t_node **head, t_token *delimiter, char **line)
 			printf(">");
 			fflush(0);
 			get_next_line_wrapper(line, 0);
-		#endif
+		#endif /*NOT READLINE*/
 		#ifdef READLINE
 			*line = readline(">");
-		#endif
+		#endif /*READLINE*/
 		if (*line == NULL || !ft_strncmp(delimiter->string, *line, len))
 			break ;
 		else
