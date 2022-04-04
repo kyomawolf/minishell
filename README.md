@@ -38,3 +38,5 @@ or the autocompletion functionality using tab, simply by compiling without the r
 ## Also with bonus part we had to implement:
 -  logical operator `&&` and `||` with parenthesis (only for priorities)
 -  wildcard `*` (only for current working directory)
+
+the code is formatted by the regulations of the 42-Norme (v3.0)
