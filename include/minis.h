@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minis.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/08 13:28:36 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/08 02:08:53 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/04/04 13:15:23 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void				input_readline(t_data *data);
 void				input_interrupt(int sig);
 void				input_attributes_clear(void);
 void				input_attributes_add(void);
+int 				get_next_line_wrapper(char **line, int fd);
 void				get_prompt(t_data *data);
 t_data				*new_t_data(char **envp);
 

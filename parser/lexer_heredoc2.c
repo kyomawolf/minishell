@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_heredoc2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mstrantz <mstrantz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/08 01:11:01 by mstrantz          #+#    #+#             */
-/*   Updated: 2022/01/08 14:43:31 by mstrantz         ###   ########.fr       */
+/*   Updated: 2022/04/04 13:29:38 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "struct.h"
 #include "lexer.h"
 #include "libft.h"
+#include "minis.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <readline/readline.h>
@@ -61,7 +62,14 @@ static int	ft_get_heredoc_input(t_node **head, t_token *delimiter, char **line)
 	len = ft_strlen(delimiter->string) + 1;
 	while (1)
 	{
-		*line = readline(">");
+		#ifndef READLINE
+			printf(">");
+			fflush(0);
+			get_next_line_wrapper(line, 0);
+		#endif
+		#ifdef READLINE
+			*line = readline(">");
+		#endif
 		if (*line == NULL || !ft_strncmp(delimiter->string, *line, len))
 			break ;
 		else

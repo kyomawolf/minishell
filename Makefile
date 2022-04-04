@@ -1,6 +1,11 @@
 
 NAME = minishell
-LIB = -Llib -lft -L$(HOME)/.brew/opt/readline/lib -lreadline
+
+NAME_RDL = minishell_wrd
+
+RDLINE := 0
+LIB = -Llib -lft
+RDLINE_LIB = -L$(HOME)/.brew/opt/readline/lib -lreadline
 FLAGS = -Wall -Wextra -Werror
 
 #-fsanitize=address -fno-omit-frame-pointer -static-libsan
@@ -9,7 +14,7 @@ SNTZ	= -fsanitize=address -fno-omit-frame-pointer  -static-libsan
 
 
 INC = -Iinclude -I$(HOME)/.brew/opt/readline/include
-SRC = main.c input.c new.c \
+SRC = main.c input.c new.c get_next_line.c get_next_line_utils.c \
 	  parser/b_tree.c parser/tree_builder1.c parser/tree_builder2.c \
 	  parser/tree_builder3.c parser/tree_builder4.c \
 	  parser/parser_io.c parser/parser_check1.c parser/parser_check2.c \
@@ -41,17 +46,31 @@ OBJ_DIR = obj/
 OBJ = $(addprefix $(OBJ_DIR), $(patsubst %.c,%.o,$(SRC)))
 
 $(NAME) : lib/libft.a $(OBJ)
+ifeq ($(RDLINE),1)
+	@gcc $(FLAGS) -O3 $(INC) $^ $(LIB) $(RDLINE_LIB) -o $@
+else
 	@gcc $(FLAGS) -O3 $(INC) $^ $(LIB) -o $@
-
+endif
 	@echo "compiled!"
 
-all : lib/libft.a $(NAME)
+
+all : $(NAME)
 
 debug : fclean lib/libft.a $(OBJ) $(SET)
-	gcc $(FLAGS) -g -O0 $(INC) $^ $(LIB) -o $@
+ifeq ($(RDLINE),1)
+	@gcc $(FLAGS) -g $(INC) $^ $(LIB) $(RDLINE_LIB) -o $@
+else
+	@gcc $(FLAGS) -g $(INC) $^ $(LIB) -o $@
+endif
+	@echo "compiled!"
 
 $(OBJ_DIR)%.o: %.c
+ifeq ($(RDLINE),1)
+	@gcc $(FLAGS) -DREADLINE $(INC) -O3 -c $< -o $@
+else
 	@gcc $(FLAGS) $(INC) -O3 -c $< -o $@
+endif
+
 
 re : fclean all
 

@@ -6,21 +6,24 @@
 /*   By: jkasper <jkasper@student.42Heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/10 15:33:39 by jkasper           #+#    #+#             */
-/*   Updated: 2022/01/10 20:40:57 by jkasper          ###   ########.fr       */
+/*   Updated: 2022/04/04 13:50:18 by jkasper          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minis.h"
 #include "libft.h"
 #include "struct.h"
+#include "get_next_line.h"
 #include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <signal.h>
 #include <termios.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#ifdef READLINE
+	#include <readline/readline.h>
+	#include <readline/history.h>
+#endif
 
 void	input_interrupt(int sig)
 {
@@ -36,10 +39,9 @@ void	input_interrupt(int sig)
 	if (sig == SIGINT)
 	{
 		printf("\n");
-		rl_replace_line("", 0);
+		//printf("%s", data->prompt);
+		fflush(0);
 	}
-	rl_on_new_line();
-	rl_redisplay();
 }
 
 //tcsetattr for disabling signal printing
@@ -101,7 +103,8 @@ char *ft_gnl_append(char *line, char c)
     free(line);
     return(longer);
 }
-int get_next_line(char **line, int fd)
+
+int get_next_line_wrapper(char **line, int fd)
 {
     char    buffer;
     int     flag;
@@ -123,13 +126,22 @@ int get_next_line(char **line, int fd)
 void	input_readline(t_data *data)
 {
 	input_attributes_add();
+	#ifndef READLINE
+		printf("%s", data->prompt);
+		fflush(0);
+	#endif
 	if (data->input != NULL)
 	{
 		free(data->input);
 		data->input = NULL;
 	}
-	if (get_next_line(&data->input, 0) == 0)
-		data->input = NULL;
-	//if (data->input != NULL && data->input[0] != '\0')
-	//	add_history(data->input);
+	#ifndef READLINE
+		if (get_next_line_wrapper(&data->input, 0) == 0)
+			data->input = NULL;
+	#endif
+	#ifdef READLINE
+		data->input = readline(data->prompt);
+		if (data->input != NULL && data->input[0] != '\0')
+			add_history(data->input);
+	#endif
 }
