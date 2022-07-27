@@ -26,7 +26,7 @@ void	export_print_list(t_data *data)
 		temp = data->envp;
 		while (temp)
 		{
-			printf("declare -x %s\n", temp->content);
+			printf("declare -x %s\n",(char *) temp->content);
 			temp = temp->next;
 		}
 	}

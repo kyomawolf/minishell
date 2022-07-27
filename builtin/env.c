@@ -21,7 +21,7 @@ int	env_main(t_data *data)
 	node = data->envp;
 	while (node != NULL)
 	{
-		printf("%s\n", node->content);
+		printf("%s\n", (char *) node->content);
 		node = node->next;
 	}
 	return (0);

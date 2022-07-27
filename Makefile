@@ -6,7 +6,7 @@ NAME_RDL = minishell_wrd
 RDLINE := 0
 LIB = -Llib -lft
 RDLINE_LIB = -L$(HOME)/.brew/opt/readline/lib -lreadline
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror 
 
 #-fsanitize=address -fno-omit-frame-pointer -static-libsan
 
